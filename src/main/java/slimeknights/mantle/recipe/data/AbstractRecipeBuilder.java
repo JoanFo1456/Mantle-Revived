@@ -3,8 +3,6 @@ package slimeknights.mantle.recipe.data;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.JsonOps;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
@@ -90,11 +88,12 @@ public abstract class AbstractRecipeBuilder<T extends AbstractRecipeBuilder<T>> 
    * @return Advancement ID
    */
   private Identifier buildAdvancementInternal(Identifier id, String folder) {
+    net.minecraft.resources.ResourceKey<Recipe<?>> recipeKey = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, id);
     this.advancementBuilder
         .parent(Identifier.withDefaultNamespace("recipes/root"))
-        .rewards(AdvancementRewards.Builder.recipe(id))
+        .rewards(AdvancementRewards.Builder.recipe(recipeKey))
         .requirements(AdvancementRequirements.Strategy.OR);
-    this.advancementBuilder.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id));
+    this.advancementBuilder.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeKey));
     return Identifier.fromNamespaceAndPath(id.getNamespace(), "recipes/" + folder + "/" + id.getPath());
   }
 
@@ -127,12 +126,26 @@ public abstract class AbstractRecipeBuilder<T extends AbstractRecipeBuilder<T>> 
   }
 
   /** Class to implement basic finished recipe methods */
-  @Getter
-  @RequiredArgsConstructor
   protected abstract class AbstractFinishedRecipe implements FinishedRecipe {
     private final Identifier id;
     @Nullable
     private final Identifier advancementId;
+
+    protected AbstractFinishedRecipe(Identifier id, @Nullable Identifier advancementId) {
+      this.id = id;
+      this.advancementId = advancementId;
+    }
+
+    @Override
+    public Identifier getId() {
+      return id;
+    }
+
+    @Nullable
+    @Override
+    public Identifier getAdvancementId() {
+      return advancementId;
+    }
 
     @Nullable
     @Override
