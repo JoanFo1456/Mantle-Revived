@@ -17,6 +17,8 @@ import net.minecraft.util.Mth;
 import org.joml.Matrix3x2fStack;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.lwjgl.glfw.GLFW;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.data.PageData;
@@ -100,9 +102,7 @@ public class BookScreen extends Screen {
     this.pageUpdater = pageUpdater;
     this.bookPickup = bookPickup;
 
-    this.minecraft = Minecraft.getInstance();
-    this.font = this.minecraft.font;
-
+    // minecraft/font are final as of 26.1.2 and already set to the singleton by the Screen(Component) constructor
     this.advancementCache = new AdvancementCache();
     if (this.minecraft.player != null) {
       this.minecraft.player.connection.getAdvancements().setListener(this.advancementCache);
@@ -425,10 +425,10 @@ public class BookScreen extends Screen {
   }
 
   @Override
-  public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-    super.keyPressed(keyCode, scanCode, modifiers);
+  public boolean keyPressed(KeyEvent event) {
+    super.keyPressed(event);
 
-    switch (keyCode) {
+    switch (event.key()) {
       case GLFW.GLFW_KEY_LEFT, GLFW.GLFW_KEY_A -> {
         previousPage();
         return true;
@@ -443,7 +443,7 @@ public class BookScreen extends Screen {
       }
     }
 
-    return super.keyPressed(keyCode, scanCode, modifiers);
+    return super.keyPressed(event);
   }
 
   @Override
@@ -460,7 +460,10 @@ public class BookScreen extends Screen {
   }
 
   @Override
-  public boolean mouseClicked(double originalMouseX, double originalMouseY, int mouseButton) {
+  public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    double originalMouseX = event.x();
+    double originalMouseY = event.y();
+    int mouseButton = event.button();
     boolean right = false;
 
     double mouseX = this.getMouseX(false);
@@ -484,11 +487,14 @@ public class BookScreen extends Screen {
       }
     }
 
-    return super.mouseClicked(originalMouseX, originalMouseY, mouseButton);
+    return super.mouseClicked(event, doubleClick);
   }
 
   @Override
-  public boolean mouseReleased(double originalMouseX, double originalMouseY, int mouseButton) {
+  public boolean mouseReleased(MouseButtonEvent event) {
+    double originalMouseX = event.x();
+    double originalMouseY = event.y();
+    int mouseButton = event.button();
     boolean right = false;
     double mouseX = this.getMouseX(false);
     double mouseY = this.getMouseY();
@@ -507,14 +513,14 @@ public class BookScreen extends Screen {
     lastClick = null;
     lastDrag = null;
 
-    return super.mouseReleased(originalMouseX, originalMouseY, mouseButton);
+    return super.mouseReleased(event);
   }
 
   @Override
-  public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-    boolean right = false;
-    mouseX = this.getMouseX(false);
-    mouseY = this.getMouseY();
+  public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+    int button = event.button();
+    double mouseX = this.getMouseX(false);
+    double mouseY = this.getMouseY();
 
     if (mouseX > PAGE_WIDTH + (PAGE_MARGIN + PAGE_PADDING_LEFT) / PAGE_SCALE) {
       mouseX = this.getMouseX(true);
