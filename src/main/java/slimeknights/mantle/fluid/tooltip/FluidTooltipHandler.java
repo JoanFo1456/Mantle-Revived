@@ -5,7 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -45,8 +46,9 @@ import java.util.function.BiConsumer;
 
 /** Handles fluid units displaying in tooltips */
 @SuppressWarnings("unused")
-@Log4j2
 public class FluidTooltipHandler extends SimpleJsonResourceReloadListener<JsonElement> {
+  // explicit logger: lombok @Log4j2 was unreliable during the 26.1.2 port
+  private static final Logger log = LogManager.getLogger();
   /** Tooltip when not holding shift mentioning that is possible */
   public static final Component HOLD_SHIFT = Mantle.makeComponent("gui", "fluid.hold_shift").withStyle(ChatFormatting.GRAY);
   /** Folder for saving the logic */

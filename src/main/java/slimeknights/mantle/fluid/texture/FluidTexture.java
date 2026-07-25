@@ -2,11 +2,6 @@ package slimeknights.mantle.fluid.texture;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -18,10 +13,11 @@ import slimeknights.mantle.util.JsonHelper;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-/** Record representing a fluid texture */
-@Accessors(fluent = true)
-@Data
-@AllArgsConstructor
+/**
+ * Record representing a fluid texture.
+ * TODO(26.1.2): lombok (@Data/@AllArgsConstructor) proved unreliable during the port, so accessors and the
+ * all-args constructor are written explicitly. Accessors are fluent (no "get" prefix) to match the previous API.
+ */
 public final class FluidTexture {
   private final Identifier still;
   private final Identifier flowing;
@@ -39,11 +35,39 @@ public final class FluidTexture {
   private final float fogStart;
   private final float fogEnd;
 
+  public FluidTexture(Identifier still, Identifier flowing, @Nullable Identifier overlay, @Nullable Identifier camera,
+                      float cameraOpacity, int color, int fogColor, boolean calculateFogColor, boolean customFog,
+                      float fogStart, float fogEnd) {
+    this.still = still;
+    this.flowing = flowing;
+    this.overlay = overlay;
+    this.camera = camera;
+    this.cameraOpacity = cameraOpacity;
+    this.color = color;
+    this.fogColor = fogColor;
+    this.calculateFogColor = calculateFogColor;
+    this.customFog = customFog;
+    this.fogStart = fogStart;
+    this.fogEnd = fogEnd;
+  }
+
   /** @deprecated use {@link #FluidTexture(Identifier, Identifier, Identifier, Identifier, float, int, int, boolean, boolean, float, float)} */
   @Deprecated(forRemoval = true)
   public FluidTexture(Identifier still, Identifier flowing, @Nullable Identifier overlay, @Nullable Identifier camera, int color) {
     this(still, flowing, overlay, camera, 0.1f, color, -1, false, false, 0.25f, 1);
   }
+
+  /* Fluent accessors */
+  public Identifier still() { return still; }
+  public Identifier flowing() { return flowing; }
+  @Nullable public Identifier overlay() { return overlay; }
+  @Nullable public Identifier camera() { return camera; }
+  public float cameraOpacity() { return cameraOpacity; }
+  public int color() { return color; }
+  public boolean calculateFogColor() { return calculateFogColor; }
+  public boolean customFog() { return customFog; }
+  public float fogStart() { return fogStart; }
+  public float fogEnd() { return fogEnd; }
 
   /** Gets the fog color for this fluid */
   public int fogColor() {
@@ -129,9 +153,6 @@ public final class FluidTexture {
    * Builder for this object
    */
   @SuppressWarnings("unused") // API
-  @Setter
-  @Accessors(fluent = true)
-  @RequiredArgsConstructor
   public static class Builder {
 
     private final FluidType fluid;
@@ -152,6 +173,24 @@ public final class FluidTexture {
     private boolean customFog = false;
     private float fogStart = 0.25f;
     private float fogEnd = 1;
+
+    // explicit constructor + fluent setters: lombok was unreliable during the 26.1.2 port
+    public Builder(FluidType fluid) {
+      this.fluid = fluid;
+    }
+
+    public Builder root(Identifier root) { this.root = root; return this; }
+    public Builder still(Identifier still) { this.still = still; return this; }
+    public Builder flowing(Identifier flowing) { this.flowing = flowing; return this; }
+    public Builder overlay(@Nullable Identifier overlay) { this.overlay = overlay; return this; }
+    public Builder camera(@Nullable Identifier camera) { this.camera = camera; return this; }
+    public Builder cameraOpacity(float cameraOpacity) { this.cameraOpacity = cameraOpacity; return this; }
+    public Builder color(int color) { this.color = color; return this; }
+    public Builder fogColor(int fogColor) { this.fogColor = fogColor; return this; }
+    public Builder calculateFogColor(boolean calculateFogColor) { this.calculateFogColor = calculateFogColor; return this; }
+    public Builder customFog(boolean customFog) { this.customFog = customFog; return this; }
+    public Builder fogStart(float fogStart) { this.fogStart = fogStart; return this; }
+    public Builder fogEnd(float fogEnd) { this.fogEnd = fogEnd; return this; }
 
     /**
      * Adds textures using the fluid registry ID
