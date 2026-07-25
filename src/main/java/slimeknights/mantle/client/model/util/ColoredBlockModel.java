@@ -3,32 +3,18 @@ package slimeknights.mantle.client.model.util;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
-import com.mojang.math.Transformation;
 import lombok.Getter;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockElement;
-import net.minecraft.client.renderer.block.model.BlockElementFace;
-import net.minecraft.client.renderer.block.model.BlockElementRotation;
-import net.minecraft.client.renderer.block.model.BlockFaceUV;
-import net.minecraft.client.renderer.block.model.FaceBakery;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.client.resources.model.SimpleBakedModel;
-import net.minecraft.client.resources.model.SimpleBakedModel.Builder;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
-import net.neoforged.neoforge.client.ClientHooks;
-import net.neoforged.neoforge.client.model.IQuadTransformer;
-import net.neoforged.neoforge.client.model.QuadTransformers;
-import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
-import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
-import org.joml.Vector3f;
-import slimeknights.mantle.Mantle;
+import net.minecraft.client.resources.model.ModelDebugName;
+import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
+import net.minecraft.client.resources.model.cuboid.UnbakedCuboidGeometry;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.resources.model.geometry.UnbakedGeometry;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.TextureSlots;
+import net.neoforged.neoforge.client.model.StandardModelParameters;
+import net.neoforged.neoforge.client.model.UnbakedModelLoader;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
@@ -37,19 +23,21 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.util.LogicHelper;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Function;
 
 /**
- * Block model for setting color, luminosity, and per element uv lock. Similar to {@link MantleItemLayerModel} but for blocks
+ * Block model for setting color, luminosity, and per element uv lock. Similar to {@link MantleItemLayerModel} but for blocks.
+ * <p>
+ * In 26.1.2 the vanilla baked quad became immutable and stores emissivity ("light emission") directly on the element, and
+ * per-vertex color has no direct equivalent (coloring is handled by tint indices / block colors). This port preserves the
+ * emissivity behavior by overriding the element light emission; the static per-vertex color is left as a TODO.
  */
 @SuppressWarnings("unused")  // API
 public class ColoredBlockModel extends SimpleBlockModel {
   /** Model loader to allow doing basic coloring outside of other models */
-  public static final IGeometryLoader<SimpleBlockModel> LOADER = ColoredBlockModel::deserialize;
-  private static final FaceBakery FACE_BAKERY = new FaceBakery();
+  public static final UnbakedModelLoader<SimpleBlockModel> LOADER = ColoredBlockModel::deserialize;
 
   /** Colors to use for each piece */
   @Getter
@@ -57,13 +45,13 @@ public class ColoredBlockModel extends SimpleBlockModel {
 
   /**
    * Creates a new colored block model
-   * @param parentLocation Location of the parent model, if unset has no parent
-   * @param textures       List of textures for iteration, in case the owner is not BlockModel
-   * @param parts          List of parts in the model
-   * @param colorData      Additional information about colors in the model
+   * @param parameters  Standard top-level model parameters
+   * @param textures    Mantle texture representation for iteration
+   * @param parts       List of parts in the model
+   * @param colorData   Additional information about colors in the model
    */
-  public ColoredBlockModel(@Nullable Identifier parentLocation, Map<String,Either<Material,String>> textures, List<BlockElement> parts, List<ColorData> colorData) {
-    super(parentLocation, textures, parts);
+  public ColoredBlockModel(StandardModelParameters parameters, Map<String,Either<Material,String>> textures, List<CuboidModelElement> parts, List<ColorData> colorData) {
+    super(parameters, textures, parts);
     this.colorData = colorData;
   }
 
@@ -73,78 +61,36 @@ public class ColoredBlockModel extends SimpleBlockModel {
   }
 
   /**
-   * Bakes a single part of the model into the builder
-   * @param builder          Baked model builder
-   * @param owner            Model owner
-   * @param part             Part to bake
-   * @param emissivity       Emissivity for fullbright, -1 will leave forge in charge, 0-15 will override the forge value
-   * @param spriteGetter     Sprite getter
-   * @param transform        Transform for the face
-   * @param quadTransformer  Forge transformations for the face, this is notably where you should handle color transformations
-   * @param uvlock           UV lock for the face, separated to allow overriding the model state
-   * @param location         Model location
+   * Applies the color data to the model elements, overriding emissivity where requested.
+   * TODO(26.1.2): static per-vertex color and per-element uv lock are not yet reimplemented on the new immutable BakedQuad pipeline.
    */
-  public static void bakePart(Builder builder, IGeometryBakingContext owner, BlockElement part, int emissivity, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transform, IQuadTransformer quadTransformer, boolean uvlock, Identifier location) {
-    for (Entry<Direction, BlockElementFace> entry : part.faces.entrySet()) {
-      BlockElementFace face = entry.getValue();
-      // ensure the name is not prefixed (it always is)
-      String texture = face.texture();
-      if (texture.charAt(0) == '#') {
-        texture = texture.substring(1);
-      }
-      // bake the face with the extra colors
-      TextureAtlasSprite sprite = spriteGetter.apply(owner.getMaterial(texture));
-      BakedQuad quad = bakeFace(part, face, sprite, entry.getKey(), transform, uvlock, emissivity, location);
-      quadTransformer.processInPlace(quad);
-      // apply cull face
-      //noinspection ConstantConditions  the annotation is a liar
-      if (face.cullForDirection() == null) {
-        builder.addUnculledFace(quad);
-      } else {
-        builder.addCulledFace(Direction.rotate(transform.getMatrix(), face.cullForDirection()), quad);
-      }
+  private static List<CuboidModelElement> applyColorData(List<CuboidModelElement> elements, List<ColorData> colorData) {
+    if (colorData.isEmpty()) {
+      return elements;
     }
-  }
-
-  /**
-   * Bakes a list of block part elements into a model
-   * @param owner         Model configuration
-   * @param elements      Model elements
-   * @param spriteGetter  Sprite getter instance
-   * @param transform     Model transform
-   * @param overrides     Model overrides
-   * @param location      Model bake location
-   * @return  Baked model
-   */
-  public static BakedModel bakeModel(IGeometryBakingContext owner, List<BlockElement> elements, List<ColorData> colorData, Function<Material,TextureAtlasSprite> spriteGetter, ModelState transform, ItemOverrides overrides, Identifier location) {
-    // iterate parts, adding to the builder
-    TextureAtlasSprite particle = spriteGetter.apply(owner.getMaterial("particle"));
-    SimpleBakedModel.Builder builder = bakedBuilder(owner, overrides).particle(particle);
     int size = elements.size();
-    IQuadTransformer quadTransformer = applyTransform(transform, owner.getRootTransform());
-    Transformation transformation = transform.getRotation();
-    boolean uvlock = transform.isUvLocked();
+    List<CuboidModelElement> result = new ArrayList<>(size);
     for (int i = 0; i < size; i++) {
-      BlockElement part = elements.get(i);
+      CuboidModelElement part = elements.get(i);
       ColorData colors = LogicHelper.getOrDefault(colorData, i, ColorData.DEFAULT);
-      if (colors.luminosity != -1 && !location.equals(BAKE_LOCATION)) {
-        Mantle.logger.warn("Using deprecated 'luminosity' field on ColoredBlockModel color data for {}, this will be removed in 1.20 in favor of Forge's 'emissivity'.", location);
+      int emissivity = colors.luminosity;
+      if (emissivity >= 0 && emissivity != part.lightEmission()) {
+        part = new CuboidModelElement(part.from(), part.to(), part.faces(), part.rotation(), part.shade(), emissivity);
       }
-      IQuadTransformer partTransformer = colors.color == -1 ? quadTransformer : quadTransformer.andThen(applyColorQuadTransformer(colors.color));
-      bakePart(builder, owner, part, colors.luminosity, spriteGetter, transformation, partTransformer, colors.isUvLock(uvlock), location);
+      result.add(part);
     }
-    return builder.build(getRenderTypeGroup(owner));
+    return result;
   }
 
   @Override
-  public BakedModel bake(IGeometryBakingContext owner, ModelBaker baker, Function<Material,TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides) {
-    Identifier modelLocation = Identifier.tryParse(owner.getModelName());
-    return bakeModel(owner, getElements(), colorData, spriteGetter, modelTransform, overrides, modelLocation == null ? BAKE_LOCATION : modelLocation);
+  public UnbakedGeometry geometry() {
+    List<CuboidModelElement> elements = applyColorData(getElements(), colorData);
+    return (textureSlots, baker, state, name) -> UnbakedCuboidGeometry.bake(elements, textureSlots, baker, state, name);
   }
 
   @Override
-  public BakedModel bakeWithElements(IGeometryBakingContext owner, List<BlockElement> elements, ModelState transform) {
-    return bakeModel(owner, elements, colorData, Material::sprite, transform, ItemOverrides.EMPTY, BAKE_LOCATION);
+  public QuadCollection bake(TextureSlots textureSlots, ModelBaker baker, ModelState transform, ModelDebugName name) {
+    return UnbakedCuboidGeometry.bake(applyColorData(getElements(), colorData), textureSlots, baker, transform, name);
   }
 
   /**
@@ -193,7 +139,7 @@ public class ColoredBlockModel extends SimpleBlockModel {
   }
 
 
-  /* Face bakery */
+  /* Color helpers */
 
   /**
    * Converts an ARGB color to an ABGR color, as the commonly used color format is not the format colors end up packed into.
@@ -205,96 +151,5 @@ public class ColoredBlockModel extends SimpleBlockModel {
     return (color & 0xFF00FF00) // alpha and green same spot
            | ((color >> 16) & 0x000000FF) // red moves to blue
            | ((color << 16) & 0x00FF0000); // blue moves to red
-  }
-
-  /** Quad transformer applying a static color */
-  public static IQuadTransformer applyColorQuadTransformer(int color) {
-    int abgr = swapColorRedBlue(color);
-    return quad -> {
-      int[] vertices = quad.getVertices();
-      for (int i = 0; i < 4; i++) {
-        vertices[i * IQuadTransformer.STRIDE + IQuadTransformer.COLOR] = abgr;
-      }
-    };
-  }
-
-  /**
-   * Extension of {@code BlockModel#bakeFace(BlockPart, BlockPartFace, TextureAtlasSprite, Direction, IModelTransform, Identifier)} with emissivity and UV lock arguments
-   * @param part        Part containing the face
-   * @param face        Face data
-   * @param sprite      Sprite for the face
-   * @param facing      Direction of the face
-   * @param transform   Transform for the face
-   * @param uvlock      UV lock for the face, separated to allow overriding the model state
-   * @param emissivity  Emissivity for fullbright, -1 will leave forge in charge, 0-15 will override the forge value
-   * @param location    Model location for errors
-   */
-  public static BakedQuad bakeFace(BlockElement part, BlockElementFace face, TextureAtlasSprite sprite, Direction facing, Transformation transform, boolean uvlock, int emissivity, Identifier location) {
-    return bakeQuad(part.from, part.to, face, sprite, facing, transform, uvlock, part.rotation, part.shade, emissivity, location);
-  }
-
-  /**
-   * Extension of {@link FaceBakery#bakeQuad(Vector3f, Vector3f, BlockElementFace, TextureAtlasSprite, Direction, ModelState, BlockElementRotation, boolean, Identifier)} with emissivity and UV lock overrides
-   * @param posFrom        Face start position
-   * @param posTo          Face end position
-   * @param face           Face data
-   * @param sprite         Sprite for the face
-   * @param facing         Direction of the face
-   * @param transform      Transform for the face
-   * @param uvlock         UV lock for the face, separated to allow overriding the model state
-   * @param partRotation   Rotation for the part
-   * @param shade          If true, shades the part
-   * @param emissivity     Emissivity for fullbright, -1 will leave forge in charge, 0-15 will override the forge value
-   * @param location       Model location for errors
-   * @return  Baked quad
-   */
-  public static BakedQuad bakeQuad(Vector3f posFrom, Vector3f posTo, BlockElementFace face, TextureAtlasSprite sprite,
-                                   Direction facing, Transformation transform, boolean uvlock, @Nullable BlockElementRotation partRotation,
-                                   boolean shade, int emissivity, Identifier location) {
-    BlockFaceUV faceUV = face.uv();
-    if (uvlock) {
-      faceUV = FaceBakery.recomputeUVs(face.uv(), facing, transform);
-    }
-
-    float[] originalUV = new float[faceUV.uvs.length];
-    System.arraycopy(faceUV.uvs, 0, originalUV, 0, originalUV.length);
-    float shrinkRatio = sprite.uvShrinkRatio();
-    float u = (faceUV.uvs[0] + faceUV.uvs[0] + faceUV.uvs[2] + faceUV.uvs[2]) / 4.0F;
-    float v = (faceUV.uvs[1] + faceUV.uvs[1] + faceUV.uvs[3] + faceUV.uvs[3]) / 4.0F;
-    faceUV.uvs[0] = Mth.lerp(shrinkRatio, faceUV.uvs[0], u);
-    faceUV.uvs[2] = Mth.lerp(shrinkRatio, faceUV.uvs[2], u);
-    faceUV.uvs[1] = Mth.lerp(shrinkRatio, faceUV.uvs[1], v);
-    faceUV.uvs[3] = Mth.lerp(shrinkRatio, faceUV.uvs[3], v);
-
-    // call the vanilla face bakery, we will pass in emmisivity and color via quad transformers
-    // note that in prior versions of mantle we reimplemented the face bakery methods to pass in colors to the face baking directly
-    ModelState modelState = new ModelState() {
-      @Override
-      public Transformation getRotation() {
-        return transform;
-      }
-
-      @Override
-      public boolean isUvLocked() {
-        return false;
-      }
-    };
-    int[] vertexData = FACE_BAKERY.bakeQuad(posFrom, posTo, new BlockElementFace(face.cullForDirection(), face.tintIndex(), face.texture(), faceUV, face.faceData(), face.parent()), sprite, facing, modelState, partRotation, shade).getVertices();
-    Direction direction = FaceBakery.calculateFacing(vertexData);
-    System.arraycopy(originalUV, 0, faceUV.uvs, 0, originalUV.length);
-    //noinspection UnstableApiUsage  We are replicating the vanilla method, so we call the forge method
-    ClientHooks.fillNormal(vertexData, direction);
-
-    // bake final quad
-    BakedQuad quad = new BakedQuad(vertexData, face.tintIndex(), direction, sprite, shade);
-    // use our override if specified, fallback to Forge
-    // TODO: forge colors
-    if (emissivity == -1) {
-      emissivity = face.faceData().blockLight();
-    }
-    if (emissivity > 0) {
-      QuadTransformers.settingEmissivity(emissivity).processInPlace(quad);
-    }
-    return quad;
   }
 }

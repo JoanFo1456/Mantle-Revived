@@ -1,79 +1,47 @@
 package slimeknights.mantle.client.model.util;
 
 import com.mojang.datafixers.util.Either;
-import lombok.AllArgsConstructor;
-import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.resources.model.Material;
-import net.neoforged.neoforge.client.model.geometry.BlockGeometryBakingContext;
-import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
+import net.minecraft.client.resources.model.sprite.Material;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-@AllArgsConstructor
+/**
+ * Iterates over a chain of texture maps, used to resolve texture references through Mantle model textures.
+ * <p>
+ * In 26.1.2 the vanilla {@code BlockModel} parent chain is no longer directly accessible pre-bake, so this now iterates
+ * over Mantle's own texture representation only. TODO(26.1.2): parent-model texture chains are no longer walked.
+ */
 public class ModelTextureIteratable implements Iterable<Map<String,Either<Material, String>>> {
-  /** Initial map for iteration */
-  @Nullable
-  private final Map<String,Either<Material, String>> startMap;
-  /** Initial model for iteration */
-  @Nullable
-  private final BlockModel startModel;
+  /** Ordered list of texture maps to iterate over, innermost first */
+  private final List<Map<String,Either<Material, String>>> maps;
 
-  /**
-   * Creates an iterable over the given model
-   * @param model  Model
-   */
-  public ModelTextureIteratable(BlockModel model) {
-    this(null, model);
+  public ModelTextureIteratable(List<Map<String,Either<Material,String>>> maps) {
+    this.maps = maps;
   }
 
   /**
-   *
-   * @param owner     Model configuration owner
-   * @param fallback  Fallback in case the owner does not contain a block model
-   * @return  Iteratable over block model texture maps
+   * Creates an iterable over the given single texture map
+   * @param textures  Texture map
    */
-  public static ModelTextureIteratable of(IGeometryBakingContext owner, SimpleBlockModel fallback) {
-    if (owner instanceof BlockGeometryBakingContext blockOwner) {
-      return new ModelTextureIteratable(null, blockOwner.owner);
-    }
-    return new ModelTextureIteratable(fallback.getTextures(), fallback.getParent());
+  public ModelTextureIteratable(@Nullable Map<String,Either<Material,String>> textures) {
+    this(textures == null ? List.of() : List.of(textures));
+  }
+
+  /**
+   * Creates an iterable over the given model's textures.
+   * @param fallback  Model providing textures
+   * @return  Iterable over the model texture maps
+   */
+  public static ModelTextureIteratable of(SimpleBlockModel fallback) {
+    return new ModelTextureIteratable(fallback.getTextures());
   }
 
   @Override
-  public MapIterator iterator() {
-    return new MapIterator(startMap, startModel);
-  }
-
-  @AllArgsConstructor
-  private static class MapIterator implements Iterator<Map<String,Either<Material, String>>> {
-    /** Initial map for iteration */
-    @Nullable
-    private Map<String,Either<Material, String>> initial;
-    /** current model in the iterator */
-    @Nullable
-    private BlockModel model;
-
-    @Override
-    public boolean hasNext() {
-      return initial != null || model != null;
-    }
-
-    @Override
-    public Map<String,Either<Material,String>> next() {
-      Map<String,Either<Material, String>> map;
-      if (initial != null) {
-        map = initial;
-        initial = null;
-      } else if (model != null) {
-        map = model.textureMap;
-        model = model.parent;
-      } else {
-        throw new NoSuchElementException();
-      }
-      return map;
-    }
+  public Iterator<Map<String,Either<Material,String>>> iterator() {
+    return maps.iterator();
   }
 }

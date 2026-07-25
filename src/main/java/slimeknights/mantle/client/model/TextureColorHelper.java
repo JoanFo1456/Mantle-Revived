@@ -5,18 +5,16 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.SpriteContents;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import org.apache.commons.lang3.math.NumberUtils;
 import slimeknights.mantle.Mantle;
+import slimeknights.mantle.client.model.util.ModelHelper;
 
 import java.awt.Color;
 import java.util.function.ToIntFunction;
@@ -79,7 +77,7 @@ public class TextureColorHelper {
   /** Getter mapping a block sprite texture to a single average color */
   private static final ToIntFunction<Identifier> COMPUTE_SPRITE_COLOR = key -> {
     Minecraft mc = Minecraft.getInstance();
-    TextureAtlasSprite sprite = mc.getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(key);
+    TextureAtlasSprite sprite = mc.getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(key);
     //noinspection ConstantValue  eh, its better to be safe
     if (sprite == null || sprite.contents().name() == MissingTextureAtlasSprite.getLocation()) {
       return -1;
@@ -92,7 +90,7 @@ public class TextureColorHelper {
     return SPRITE_CACHE.computeIfAbsent(texture, COMPUTE_SPRITE_COLOR);
   }
 
-  /** Gets the color for the given sprite. Should be from {@link InventoryMenu#BLOCK_ATLAS} */
+  /** Gets the color for the given sprite. Should be from the block atlas */
   public static int getAverageColor(TextureAtlasSprite sprite) {
     Identifier name = sprite.contents().name();
     if (SPRITE_CACHE.containsKey(name)) {
@@ -106,14 +104,15 @@ public class TextureColorHelper {
 
   /* Particle textures */
 
-  /** Computes the color for an item based on the particle icon */
+  /**
+   * Computes the color for an item based on the particle icon.
+   * TODO(26.1.2): item model particle access was reworked (BakedModel/getParticleIcon removed); falls back to -1.
+   */
   private static final ToIntFunction<Item> COMPUTE_ITEM_COLOR = item -> {
-    Minecraft mc = Minecraft.getInstance();
-    BakedModel model = mc.getItemRenderer().getModel(new ItemStack(item), null, null, 0);
-    if (model == mc.getModelManager().getMissingModel()) {
-      return -1;
+    if (item instanceof net.minecraft.world.item.BlockItem blockItem) {
+      return getBlockColor(blockItem.getBlock());
     }
-    return getAverageColor(model.getParticleIcon(ModelData.EMPTY));
+    return -1;
   };
 
   /** Gets the average color of an item's default particle icon */
@@ -121,17 +120,16 @@ public class TextureColorHelper {
     return ITEM_CACHE.computeIfAbsent(item.asItem(), COMPUTE_ITEM_COLOR);
   }
 
-  /** Computes the color for an item based on the particle icon */
+  /** Computes the color for a block based on its particle icon */
   private static final ToIntFunction<Block> COMPUTE_BLOCK_COLOR = block -> {
-    Minecraft mc = Minecraft.getInstance();
-    BakedModel model = mc.getBlockRenderer().getBlockModel(block.defaultBlockState());
-    if (model == mc.getModelManager().getMissingModel()) {
+    Identifier particle = ModelHelper.getParticleTexture(block);
+    if (particle.equals(MissingTextureAtlasSprite.getLocation())) {
       return -1;
     }
-    return getAverageColor(model.getParticleIcon(ModelData.EMPTY));
+    return getAverageColor(particle);
   };
 
-  /** Gets the average color of an blocks default particle icon */
+  /** Gets the average color of a blocks default particle icon */
   public static int getBlockColor(Block block) {
     return BLOCK_CACHE.computeIfAbsent(block, COMPUTE_BLOCK_COLOR);
   }
