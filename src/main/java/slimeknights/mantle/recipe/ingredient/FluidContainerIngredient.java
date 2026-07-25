@@ -14,14 +14,17 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.recipe.MantleRecipes;
@@ -45,7 +48,6 @@ public class FluidContainerIngredient implements ICustomIngredient {
   /** Internal ingredient to display the ingredient recipe viewers */
   @Nullable
   private final Ingredient display;
-  private ItemStack[] displayStacks;
   protected FluidContainerIngredient(FluidIngredient fluidIngredient, @Nullable Ingredient display) {
     this.fluidIngredient = fluidIngredient;
     this.display = display;
@@ -72,42 +74,36 @@ public class FluidContainerIngredient implements ICustomIngredient {
     if (stack.isEmpty()) {
       return false;
     }
-    IFluidHandlerItem cap = stack.getCapability(Capabilities.FluidHandler.ITEM);
-    if (cap == null) {
+    // work on a single-count copy as we need to simulate draining
+    ItemAccess access = ItemAccess.forStack(stack.copyWithCount(1));
+    ResourceHandler<FluidResource> handler = access.getCapability(Capabilities.Fluid.ITEM);
+    // second, must contain enough fluid in a single tank
+    if (handler == null || handler.size() != 1) {
       return false;
     }
-    return Optional.of(cap).flatMap(handler -> {
-      // second, must contain enough fluid
-      if (handler.getTanks() == 1) {
-        FluidStack contained = handler.getFluidInTank(0);
-        if (!contained.isEmpty() && fluidIngredient.getAmount(contained.getFluid()) == contained.getAmount() && fluidIngredient.test(contained.getFluid())) {
-          // so far so good, from this point on we are forced to make copies as we need to try draining, so copy and fetch the copy's cap
-          ItemStack copy = stack.copyWithCount(1);
-          return Optional.ofNullable(copy.getCapability(Capabilities.FluidHandler.ITEM));
-        }
-      }
-      return Optional.empty();
-    }).filter(fluidHandler -> {
-      // alright, we know it has the fluid, the question is just whether draining the fluid will give us the desired result
-      Fluid fluid = fluidHandler.getFluidInTank(0).getFluid();
-      int amount = fluidIngredient.getAmount(fluid);
-      FluidStack drained = fluidHandler.drain(amount, FluidAction.EXECUTE);
+    FluidResource contained = handler.getResource(0);
+    if (contained.isEmpty()) {
+      return false;
+    }
+    Fluid fluid = contained.getFluid();
+    int amount = fluidIngredient.getAmount(fluid);
+    if (amount != handler.getAmountAsInt(0) || !fluidIngredient.test(fluid)) {
+      return false;
+    }
+    // alright, we know it has the fluid, the question is just whether draining the fluid will give us the desired result
+    // simulate the drain in a transaction that we never commit, so the item copy is left untouched
+    try (Transaction tx = Transaction.openRoot()) {
+      int drained = handler.extract(0, contained, amount, tx);
       // we need an exact match, and we need the resulting container item to be the same as the item stack's container item
-      return drained.getFluid() == fluid && drained.getAmount() == amount && ItemStack.matches(stack.getCraftingRemainingItem(), fluidHandler.getContainer());
-    }).isPresent();
+      ItemResource result = access.getResource();
+      return drained == amount && result.matches(stack.getCraftingRemainingItem());
+    }
   }
 
   @Override
-  public Stream<ItemStack> getItems() {
-    if (displayStacks == null) {
-      // no container? unfortunately hard to display this recipe so show nothing
-      if (display == null) {
-        displayStacks = new ItemStack[0];
-      } else {
-        displayStacks = display.getItems();
-      }
-    }
-    return Arrays.stream(displayStacks);
+  public Stream<Holder<Item>> items() {
+    // no container? unfortunately hard to display this recipe so show nothing
+    return display == null ? Stream.empty() : display.items();
   }
 
   public JsonElement toJson() {

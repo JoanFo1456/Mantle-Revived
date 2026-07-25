@@ -191,11 +191,15 @@ public abstract class FluidIngredient implements IAmLoadable {
   /**
    * Fluid ingredient that matches a single fluid
    */
-  @AllArgsConstructor(access=AccessLevel.PRIVATE)
   private static class FluidMatch extends FluidIngredient {
 
     private final Fluid fluid;
     private final int amount;
+
+    private FluidMatch(Fluid fluid, int amount) {
+      this.fluid = fluid;
+      this.amount = amount;
+    }
 
     @Override
     public Loadable<FluidMatch> loadable() {
@@ -221,10 +225,14 @@ public abstract class FluidIngredient implements IAmLoadable {
   /**
    * Fluid ingredient that matches a tag
    */
-  @AllArgsConstructor
   private static class TagMatch extends FluidIngredient {
     private final TagKey<Fluid> tag;
     private final int amount;
+
+    private TagMatch(TagKey<Fluid> tag, int amount) {
+      this.tag = tag;
+      this.amount = amount;
+    }
 
     @Override
     public Loadable<TagMatch> loadable() {
@@ -254,9 +262,12 @@ public abstract class FluidIngredient implements IAmLoadable {
   /**
    * Fluid ingredient that matches a list of ingredients
    */
-  @RequiredArgsConstructor
   private static class Compound extends FluidIngredient {
     private final List<FluidIngredient> ingredients;
+
+    private Compound(List<FluidIngredient> ingredients) {
+      this.ingredients = ingredients;
+    }
 
     @Override
     public Loadable<Compound> loadable() {

@@ -141,7 +141,12 @@ public abstract class EntityIngredient implements Predicate<EntityType<?>>, IAmL
   public List<ItemStack> getEggs() {
     if (eggs == null) {
       // use getDisplay to guarantee order is the same, just in case
-      eggs = getDisplay().stream().map(type -> new ItemStack(Objects.requireNonNullElse(SpawnEggItem.byId(type.type), Items.AIR))).toList();
+      eggs = getDisplay().stream()
+                         .map(type -> SpawnEggItem.byId(type.type)
+                                                  .map(net.minecraft.core.Holder::value)
+                                                  .<ItemStack>map(ItemStack::new)
+                                                  .orElseGet(() -> new ItemStack(Items.AIR)))
+                         .toList();
     }
     return eggs;
   }
@@ -151,9 +156,12 @@ public abstract class EntityIngredient implements Predicate<EntityType<?>>, IAmL
   /* Impls */
 
   /** Ingredient that matches any entity from a set */
-  @RequiredArgsConstructor
   private static class SetMatch extends EntityIngredient {
     private final Set<EntityType<?>> types;
+
+    private SetMatch(Set<EntityType<?>> types) {
+      this.types = types;
+    }
 
     @Override
     public Loadable<? extends EntityIngredient> loadable() {
@@ -172,10 +180,13 @@ public abstract class EntityIngredient implements Predicate<EntityType<?>>, IAmL
   }
 
   /** Ingredient that matches any entity from a tag */
-  @RequiredArgsConstructor
   private static class TagMatch extends EntityIngredient {
     private final TagKey<EntityType<?>> tag;
     private Set<EntityType<?>> types;
+
+    private TagMatch(TagKey<EntityType<?>> tag) {
+      this.tag = tag;
+    }
 
     @Override
     public Loadable<TagMatch> loadable() {
@@ -198,10 +209,13 @@ public abstract class EntityIngredient implements Predicate<EntityType<?>>, IAmL
   }
 
   /** Ingredient combining multiple */
-  @RequiredArgsConstructor
   private static class Compound extends EntityIngredient {
     private final List<EntityIngredient> ingredients;
     private Set<EntityType<?>> allTypes;
+
+    private Compound(List<EntityIngredient> ingredients) {
+      this.ingredients = ingredients;
+    }
 
     @Override
     public Loadable<Compound> loadable() {

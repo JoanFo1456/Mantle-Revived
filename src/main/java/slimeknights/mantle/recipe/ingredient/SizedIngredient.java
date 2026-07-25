@@ -1,8 +1,6 @@
 package slimeknights.mantle.recipe.ingredient;
 
 import com.google.gson.JsonObject;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -13,8 +11,6 @@ import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 
-import java.lang.ref.WeakReference;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -22,7 +18,6 @@ import java.util.stream.Collectors;
 /**
  * Extension of the vanilla ingredient to make stack size checks
  */
-@RequiredArgsConstructor(staticName = "of")
 public class SizedIngredient implements Predicate<ItemStack> {
   /** Empty sized ingredient wrapper. Matches only the empty stack of size 0 */
   public static final SizedIngredient EMPTY = of(Ingredient.EMPTY, 0);
@@ -33,16 +28,34 @@ public class SizedIngredient implements Predicate<ItemStack> {
     SizedIngredient::new);
 
   /** Ingredient to use in recipe match */
-  @Getter
   private final Ingredient ingredient;
   /** Amount of this ingredient needed */
-  @Getter
   private final int amountNeeded;
 
-  /** Last list of matching stacks from the ingredient */
-  private WeakReference<ItemStack[]> lastIngredientMatch;
-  /** Cached matching stacks from last time it was requested */
-  private List<ItemStack> matchingStacks;
+  private SizedIngredient(Ingredient ingredient, int amountNeeded) {
+    this.ingredient = ingredient;
+    this.amountNeeded = amountNeeded;
+  }
+
+  /** Gets the ingredient to use in recipe match */
+  public Ingredient getIngredient() {
+    return ingredient;
+  }
+
+  /** Gets the amount of this ingredient needed */
+  public int getAmountNeeded() {
+    return amountNeeded;
+  }
+
+  /**
+   * Creates a new sized ingredient
+   * @param ingredient    Ingredient
+   * @param amountNeeded  Number that must match of this ingredient
+   * @return  Sized ingredient
+   */
+  public static SizedIngredient of(Ingredient ingredient, int amountNeeded) {
+    return new SizedIngredient(ingredient, amountNeeded);
+  }
 
   /**
    * Gets a new sized ingredient with a size of 1
@@ -109,19 +122,9 @@ public class SizedIngredient implements Predicate<ItemStack> {
    * @return  List of matching stacks
    */
   public List<ItemStack> getMatchingStacks() {
-    ItemStack[] ingredientMatch = ingredient.getItems();
-    // if we never cached, or the array instance changed since we last cached, recache
-    if (matchingStacks == null || lastIngredientMatch.get() != ingredientMatch) {
-      matchingStacks = Arrays.stream(ingredientMatch).map(stack -> {
-        if (stack.getCount() != amountNeeded) {
-          stack = stack.copy();
-          stack.setCount(amountNeeded);
-        }
-        return stack;
-      }).collect(Collectors.toList());
-      lastIngredientMatch = new WeakReference<>(ingredientMatch);
-    }
-    return matchingStacks;
+    return ingredient.items()
+                     .map(holder -> new ItemStack(holder.value(), amountNeeded))
+                     .collect(Collectors.toList());
   }
 
   /** use {@link #LOADABLE} with {@link slimeknights.mantle.data.loadable.Loadable#encode(FriendlyByteBuf, Object)} */
