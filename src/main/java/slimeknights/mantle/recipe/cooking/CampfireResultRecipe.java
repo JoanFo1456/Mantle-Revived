@@ -2,6 +2,8 @@ package slimeknights.mantle.recipe.cooking;
 
 import lombok.Getter;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
@@ -22,7 +24,7 @@ public class CampfireResultRecipe extends CampfireCookingRecipe implements Cooki
   public static LoadableField<Integer, AbstractCookingRecipe> COOKING_TIME_FIELD = IntLoadable.FROM_ONE.defaultField("cooking_time", 600, true, AbstractCookingRecipe::cookingTime);
   public static final RecordLoadable<CampfireResultRecipe> LOADABLE = RecordLoadable.create(
     LoadableRecipeSerializer.RECIPE_GROUP, CookingResultRecipe.CATEGORY_FIELD,
-    IngredientLoadable.DISALLOW_EMPTY.requiredField("ingredient", r -> r.ingredient),
+    IngredientLoadable.DISALLOW_EMPTY.requiredField("ingredient", AbstractCookingRecipe::input),
     RESULT_FIELD, EXPERIENCE_FIELD, COOKING_TIME_FIELD,
     CampfireResultRecipe::new);
 
@@ -32,9 +34,10 @@ public class CampfireResultRecipe extends CampfireCookingRecipe implements Cooki
     this.result = result;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public RecipeSerializer<? extends AbstractCookingRecipe> getSerializer() {
-    return MantleRecipes.CAMPFIRE.get();
+  public RecipeSerializer<CampfireCookingRecipe> getSerializer() {
+    return (RecipeSerializer<CampfireCookingRecipe>) (RecipeSerializer<?>) MantleRecipes.CAMPFIRE.get();
   }
 
   @Override

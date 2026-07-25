@@ -2,6 +2,8 @@ package slimeknights.mantle.recipe.cooking;
 
 import lombok.Getter;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -22,7 +24,7 @@ public class SmeltingResultRecipe extends SmeltingRecipe implements CookingResul
   public static LoadableField<Integer, AbstractCookingRecipe> COOKING_TIME_FIELD = IntLoadable.FROM_ONE.defaultField("cooking_time", 200, true, AbstractCookingRecipe::cookingTime);
   public static final RecordLoadable<SmeltingResultRecipe> LOADABLE = RecordLoadable.create(
     LoadableRecipeSerializer.RECIPE_GROUP, CookingResultRecipe.CATEGORY_FIELD,
-    IngredientLoadable.DISALLOW_EMPTY.requiredField("ingredient", r -> r.ingredient),
+    IngredientLoadable.DISALLOW_EMPTY.requiredField("ingredient", AbstractCookingRecipe::input),
     RESULT_FIELD, EXPERIENCE_FIELD, COOKING_TIME_FIELD,
     SmeltingResultRecipe::new);
 
@@ -32,9 +34,10 @@ public class SmeltingResultRecipe extends SmeltingRecipe implements CookingResul
     this.result = result;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public RecipeSerializer<? extends AbstractCookingRecipe> getSerializer() {
-    return MantleRecipes.SMELTING.get();
+  public RecipeSerializer<SmeltingRecipe> getSerializer() {
+    return (RecipeSerializer<SmeltingRecipe>) (RecipeSerializer<?>) MantleRecipes.SMELTING.get();
   }
 
   @Override
