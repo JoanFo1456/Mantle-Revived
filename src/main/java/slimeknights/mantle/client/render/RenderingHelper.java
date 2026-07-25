@@ -87,7 +87,10 @@ public class RenderingHelper {
     }
 
     // render the actual item
-    Minecraft.getInstance().getItemRenderer().renderStatic(item, renderItem.getTransform(), light, OverlayTexture.NO_OVERLAY, matrices, buffer, Minecraft.getInstance().level, 0);
+    // TODO(26.1.2): Minecraft#getItemRenderer() and ItemRenderer#renderStatic were removed in the 1.21.4+ item
+    // model/render rewrite. In-world item rendering now goes through the ItemModelResolver / ItemStackRenderState
+    // + SubmitNodeCollector pipeline. Reimplement this immediate-mode item draw against that system.
+    // Minecraft.getInstance().getItemRenderer().renderStatic(item, renderItem.getTransform(), light, OverlayTexture.NO_OVERLAY, matrices, buffer, Minecraft.getInstance().level, 0);
     matrices.popPose();
   }
 
