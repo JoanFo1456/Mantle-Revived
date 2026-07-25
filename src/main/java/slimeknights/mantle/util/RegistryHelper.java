@@ -23,7 +23,7 @@ public class RegistryHelper {
   @Nullable
   @SuppressWarnings({"unchecked"})
   public static <T> Registry<T> getRegistry(ResourceKey<? extends Registry<T>> key) {
-    return (Registry<T>) BuiltInRegistries.REGISTRY.get(key.location());
+    return (Registry<T>) BuiltInRegistries.REGISTRY.get(key.identifier());
   }
 
   /** Gets a stream of tag holders for the given registry */

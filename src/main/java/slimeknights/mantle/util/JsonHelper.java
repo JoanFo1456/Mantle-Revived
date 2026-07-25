@@ -227,7 +227,7 @@ public class JsonHelper {
         return value;
       }
     }
-    throw new JsonSyntaxException("Unknown " + registry.key().location() + " " + name);
+    throw new JsonSyntaxException("Unknown " + registry.key().identifier() + " " + name);
   }
 
   /**

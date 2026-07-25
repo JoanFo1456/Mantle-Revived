@@ -53,7 +53,7 @@ public abstract class TagCondition<T> implements ICondition {
   /** Creates a codec for tag conditions. */
   protected static <C extends TagCondition<?>> MapCodec<C> codec(Function<TagKey<?>,C> constructor) {
     return RecordCodecBuilder.mapCodec(instance -> instance.group(
-      Identifier.CODEC.optionalFieldOf("registry", Registries.ITEM.location()).forGetter(condition -> condition.tag.registry().location()),
+      Identifier.CODEC.optionalFieldOf("registry", Registries.ITEM.identifier()).forGetter(condition -> condition.tag.registry().identifier()),
       Identifier.CODEC.fieldOf("tag").forGetter(condition -> condition.tag.location())
     ).apply(instance, (registry, tag) -> constructor.apply(TagKey.create(ResourceKey.createRegistryKey(registry), tag))));
   }
@@ -64,7 +64,7 @@ public abstract class TagCondition<T> implements ICondition {
       TagKey<?> tag = value.getTag();
       // save some space in JSON by not setting registry if item (most common)
       if (!Registries.ITEM.equals(tag.registry())) {
-        json.addProperty("registry", tag.registry().location().toString());
+        json.addProperty("registry", tag.registry().identifier().toString());
       }
       json.addProperty("tag", tag.location().toString());
     }
@@ -72,7 +72,7 @@ public abstract class TagCondition<T> implements ICondition {
     public C read(JsonObject json) {
       return constructor.apply(TagKey.create(
         // default to item registry if registry is unset
-        ResourceKey.createRegistryKey(JsonHelper.getResourceLocation(json, "registry", Registries.ITEM.location())),
+        ResourceKey.createRegistryKey(JsonHelper.getResourceLocation(json, "registry", Registries.ITEM.identifier())),
         JsonHelper.getResourceLocation(json, "tag")));
     }
   }

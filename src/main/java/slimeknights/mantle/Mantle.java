@@ -1,6 +1,6 @@
 package slimeknights.mantle;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.HolderLookup;

@@ -20,7 +20,7 @@ public record DynamicRegistryLoadable<T>(ResourceKey<? extends Registry<T>> regi
     HolderLookup.Provider provider = context.get(ContextKey.REGISTRY_ACCESS);
     HolderLookup.RegistryLookup<T> lookup = provider == null ? CommonHooks.resolveLookup(registryKey) : provider.lookup(registryKey).orElse(null);
     if (lookup == null) {
-      throw new JsonSyntaxException("Unable to parse " + key + " as registry " + registryKey.location() + " cannot be located");
+      throw new JsonSyntaxException("Unable to parse " + key + " as registry " + registryKey.identifier() + " cannot be located");
     }
     return lookup;
   }
@@ -29,16 +29,16 @@ public record DynamicRegistryLoadable<T>(ResourceKey<? extends Registry<T>> regi
   public T fromKey(Identifier name, String key, TypedMap context) {
     return lookup(key, context).get(ResourceKey.create(registryKey, name))
       .map(holder -> holder.value())
-      .orElseThrow(() -> new JsonSyntaxException("Unable to parse " + key + " as registry " + registryKey.location() + " does not contain ID " + name));
+      .orElseThrow(() -> new JsonSyntaxException("Unable to parse " + key + " as registry " + registryKey.identifier() + " does not contain ID " + name));
   }
 
   @Override
   public Identifier getKey(T object) {
     return lookup("value", TypedMap.EMPTY).listElements()
       .filter(holder -> holder.value() == object)
-      .map(holder -> holder.key().location())
+      .map(holder -> holder.key().identifier())
       .findFirst()
-      .orElseThrow(() -> new EncoderException("Registry " + registryKey.location() + " does not contain object " + object));
+      .orElseThrow(() -> new EncoderException("Registry " + registryKey.identifier() + " does not contain object " + object));
   }
 
   @Override

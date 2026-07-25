@@ -51,7 +51,7 @@ public class HarvestTiersCommand {
   /** Creates a clickable component for a block tag */
   private static Object getTagComponent(TagKey<Block> tag) {
     Identifier id = tag.location();
-    return Component.literal(id.toString()).withStyle(style -> style.withUnderlined(true).withClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/mantle dump_tag " + Registries.BLOCK.location() + " " + id + " save")));
+    return Component.literal(id.toString()).withStyle(style -> style.withUnderlined(true).withClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/mantle dump_tag " + Registries.BLOCK.identifier() + " " + id + " save")));
   }
 
   /** Runs the command, dumping the tag */

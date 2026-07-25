@@ -37,7 +37,7 @@ public record TagCombinationCondition<T>(List<TagKey<T>> match, @Nullable TagKey
     either -> either.map(List::of, locations -> locations),
     locations -> locations.size() == 1 ? Either.left(locations.get(0)) : Either.right(locations));
   public static final MapCodec<TagCombinationCondition<?>> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-    Identifier.CODEC.optionalFieldOf("registry", Registries.ITEM.location()).forGetter(condition -> condition.match.get(0).registry().location()),
+    Identifier.CODEC.optionalFieldOf("registry", Registries.ITEM.identifier()).forGetter(condition -> condition.match.get(0).registry().identifier()),
     MATCH_CODEC.fieldOf("match").forGetter(condition -> condition.match.stream().map(TagKey::location).toList()),
     Identifier.CODEC.optionalFieldOf("ignore").forGetter(condition -> Optional.ofNullable(condition.ignore).map(TagKey::location))
   ).apply(instance, TagCombinationCondition::newCondition));
@@ -130,7 +130,7 @@ public record TagCombinationCondition<T>(List<TagKey<T>> match, @Nullable TagKey
       // save some space in JSON by not setting registry if item (most common)
       ResourceKey<?> registry = value.match.get(0).registry();
       if (!Registries.ITEM.equals(registry)) {
-        json.addProperty("registry", registry.location().toString());
+        json.addProperty("registry", registry.identifier().toString());
       }
       // serialize to a single field if just 1 name
       if (value.match.size() == 1) {
@@ -149,7 +149,7 @@ public record TagCombinationCondition<T>(List<TagKey<T>> match, @Nullable TagKey
 
     public TagCombinationCondition<?> read(JsonObject json) {
       // default to item registry if registry is unset
-      ResourceKey<Registry<Object>> registry = ResourceKey.createRegistryKey(JsonHelper.getResourceLocation(json, "registry", Registries.ITEM.location()));
+      ResourceKey<Registry<Object>> registry = ResourceKey.createRegistryKey(JsonHelper.getResourceLocation(json, "registry", Registries.ITEM.identifier()));
       return new TagCombinationCondition<>(
         MATCH.getIfPresent(json, "match").stream().map(id -> TagKey.create(registry, id)).toList(),
         json.has("ignore") ? TagKey.create(registry, JsonHelper.getResourceLocation(json, "ignore")) : null);
