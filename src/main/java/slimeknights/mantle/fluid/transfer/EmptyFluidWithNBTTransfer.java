@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -15,7 +15,7 @@ import slimeknights.mantle.recipe.helper.ItemOutput;
 
 /** Fluid transfer info that empties a fluid from an item, copying the fluid's NBT to the stack */
 public class EmptyFluidWithNBTTransfer extends EmptyFluidContainerTransfer {
-  public static final ResourceLocation ID = Mantle.getResource("empty_nbt");
+  public static final Identifier ID = Mantle.getResource("empty_nbt");
   public EmptyFluidWithNBTTransfer(Ingredient input, ItemOutput filled, FluidOutput fluid) {
     super(input, filled, fluid);
   }

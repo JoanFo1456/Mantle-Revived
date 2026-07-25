@@ -6,7 +6,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -37,7 +37,7 @@ public class NetworkWrapper {
     PLAY_TO_SERVER
   }
 
-  private final ResourceLocation channelName;
+  private final Identifier channelName;
   private final String version;
   private final Map<Class<?>,Registration<?>> registrations = new HashMap<>();
   private int id = 0;
@@ -48,11 +48,11 @@ public class NetworkWrapper {
    * @deprecated Give your channel a version number.
    */
   @Deprecated
-  public NetworkWrapper(ResourceLocation channelName) {
+  public NetworkWrapper(Identifier channelName) {
     this(channelName, "1");
   }
 
-  public NetworkWrapper(ResourceLocation channelName, String version) {
+  public NetworkWrapper(Identifier channelName, String version) {
     this.channelName = channelName;
     this.version = version;
   }
@@ -90,7 +90,7 @@ public class NetworkWrapper {
    * Registers a new packet without the automatic logging if the decoder fails
    */
   public <MSG> void registerPacketNoLogger(Class<MSG> clazz, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG,IPayloadContext> consumer, @Nullable PacketDirection direction) {
-    ResourceLocation typeName = ResourceLocation.fromNamespaceAndPath(channelName.getNamespace(), channelName.getPath() + "/" + id++);
+    Identifier typeName = Identifier.fromNamespaceAndPath(channelName.getNamespace(), channelName.getPath() + "/" + id++);
     CustomPacketPayload.Type<Payload<MSG>> type = new CustomPacketPayload.Type<>(typeName);
     registrations.put(clazz, new Registration<>(type, encoder, decoder, consumer, direction));
   }

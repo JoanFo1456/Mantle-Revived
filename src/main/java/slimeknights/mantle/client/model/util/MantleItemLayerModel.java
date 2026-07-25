@@ -17,7 +17,7 @@ import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.RenderTypeGroup;
 import net.neoforged.neoforge.client.model.CompositeModel;
@@ -72,7 +72,7 @@ public class MantleItemLayerModel implements IUnbakedGeometry<MantleItemLayerMod
   }
 
   @Override
-  public void resolveParents(Function<ResourceLocation,UnbakedModel> modelGetter, IGeometryBakingContext owner) {
+  public void resolveParents(Function<Identifier,UnbakedModel> modelGetter, IGeometryBakingContext owner) {
     List<Material> builder = new ArrayList<>();
     for (int i = 0; owner.hasMaterial("layer" + i); i++) {
       builder.add(owner.getMaterial("layer" + i));
@@ -82,7 +82,7 @@ public class MantleItemLayerModel implements IUnbakedGeometry<MantleItemLayerMod
 
   /** Gets the default render type for an item layer */
   public static RenderTypeGroup getDefaultRenderType(IGeometryBakingContext context) {
-    ResourceLocation renderTypeHint = context.getRenderTypeHint();
+    Identifier renderTypeHint = context.getRenderTypeHint();
     if (renderTypeHint != null) {
       return context.getRenderType(renderTypeHint);
     } else {
@@ -492,7 +492,7 @@ public class MantleItemLayerModel implements IUnbakedGeometry<MantleItemLayerMod
   /**
    * Class holding details about a single layer in the model
    */
-  public record LayerData(int color, int luminosity, boolean noTint, @Nullable ResourceLocation renderType) {
+  public record LayerData(int color, int luminosity, boolean noTint, @Nullable Identifier renderType) {
     public static final LayerData DEFAULT = new LayerData(-1, 0, false, null);
     public static final RecordLoadable<LayerData> LOADABLE = RecordLoadable.create(
       ColorLoadable.ALPHA.defaultField("color", false, LayerData::color),

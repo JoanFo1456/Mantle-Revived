@@ -23,7 +23,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
@@ -100,7 +100,7 @@ public class BookCommand {
    * @return  Integer return
    */
   private static int openBook(CommandContext<CommandSourceStack> context) {
-    ResourceLocation book = ResourceLocationArgument.getId(context, "id");
+    Identifier book = ResourceLocationArgument.getId(context, "id");
 
     BookData bookData = BookLoader.getBook(book);
     if(bookData != null) {
@@ -122,7 +122,7 @@ public class BookCommand {
    * @return  Integer return
    */
   private static int exportImages(CommandContext<CommandSourceStack> context, int scale) throws CommandSyntaxException {
-    ResourceLocation book = ResourceLocationArgument.getId(context, "id");
+    Identifier book = ResourceLocationArgument.getId(context, "id");
     return doExport(book, scale, false, DEFAULT_BOOK_VERSION);
   }
 
@@ -133,7 +133,7 @@ public class BookCommand {
    */
   private static int exportDomainImages(CommandContext<CommandSourceStack> context, int scale) throws CommandSyntaxException {
     String domain = StringArgumentType.getString(context, "domain");
-    for (ResourceLocation book : BookLoader.getAllBooks()) {
+    for (Identifier book : BookLoader.getAllBooks()) {
       if (domain.equals(book.getNamespace())) {
         int code = doExport(book, scale, false, DEFAULT_BOOK_VERSION);
         if (code != 0) return code;
@@ -148,7 +148,7 @@ public class BookCommand {
    * @return Integer return
    */
   private static int exportHTML(CommandContext<CommandSourceStack> context, String version) throws CommandSyntaxException {
-    ResourceLocation book = ResourceLocationArgument.getId(context, "id");
+    Identifier book = ResourceLocationArgument.getId(context, "id");
     return doExport(book, 2, true, version);
   }
 
@@ -159,7 +159,7 @@ public class BookCommand {
    */
   private static int exportDomainHtml(CommandContext<CommandSourceStack> context, String version) throws CommandSyntaxException {
     String domain = StringArgumentType.getString(context, "domain");
-    for (ResourceLocation book : BookLoader.getAllBooks()) {
+    for (Identifier book : BookLoader.getAllBooks()) {
       if (domain.equals(book.getNamespace())) {
         int code = doExport(book, 2, true, version);
         if (code != 0) return code;
@@ -176,7 +176,7 @@ public class BookCommand {
    * @param version  version in each files header
    * @return  Integer return
    */
-  private static int doExport(ResourceLocation book, int scale, boolean html, String version) throws CommandSyntaxException {
+  private static int doExport(Identifier book, int scale, boolean html, String version) throws CommandSyntaxException {
     BookData bookData = BookLoader.getBook(book);
 
     Path gameDirectory = Minecraft.getInstance().gameDirectory.toPath();
@@ -361,7 +361,7 @@ public class BookCommand {
     return nativeimage;
   }
 
-  public static void bookNotFound(ResourceLocation book) {
+  public static void bookNotFound(Identifier book) {
     Player player = Minecraft.getInstance().player;
     if (player != null) {
       player.displayClientMessage(Component.translatable(BOOK_NOT_FOUND, book).withStyle(ChatFormatting.RED), false);

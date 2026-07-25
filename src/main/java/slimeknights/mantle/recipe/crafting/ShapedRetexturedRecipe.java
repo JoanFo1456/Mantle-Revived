@@ -12,7 +12,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -44,10 +44,10 @@ public class ShapedRetexturedRecipe extends ShapedRecipe {
   private final boolean matchAll;
   private final ItemStack result;
   @Nullable
-  private final ResourceLocation recipeId;
+  private final Identifier recipeId;
 
   /** Creates a new recipe using the passed parameters */
-  protected ShapedRetexturedRecipe(@Nullable ResourceLocation id, String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification, Ingredient texture, boolean matchAll) {
+  protected ShapedRetexturedRecipe(@Nullable Identifier id, String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification, Ingredient texture, boolean matchAll) {
     super(group, category, pattern, result, showNotification);
     this.texture = texture;
     this.matchAll = matchAll;
@@ -56,7 +56,7 @@ public class ShapedRetexturedRecipe extends ShapedRecipe {
   }
 
   /** Creates a new recipe using the passed parameters */
-  protected ShapedRetexturedRecipe(@Nullable ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result, boolean showNotification, Ingredient texture, boolean matchAll) {
+  protected ShapedRetexturedRecipe(@Nullable Identifier id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result, boolean showNotification, Ingredient texture, boolean matchAll) {
     this(id, group, category, new ShapedRecipePattern(width, height, ingredients, Optional.empty()), result, showNotification, texture, matchAll);
   }
 
@@ -71,7 +71,7 @@ public class ShapedRetexturedRecipe extends ShapedRecipe {
   }
 
   /** Gets a best-effort recipe ID for legacy JEI hooks. */
-  public ResourceLocation getRecipeId() {
+  public Identifier getRecipeId() {
     return recipeId == null ? Mantle.getResource("unknown_retextured_recipe") : recipeId;
   }
 

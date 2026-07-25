@@ -3,7 +3,7 @@ package slimeknights.mantle.network.packet;
 import lombok.AllArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import slimeknights.mantle.client.book.BookLoader;
 import slimeknights.mantle.client.book.data.BookData;
@@ -11,7 +11,7 @@ import slimeknights.mantle.command.client.BookCommand;
 
 @AllArgsConstructor
 public class OpenNamedBookPacket implements IThreadsafePacket {
-  private final ResourceLocation book;
+  private final Identifier book;
 
   public OpenNamedBookPacket(FriendlyByteBuf buffer) {
     this.book = buffer.readResourceLocation();
@@ -33,7 +33,7 @@ public class OpenNamedBookPacket implements IThreadsafePacket {
   }
 
   static class ClientOnly {
-    static void errorStatus(ResourceLocation book) {
+    static void errorStatus(Identifier book) {
       BookCommand.bookNotFound(book);
     }
   }

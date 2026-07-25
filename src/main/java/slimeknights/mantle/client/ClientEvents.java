@@ -16,7 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -70,10 +70,10 @@ import java.util.Optional;
 
 @EventBusSubscriber(modid = Mantle.modId, value = Dist.CLIENT, bus = Bus.MOD)
 public class ClientEvents {
-  private static final ResourceLocation CROSSHAIR_ATTACK_INDICATOR_BACKGROUND = ResourceLocation.withDefaultNamespace("hud/crosshair_attack_indicator_background");
-  private static final ResourceLocation CROSSHAIR_ATTACK_INDICATOR_PROGRESS = ResourceLocation.withDefaultNamespace("hud/crosshair_attack_indicator_progress");
-  private static final ResourceLocation HOTBAR_ATTACK_INDICATOR_BACKGROUND = ResourceLocation.withDefaultNamespace("hud/hotbar_attack_indicator_background");
-  private static final ResourceLocation HOTBAR_ATTACK_INDICATOR_PROGRESS = ResourceLocation.withDefaultNamespace("hud/hotbar_attack_indicator_progress");
+  private static final Identifier CROSSHAIR_ATTACK_INDICATOR_BACKGROUND = Identifier.withDefaultNamespace("hud/crosshair_attack_indicator_background");
+  private static final Identifier CROSSHAIR_ATTACK_INDICATOR_PROGRESS = Identifier.withDefaultNamespace("hud/crosshair_attack_indicator_progress");
+  private static final Identifier HOTBAR_ATTACK_INDICATOR_BACKGROUND = Identifier.withDefaultNamespace("hud/hotbar_attack_indicator_background");
+  private static final Identifier HOTBAR_ATTACK_INDICATOR_PROGRESS = Identifier.withDefaultNamespace("hud/hotbar_attack_indicator_progress");
 
   /** Called on construct to initiatlize things that need early entry */
   public static void onConstruct() {}
@@ -251,7 +251,7 @@ public class ClientEvents {
       tooltip = List.of(GaugeBlock.formatCapacity(handler.getTankCapacity(0)));
     } else if (RegistryHelper.contains(BuiltInRegistries.BLOCK_ENTITY_TYPE, MantleTags.BlockEntities.HIDES_GAUGE_AMOUNT, gaugeContainer.getType())) {
       // in the tag, don't show capacity
-      ResourceLocation id = BuiltInRegistries.FLUID.getKey(fluid.getFluid());
+      Identifier id = BuiltInRegistries.FLUID.getKey(fluid.getFluid());
       tooltip = new ArrayList<>(3);
       tooltip.add(fluid.getDisplayName());
       FluidTooltipHandler.appendAdvanced(id, tooltip);

@@ -7,7 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.CommonHooks;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.ResourceLocationLoadable;
@@ -26,14 +26,14 @@ public record DynamicRegistryLoadable<T>(ResourceKey<? extends Registry<T>> regi
   }
 
   @Override
-  public T fromKey(ResourceLocation name, String key, TypedMap context) {
+  public T fromKey(Identifier name, String key, TypedMap context) {
     return lookup(key, context).get(ResourceKey.create(registryKey, name))
       .map(holder -> holder.value())
       .orElseThrow(() -> new JsonSyntaxException("Unable to parse " + key + " as registry " + registryKey.location() + " does not contain ID " + name));
   }
 
   @Override
-  public ResourceLocation getKey(T object) {
+  public Identifier getKey(T object) {
     return lookup("value", TypedMap.EMPTY).listElements()
       .filter(holder -> holder.value() == object)
       .map(holder -> holder.key().location())
@@ -43,7 +43,7 @@ public record DynamicRegistryLoadable<T>(ResourceKey<? extends Registry<T>> regi
 
   @Override
   public T decode(FriendlyByteBuf buffer, TypedMap context) {
-    ResourceLocation name = buffer.readResourceLocation();
+    Identifier name = buffer.readResourceLocation();
     try {
       return fromKey(name, "packet", context);
     } catch (JsonSyntaxException e) {

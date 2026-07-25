@@ -20,7 +20,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
@@ -142,10 +142,10 @@ public class RemoveRecipesCommand {
   /** Runs the command using a JSON preset */
   private static int runPreset(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
     long startTime = System.nanoTime();
-    ResourceLocation preset = ResourceLocationArgument.getId(context, "preset");
+    Identifier preset = ResourceLocationArgument.getId(context, "preset");
 
     // load in the preset JSON
-    ResourceLocation presetLocation = PRESETS.idToFile(preset);
+    Identifier presetLocation = PRESETS.idToFile(preset);
     ServerLevel level = context.getSource().getLevel();
     Optional<Resource> resource = level.getServer().getResourceManager().getResource(presetLocation);
     if (resource.isPresent()) {
@@ -179,7 +179,7 @@ public class RemoveRecipesCommand {
     // iterate all recipes for the type storing recipes that craft the tag
     ServerLevel level = context.getSource().getLevel();
     RegistryAccess access = level.registryAccess();
-    List<ResourceLocation> recipes = new ArrayList<>();
+    List<Identifier> recipes = new ArrayList<>();
     for (RecipeType<?> recipeType : recipeTypes) {
       for (Object rawHolder : context.getSource().getLevel().getRecipeManager().getAllRecipesFor((RecipeType) recipeType)) {
         RecipeHolder<? extends Recipe<? extends RecipeInput>> holder = (RecipeHolder<? extends Recipe<? extends RecipeInput>>) rawHolder;
@@ -216,7 +216,7 @@ public class RemoveRecipesCommand {
 
     int successes = 0;
     Path data = pack.resolve(PackType.SERVER_DATA.getDirectory());
-    for (ResourceLocation id : recipes) {
+    for (Identifier id : recipes) {
       Path path = data.resolve(id.getNamespace() + "/recipes/" + id.getPath() + ".json");
       try {
         Files.createDirectories(path.getParent());
@@ -239,7 +239,7 @@ public class RemoveRecipesCommand {
   /** Removes a recipe by ID */
   private static int byId(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
     long startTime = System.nanoTime();
-    ResourceLocation id = ResourceLocationArgument.getId(context, "recipe");
+    Identifier id = ResourceLocationArgument.getId(context, "recipe");
 
     // determine the path for the resulting datapack
     Path pack = GeneratePackHelper.getDatapackPath(context.getSource().getServer());

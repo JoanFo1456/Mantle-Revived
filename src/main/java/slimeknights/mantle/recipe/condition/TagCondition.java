@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -53,13 +53,13 @@ public abstract class TagCondition<T> implements ICondition {
   /** Creates a codec for tag conditions. */
   protected static <C extends TagCondition<?>> MapCodec<C> codec(Function<TagKey<?>,C> constructor) {
     return RecordCodecBuilder.mapCodec(instance -> instance.group(
-      ResourceLocation.CODEC.optionalFieldOf("registry", Registries.ITEM.location()).forGetter(condition -> condition.tag.registry().location()),
-      ResourceLocation.CODEC.fieldOf("tag").forGetter(condition -> condition.tag.location())
+      Identifier.CODEC.optionalFieldOf("registry", Registries.ITEM.location()).forGetter(condition -> condition.tag.registry().location()),
+      Identifier.CODEC.fieldOf("tag").forGetter(condition -> condition.tag.location())
     ).apply(instance, (registry, tag) -> constructor.apply(TagKey.create(ResourceKey.createRegistryKey(registry), tag))));
   }
 
   /** Serializer logic for tag keys */
-  public record Serializer<C extends TagCondition<?>>(ResourceLocation getID, Function<TagKey<?>,C> constructor) {
+  public record Serializer<C extends TagCondition<?>>(Identifier getID, Function<TagKey<?>,C> constructor) {
     public void write(JsonObject json, C value) {
       TagKey<?> tag = value.getTag();
       // save some space in JSON by not setting registry if item (most common)

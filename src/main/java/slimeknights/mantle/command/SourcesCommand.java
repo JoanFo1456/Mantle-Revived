@@ -12,7 +12,7 @@ import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.mantle.Mantle;
@@ -41,17 +41,17 @@ public class SourcesCommand {
   }
 
   /** Runs for the given folder and extension */
-  private static int run(CommandContext<CommandSourceStack> context, String folder, ResourceLocation id, String extension) throws CommandSyntaxException {
+  private static int run(CommandContext<CommandSourceStack> context, String folder, Identifier id, String extension) throws CommandSyntaxException {
     return run(context, context.getSource().getServer().getResourceManager(), id.withPath(folder + '/' + id.getPath() + extension));
   }
 
   /** Runs for the given folder and extension */
-  public static int run(CommandContext<CommandSourceStack> context, ResourceManager manager, String folder, ResourceLocation id, String extension) throws CommandSyntaxException {
+  public static int run(CommandContext<CommandSourceStack> context, ResourceManager manager, String folder, Identifier id, String extension) throws CommandSyntaxException {
     return run(context, manager, id.withPath(folder + '/' + id.getPath() + extension));
   }
 
   /** Runs for the given ID and resource manager */
-  public static int run(CommandContext<CommandSourceStack> context, ResourceManager manager, ResourceLocation path) throws CommandSyntaxException {
+  public static int run(CommandContext<CommandSourceStack> context, ResourceManager manager, Identifier path) throws CommandSyntaxException {
     List<String> packs = manager.getResourceStack(path).stream().map(Resource::sourcePackId).toList();
     if (packs.isEmpty()) {
       throw NOT_FOUND.create(path);

@@ -27,7 +27,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.Plane;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -84,7 +84,7 @@ public class ConnectedModel implements IUnbakedGeometry<ConnectedModel> {
   private Map<String,Material> extraTextures;
 
   @Override
-  public void resolveParents(Function<ResourceLocation,UnbakedModel> modelGetter, IGeometryBakingContext owner) {
+  public void resolveParents(Function<Identifier,UnbakedModel> modelGetter, IGeometryBakingContext owner) {
     model.resolveParents(modelGetter, owner);
     // for all connected textures, add suffix textures
     Map<String, Material> extraTextures = new HashMap<>();
@@ -96,8 +96,8 @@ public class ConnectedModel implements IUnbakedGeometry<ConnectedModel> {
         continue;
       }
       Material base = owner.getMaterial(name);
-      ResourceLocation atlas = base.atlasLocation();
-      ResourceLocation texture = base.texture();
+      Identifier atlas = base.atlasLocation();
+      Identifier texture = base.texture();
       String namespace = texture.getNamespace();
       String path = texture.getPath();
 
@@ -115,7 +115,7 @@ public class ConnectedModel implements IUnbakedGeometry<ConnectedModel> {
           if (owner.hasMaterial(suffixedName)) {
             mat = owner.getMaterial(suffixedName);
           } else {
-            mat = new Material(atlas, ResourceLocation.fromNamespaceAndPath(namespace, path + "/" + suffix));
+            mat = new Material(atlas, Identifier.fromNamespaceAndPath(namespace, path + "/" + suffix));
           }
           // cache the texture name, we use it a lot in rebaking
           extraTextures.put(suffixedName, mat);

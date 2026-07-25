@@ -6,7 +6,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.book.BookLoader;
 import slimeknights.mantle.client.book.data.BookData;
 
@@ -31,7 +31,7 @@ public class ClearBookCacheCommand {
    * @return  Integer return
    */
   private static int runBook(CommandContext<CommandSourceStack> context) {
-    ResourceLocation book = ResourceLocationArgument.getId(context, "id");
+    Identifier book = ResourceLocationArgument.getId(context, "id");
     clearBookCache(book);
     return 0;
   }
@@ -46,7 +46,7 @@ public class ClearBookCacheCommand {
     return 0;
   }
 
-  private static void clearBookCache(@Nullable ResourceLocation book) {
+  private static void clearBookCache(@Nullable Identifier book) {
     if (book != null) {
       BookData bookData = BookLoader.getBook(book);
       if (bookData != null) {

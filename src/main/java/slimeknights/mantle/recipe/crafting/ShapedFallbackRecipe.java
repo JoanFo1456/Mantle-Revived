@@ -10,7 +10,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -37,7 +37,7 @@ public class ShapedFallbackRecipe extends ShapedRecipe {
   private static final HolderLookup.Provider EMPTY_PROVIDER = HolderLookup.Provider.create(java.util.stream.Stream.empty());
 
   /** Recipes to skip if they match */
-  private final List<ResourceLocation> alternatives;
+  private final List<Identifier> alternatives;
   private List<CraftingRecipe> alternativeCache;
   private final ItemStack result;
 
@@ -51,11 +51,11 @@ public class ShapedFallbackRecipe extends ShapedRecipe {
    * @param output         Recipe output
    * @param alternatives   List of recipe names to fail this match if they match
    */
-  public ShapedFallbackRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> ingredients, ItemStack output, List<ResourceLocation> alternatives) {
+  public ShapedFallbackRecipe(Identifier id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> ingredients, ItemStack output, List<Identifier> alternatives) {
     this(group, category, new ShapedRecipePattern(width, height, ingredients, Optional.empty()), output, true, alternatives);
   }
 
-  public ShapedFallbackRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack output, boolean showNotification, List<ResourceLocation> alternatives) {
+  public ShapedFallbackRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack output, boolean showNotification, List<Identifier> alternatives) {
     super(group, category, pattern, output, showNotification);
     this.alternatives = alternatives;
     this.result = output;
@@ -66,7 +66,7 @@ public class ShapedFallbackRecipe extends ShapedRecipe {
    * @param base          Shaped recipe to copy data from
    * @param alternatives  List of recipe names to fail this match if they match
    */
-  public ShapedFallbackRecipe(ShapedRecipe base, List<ResourceLocation> alternatives) {
+  public ShapedFallbackRecipe(ShapedRecipe base, List<Identifier> alternatives) {
     this(base.getGroup(), base.category(), base.pattern, base.getResultItem(EMPTY_PROVIDER).copy(), base.showNotification(), alternatives);
   }
 
@@ -125,7 +125,7 @@ public class ShapedFallbackRecipe extends ShapedRecipe {
 
     private static ShapedFallbackRecipe fromJson(JsonObject json) {
       ShapedRecipe base = ShapedRecipe.Serializer.CODEC.codec().parse(JsonOps.INSTANCE, json).getOrThrow(JsonSyntaxException::new);
-      List<ResourceLocation> alternatives = JsonHelper.parseList(json, "alternatives", Loadables.RESOURCE_LOCATION);
+      List<Identifier> alternatives = JsonHelper.parseList(json, "alternatives", Loadables.RESOURCE_LOCATION);
       return new ShapedFallbackRecipe(base, alternatives);
     }
 
@@ -142,7 +142,7 @@ public class ShapedFallbackRecipe extends ShapedRecipe {
       ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
       boolean showNotification = buffer.readBoolean();
       int size = buffer.readVarInt();
-      List<ResourceLocation> builder = new ArrayList<>(size);
+      List<Identifier> builder = new ArrayList<>(size);
       for (int i = 0; i < size; i++) {
         builder.add(buffer.readResourceLocation());
       }
@@ -156,7 +156,7 @@ public class ShapedFallbackRecipe extends ShapedRecipe {
       ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
       buffer.writeBoolean(recipe.showNotification());
       buffer.writeVarInt(recipe.alternatives.size());
-      for (ResourceLocation alternative : recipe.alternatives) {
+      for (Identifier alternative : recipe.alternatives) {
         buffer.writeResourceLocation(alternative);
       }
     }

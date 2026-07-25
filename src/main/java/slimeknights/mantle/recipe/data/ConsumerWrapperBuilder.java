@@ -4,7 +4,7 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.common.crafting.CraftingHelper;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -25,9 +25,9 @@ public class ConsumerWrapperBuilder {
   @Nullable
   private final RecipeSerializer<?> override;
   @Nullable
-  private final ResourceLocation overrideName;
+  private final Identifier overrideName;
 
-  private ConsumerWrapperBuilder(@Nullable RecipeSerializer<?> override, @Nullable ResourceLocation overrideName) {
+  private ConsumerWrapperBuilder(@Nullable RecipeSerializer<?> override, @Nullable Identifier overrideName) {
     this.override = override;
     this.overrideName = overrideName;
   }
@@ -54,7 +54,7 @@ public class ConsumerWrapperBuilder {
    * @param override Serializer override
    * @return Default serializer builder
    */
-  public static ConsumerWrapperBuilder wrap(ResourceLocation override) {
+  public static ConsumerWrapperBuilder wrap(Identifier override) {
     return new ConsumerWrapperBuilder(null, override);
   }
 
@@ -84,9 +84,9 @@ public class ConsumerWrapperBuilder {
     @Nullable
     private final RecipeSerializer<?> override;
     @Nullable
-    private final ResourceLocation overrideName;
+    private final Identifier overrideName;
 
-    private Wrapped(FinishedRecipe original, List<ICondition> conditions, @Nullable RecipeSerializer<?> override, @Nullable ResourceLocation overrideName) {
+    private Wrapped(FinishedRecipe original, List<ICondition> conditions, @Nullable RecipeSerializer<?> override, @Nullable Identifier overrideName) {
       // if wrapping another wrapper result, merge the two together
       if (original instanceof Wrapped toMerge) {
         this.original = toMerge.original;
@@ -134,7 +134,7 @@ public class ConsumerWrapperBuilder {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
       return original.getId();
     }
 
@@ -154,7 +154,7 @@ public class ConsumerWrapperBuilder {
 
     @Nullable
     @Override
-    public ResourceLocation getAdvancementId() {
+    public Identifier getAdvancementId() {
       return original.getAdvancementId();
     }
   }

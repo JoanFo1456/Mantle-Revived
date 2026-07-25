@@ -2,7 +2,7 @@ package slimeknights.mantle.recipe.data;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import javax.annotation.Nullable;
@@ -19,7 +19,7 @@ public interface FinishedRecipe {
 
   void serializeRecipeData(JsonObject json);
 
-  ResourceLocation getId();
+  Identifier getId();
 
   RecipeSerializer<?> getType();
 
@@ -27,5 +27,5 @@ public interface FinishedRecipe {
   JsonObject serializeAdvancement();
 
   @Nullable
-  ResourceLocation getAdvancementId();
+  Identifier getAdvancementId();
 }

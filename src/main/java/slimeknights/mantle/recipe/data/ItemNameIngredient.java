@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
@@ -23,17 +23,17 @@ public final class ItemNameIngredient {
   private ItemNameIngredient() {}
 
   /** Creates a new ingredient from a list of names */
-  public static Ingredient from(List<ResourceLocation> names) {
+  public static Ingredient from(List<Identifier> names) {
     return new NamedItemIngredient(List.copyOf(names)).toVanilla();
   }
 
   /** Creates a new ingredient from a list of names */
-  public static Ingredient from(ResourceLocation... names) {
+  public static Ingredient from(Identifier... names) {
     return from(Arrays.asList(names));
   }
 
   /** Creates a JSON object for a name */
-  private static JsonObject forName(ResourceLocation name) {
+  private static JsonObject forName(Identifier name) {
     JsonObject json = new JsonObject();
     json.addProperty("item", name.toString());
     return json;
@@ -55,13 +55,13 @@ public final class ItemNameIngredient {
     return null;
   }
 
-  private record NamedItemIngredient(List<ResourceLocation> names) implements ICustomIngredient {
+  private record NamedItemIngredient(List<Identifier> names) implements ICustomIngredient {
     private JsonElement toJson() {
       if (names.size() == 1) {
         return forName(names.get(0));
       }
       JsonArray array = new JsonArray();
-      for (ResourceLocation name : names) {
+      for (Identifier name : names) {
         array.add(forName(name));
       }
       return array;
@@ -69,7 +69,7 @@ public final class ItemNameIngredient {
 
     @Override
     public boolean test(ItemStack stack) {
-      ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+      Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
       return names.contains(id);
     }
 

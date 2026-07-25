@@ -12,7 +12,7 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.ClickEvent.Action;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
@@ -29,7 +29,7 @@ import java.util.Objects;
 /** Command to dump global loot modifiers */
 public class HarvestTiersCommand {
   /** Resource location of the global loot manager "tag" */
-  protected static final ResourceLocation HARVEST_TIERS = ResourceLocation.fromNamespaceAndPath("c", "item_tier_ordering.json");
+  protected static final Identifier HARVEST_TIERS = Identifier.fromNamespaceAndPath("c", "item_tier_ordering.json");
   /** Path for saving the loot modifiers */
   private static final String HARVEST_TIER_PATH = HARVEST_TIERS.getNamespace() + "/" + HARVEST_TIERS.getPath();
 
@@ -50,7 +50,7 @@ public class HarvestTiersCommand {
 
   /** Creates a clickable component for a block tag */
   private static Object getTagComponent(TagKey<Block> tag) {
-    ResourceLocation id = tag.location();
+    Identifier id = tag.location();
     return Component.literal(id.toString()).withStyle(style -> style.withUnderlined(true).withClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/mantle dump_tag " + Registries.BLOCK.location() + " " + id + " save")));
   }
 
@@ -67,7 +67,7 @@ public class HarvestTiersCommand {
       for (Tier tier : sortedTiers) {
         output.append("\n* ");
         TagKey<Block> tag = tier.getIncorrectBlocksForDrops();
-        ResourceLocation id = ResourceLocation.withDefaultNamespace(tier.toString().toLowerCase(java.util.Locale.ROOT));
+        Identifier id = Identifier.withDefaultNamespace(tier.toString().toLowerCase(java.util.Locale.ROOT));
         if (tag != null) {
           output.append(Component.translatable("command.mantle.harvest_tiers.tag", id, getTagComponent(tag)));
         } else {
@@ -86,7 +86,7 @@ public class HarvestTiersCommand {
     // save the list as JSON
     JsonArray entries = new JsonArray();
     for (Tier location : sortedTiers) {
-      entries.add(Objects.requireNonNull(ResourceLocation.withDefaultNamespace(location.toString().toLowerCase(java.util.Locale.ROOT))).toString());
+      entries.add(Objects.requireNonNull(Identifier.withDefaultNamespace(location.toString().toLowerCase(java.util.Locale.ROOT))).toString());
     }
     JsonObject json = new JsonObject();
     json.add("order", entries);

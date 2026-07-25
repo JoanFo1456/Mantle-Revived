@@ -2,7 +2,7 @@ package slimeknights.mantle.data.predicate.entity;
 
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -20,14 +20,14 @@ public record MobTypePredicate(LivingEntityPredicate type) implements LivingEnti
 
   /** Registers the vanilla mob type replacements. */
   public static void registerDefaults() {
-    MOB_TYPES.register(ResourceLocation.withDefaultNamespace("undefined"), LivingEntityPredicate.simple(entity -> !entity.getType().is(EntityTypeTags.UNDEAD)
+    MOB_TYPES.register(Identifier.withDefaultNamespace("undefined"), LivingEntityPredicate.simple(entity -> !entity.getType().is(EntityTypeTags.UNDEAD)
       && !entity.getType().is(EntityTypeTags.ARTHROPOD)
       && !entity.getType().is(EntityTypeTags.ILLAGER)
       && !entity.getType().is(EntityTypeTags.AQUATIC)));
-    MOB_TYPES.register(ResourceLocation.withDefaultNamespace("undead"), tagged(EntityTypeTags.UNDEAD));
-    MOB_TYPES.register(ResourceLocation.withDefaultNamespace("arthropod"), tagged(EntityTypeTags.ARTHROPOD));
-    MOB_TYPES.register(ResourceLocation.withDefaultNamespace("illager"), tagged(EntityTypeTags.ILLAGER));
-    MOB_TYPES.register(ResourceLocation.withDefaultNamespace("water"), tagged(EntityTypeTags.AQUATIC));
+    MOB_TYPES.register(Identifier.withDefaultNamespace("undead"), tagged(EntityTypeTags.UNDEAD));
+    MOB_TYPES.register(Identifier.withDefaultNamespace("arthropod"), tagged(EntityTypeTags.ARTHROPOD));
+    MOB_TYPES.register(Identifier.withDefaultNamespace("illager"), tagged(EntityTypeTags.ILLAGER));
+    MOB_TYPES.register(Identifier.withDefaultNamespace("water"), tagged(EntityTypeTags.AQUATIC));
   }
 
   private static LivingEntityPredicate tagged(TagKey<EntityType<?>> tag) {

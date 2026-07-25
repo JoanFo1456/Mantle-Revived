@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.command.SourcesCommand;
 import slimeknights.mantle.command.SourcesCommand.SourceFolder;
 
@@ -33,7 +33,7 @@ public class ClientSourcesCommand {
   }
 
   /** Runs for the given folder and extension */
-  private static int run(CommandContext<CommandSourceStack> context, String folder, ResourceLocation id, String extension) throws CommandSyntaxException {
+  private static int run(CommandContext<CommandSourceStack> context, String folder, Identifier id, String extension) throws CommandSyntaxException {
     return SourcesCommand.run(context, Minecraft.getInstance().getResourceManager(), id.withPath(folder + '/' + id.getPath() + extension));
   }
 

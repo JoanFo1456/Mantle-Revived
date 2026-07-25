@@ -10,7 +10,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -20,14 +20,14 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /** Bridges vanilla 1.21 recipe output back to Mantle's recipe helper API. */
-public record VanillaFinishedRecipe(ResourceLocation getId, Recipe<?> recipe, @Nullable AdvancementHolder advancement) implements FinishedRecipe {
+public record VanillaFinishedRecipe(Identifier getId, Recipe<?> recipe, @Nullable AdvancementHolder advancement) implements FinishedRecipe {
   private static final RegistryOps<JsonElement> REGISTRY_OPS = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY).createSerializationContext(JsonOps.INSTANCE);
 
   /** Creates a recipe output that forwards recipes to Mantle recipe consumers. */
   public static RecipeOutput output(Consumer<FinishedRecipe> consumer) {
     return new RecipeOutput() {
       @Override
-      public void accept(ResourceLocation id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
+      public void accept(Identifier id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
         consumer.accept(new VanillaFinishedRecipe(id, recipe, advancement));
       }
 
@@ -63,7 +63,7 @@ public record VanillaFinishedRecipe(ResourceLocation getId, Recipe<?> recipe, @N
 
   @Nullable
   @Override
-  public ResourceLocation getAdvancementId() {
+  public Identifier getAdvancementId() {
     return advancement == null ? null : advancement.id();
   }
 }

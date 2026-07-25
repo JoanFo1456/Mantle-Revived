@@ -9,7 +9,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.Mantle;
@@ -67,7 +67,7 @@ public class RetexturableRecipeExtension implements ICraftingCategoryExtension {
   }
 
   @Override
-  public ResourceLocation getRegistryName() {
+  public Identifier getRegistryName() {
     return this.recipe.getRecipeId();
   }
 

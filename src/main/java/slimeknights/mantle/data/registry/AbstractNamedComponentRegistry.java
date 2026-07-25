@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import io.netty.handler.codec.DecoderException;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.ResourceLocationLoadable;
 import slimeknights.mantle.util.typed.TypedMap;
@@ -24,10 +24,10 @@ public abstract class AbstractNamedComponentRegistry<T> implements ResourceLocat
 
   /** Gets a value or null if missing */
   @Nullable
-  public abstract T getValue(ResourceLocation name);
+  public abstract T getValue(Identifier name);
 
   /** Gets all keys registered */
-  public abstract Collection<ResourceLocation> getKeys();
+  public abstract Collection<Identifier> getKeys();
 
   /** Gets all keys registered */
   public abstract Collection<T> getValues();
@@ -36,7 +36,7 @@ public abstract class AbstractNamedComponentRegistry<T> implements ResourceLocat
   /* Json */
 
   @Override
-  public T fromKey(ResourceLocation name, String key, TypedMap context) {
+  public T fromKey(Identifier name, String key, TypedMap context) {
     T value = getValue(name);
     if (value != null) {
       return value;
@@ -64,7 +64,7 @@ public abstract class AbstractNamedComponentRegistry<T> implements ResourceLocat
   }
 
   /** Reads the given value from the network by resource location */
-  private T decodeInternal(ResourceLocation name) {
+  private T decodeInternal(Identifier name) {
     T value = getValue(name);
     if (value == null) {
       throw new DecoderException(errorText + name);
@@ -86,7 +86,7 @@ public abstract class AbstractNamedComponentRegistry<T> implements ResourceLocat
     if (key.isEmpty()) {
       return null;
     }
-    return decodeInternal(ResourceLocation.parse(key));
+    return decodeInternal(Identifier.parse(key));
   }
 
 

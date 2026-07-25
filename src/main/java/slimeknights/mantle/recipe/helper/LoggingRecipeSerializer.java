@@ -8,7 +8,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -21,14 +21,14 @@ import javax.annotation.Nullable;
  * @param <T>  Recipe class
  */
 public interface LoggingRecipeSerializer<T extends Recipe<?>> extends RecipeSerializer<T> {
-  ResourceLocation UNKNOWN_ID = ResourceLocation.fromNamespaceAndPath("mantle", "unknown");
+  Identifier UNKNOWN_ID = Identifier.fromNamespaceAndPath("mantle", "unknown");
   LegacySerializer<ShapedRecipe> SHAPED_RECIPE = new LegacySerializer<>(RecipeSerializer.SHAPED_RECIPE);
   LegacySerializer<ShapelessRecipe> SHAPELESS_RECIPE = new LegacySerializer<>(RecipeSerializer.SHAPELESS_RECIPE);
 
-  T fromJson(ResourceLocation recipeId, JsonObject json);
+  T fromJson(Identifier recipeId, JsonObject json);
 
   @Nullable
-  default T fromNetworkSafe(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+  default T fromNetworkSafe(Identifier recipeId, FriendlyByteBuf buffer) {
     return streamCodec().decode((RegistryFriendlyByteBuf)buffer);
   }
 
@@ -50,12 +50,12 @@ public interface LoggingRecipeSerializer<T extends Recipe<?>> extends RecipeSeri
   }
 
   record LegacySerializer<R extends Recipe<?>>(RecipeSerializer<R> serializer) {
-    public R fromJson(ResourceLocation recipeId, JsonObject json) {
+    public R fromJson(Identifier recipeId, JsonObject json) {
       return serializer.codec().codec().parse(JsonOps.INSTANCE, upgradeLegacyItemStacks(json)).getOrThrow(IllegalArgumentException::new);
     }
 
     @Nullable
-    public R fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    public R fromNetwork(Identifier recipeId, FriendlyByteBuf buffer) {
       return serializer.streamCodec().decode((RegistryFriendlyByteBuf)buffer);
     }
 

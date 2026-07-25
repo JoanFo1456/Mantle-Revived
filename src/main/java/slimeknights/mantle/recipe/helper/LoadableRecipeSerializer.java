@@ -9,7 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -70,7 +70,7 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
   }
 
   /** Builds a context for the given ID */
-  protected TypedMapBuilder buildContext(@Nullable ResourceLocation id) {
+  protected TypedMapBuilder buildContext(@Nullable Identifier id) {
     TypedMapBuilder builder = TypedMapBuilder.builder().put(ContextKey.DEBUG, id == null ? "Recipe" : "Recipe " + id).put(SERIALIZER, this);
     if (id != null) {
       builder.put(ContextKey.ID, id);
@@ -78,16 +78,16 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
     return builder;
   }
 
-  public T fromJson(ResourceLocation id, JsonObject json) {
+  public T fromJson(Identifier id, JsonObject json) {
     return loadable.deserialize(json, buildContext(id).build());
   }
 
-  public T fromNetworkSafe(@Nullable ResourceLocation id, FriendlyByteBuf buffer) {
+  public T fromNetworkSafe(@Nullable Identifier id, FriendlyByteBuf buffer) {
     return loadable.decode(buffer, buildContext(id).build());
   }
 
   @Nullable
-  public T fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+  public T fromNetwork(Identifier id, FriendlyByteBuf buffer) {
     try {
       return fromNetworkSafe(id, buffer);
     } catch (RuntimeException e) {
@@ -100,17 +100,17 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
     try {
       loadable.encode(buffer, recipe);
     } catch (RuntimeException e) {
-      ResourceLocation id = getRecipeId(recipe);
+      Identifier id = getRecipeId(recipe);
       Mantle.logger.error("{}: Error writing recipe {} to packet using loadable {}", this.getClass().getSimpleName(), id, loadable, e);
       throw e;
     }
   }
 
   /** Gets the recipe ID from legacy recipe classes for 1.21 recipe packets. */
-  private static ResourceLocation getRecipeId(Recipe<?> recipe) {
+  private static Identifier getRecipeId(Recipe<?> recipe) {
     try {
       Method method = recipe.getClass().getMethod("getId");
-      if (method.invoke(recipe) instanceof ResourceLocation id) {
+      if (method.invoke(recipe) instanceof Identifier id) {
         return id;
       }
     } catch (ReflectiveOperationException e) {
@@ -137,7 +137,7 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
     }
 
     @Override
-    protected TypedMapBuilder buildContext(ResourceLocation id) {
+    protected TypedMapBuilder buildContext(Identifier id) {
       return super.buildContext(id).put(TYPE, getType()).put(TYPED_SERIALIZER, this);
     }
 
@@ -147,7 +147,7 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
     }
 
     @Nullable
-    public T fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+    public T fromNetwork(Identifier id, FriendlyByteBuf buffer) {
       try {
         return fromNetworkSafe(id, buffer);
       } catch (RuntimeException e) {
@@ -166,7 +166,7 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
     }
 
     @Override
-    public T fromJson(ResourceLocation id, JsonObject json) {
+    public T fromJson(Identifier id, JsonObject json) {
       T recipe = super.fromJson(id, json);
       Mantle.logger.warn("Using deprecated recipe serializer {}, {}", BuiltInRegistries.RECIPE_SERIALIZER.getKey(this), replacement);
       return recipe;

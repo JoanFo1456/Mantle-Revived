@@ -14,7 +14,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess.RegistryEntry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
@@ -82,22 +82,22 @@ public class TagSourceArgument {
   /* Argument creation */
 
   /** Creates an argument instance */
-  public static ArgumentType<ResourceLocation> source() {
+  public static ArgumentType<Identifier> source() {
     return ResourceLocationArgument.id();
   }
 
   /** Creates an argument builder with the given name */
-  public static RequiredArgumentBuilder<CommandSourceStack,ResourceLocation> argument() {
+  public static RequiredArgumentBuilder<CommandSourceStack,Identifier> argument() {
     return Commands.argument("type", source()).suggests(SOURCE);
   }
 
   /** Creates a tag argument builder with the given name */
-  public static RequiredArgumentBuilder<CommandSourceStack,ResourceLocation> tagArgument(String key) {
+  public static RequiredArgumentBuilder<CommandSourceStack,Identifier> tagArgument(String key) {
     return Commands.argument(key, ResourceLocationArgument.id()).suggests(TAG);
   }
 
   /** Creates a value argument builder with the given name */
-  public static RequiredArgumentBuilder<CommandSourceStack,ResourceLocation> valueArgument(String key) {
+  public static RequiredArgumentBuilder<CommandSourceStack,Identifier> valueArgument(String key) {
     return Commands.argument(key, ResourceLocationArgument.id()).suggests(VALUE);
   }
 
@@ -127,7 +127,7 @@ public class TagSourceArgument {
 
   /** Gets the result of this argument */
   public static TagSource<?> get(CommandContext<? extends SharedSuggestionProvider> context) throws CommandSyntaxException {
-    ResourceLocation id = context.getArgument("type", ResourceLocation.class);
+    Identifier id = context.getArgument("type", Identifier.class);
     ResourceKey<? extends Registry<?>> key = ResourceKey.createRegistryKey(id);
     // try a custom source first, saves a lookup to the registry
     TagSource<?> custom = CUSTOM_TAG_SOURCES.get(key);

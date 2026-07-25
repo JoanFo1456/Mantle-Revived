@@ -3,7 +3,7 @@ package slimeknights.mantle.recipe.data;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import javax.annotation.Nullable;
 
@@ -11,11 +11,11 @@ import javax.annotation.Nullable;
  * Ingredient for a NBT sensitive item from another mod, should never be used outside datagen
  */
 public class NBTNameIngredient {
-  private final ResourceLocation name;
+  private final Identifier name;
   @Nullable
   private final CompoundTag nbt;
 
-  protected NBTNameIngredient(ResourceLocation name, @Nullable CompoundTag nbt) {
+  protected NBTNameIngredient(Identifier name, @Nullable CompoundTag nbt) {
     this.name = name;
     this.nbt = nbt;
   }
@@ -26,7 +26,7 @@ public class NBTNameIngredient {
    * @param nbt   NBT
    * @return  Ingredient
    */
-  public static NBTNameIngredient from(ResourceLocation name, CompoundTag nbt) {
+  public static NBTNameIngredient from(Identifier name, CompoundTag nbt) {
     return new NBTNameIngredient(name, nbt);
   }
 
@@ -35,7 +35,7 @@ public class NBTNameIngredient {
    * @param name  Item name
    * @return  Ingredient
    */
-  public static NBTNameIngredient from(ResourceLocation name) {
+  public static NBTNameIngredient from(Identifier name) {
     return new NBTNameIngredient(name, null);
   }
 

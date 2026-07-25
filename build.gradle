@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.1.36'
+    id 'net.neoforged.gradle.userdev' version '7.1.38'
     id 'io.freefair.lombok' version '8.6'
 }
 
@@ -34,7 +34,7 @@ group = 'slimeknights.mantle'
 base {
     archivesName = 'MantleRevived'
 }
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 // sets version to the slimeKnights version format
 task buildInfo {
@@ -101,9 +101,11 @@ runs {
         argument '--nogui'
     }
 
-    data {
-        arguments.addAll '--mod', 'mantle', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-    }
+    // NeoForge 26.1.x split datagen into clientData/serverData; 'data' run type no longer exists.
+    // Temporarily disabled during the port; re-add clientData/serverData once compiling.
+    // data {
+    //     arguments.addAll '--mod', 'mantle', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    // }
 }
 
 configurations {
@@ -181,4 +183,5 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.compilerArgs += ['-Xmaxerrs', '100000']
 }
