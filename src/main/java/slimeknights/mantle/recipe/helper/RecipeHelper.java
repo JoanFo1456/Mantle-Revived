@@ -28,9 +28,8 @@ public class RecipeHelper {
   /* Recipe manager utils */
 
   /** Gets all recipes of a given type, working around vanilla's stricter input generic on 1.21. */
-  @SuppressWarnings({"rawtypes", "unchecked"})
   private static Stream<Recipe<?>> getRecipeStream(RecipeManager manager, RecipeType<? extends Recipe<?>> type) {
-    return ((List<RecipeHolder<?>>)(List<?>)manager.getAllRecipesFor((RecipeType)type)).stream().map(RecipeHolder::value);
+    return manager.getRecipes().stream().map(RecipeHolder::value).filter(recipe -> recipe.getType() == type);
   }
 
   /**
@@ -42,7 +41,7 @@ public class RecipeHelper {
    * @return  Optional of the recipe, or empty if the recipe is missing
    */
   public static <C extends Recipe<?>> Optional<C> getRecipe(RecipeManager manager, Identifier name, Class<C> clazz) {
-    return manager.byKey(name).map(RecipeHolder::value).filter(clazz::isInstance).map(clazz::cast);
+    return manager.byKey(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, name)).map(RecipeHolder::value).filter(clazz::isInstance).map(clazz::cast);
   }
 
   /**

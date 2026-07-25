@@ -25,9 +25,6 @@ public class PotionDisplayIngredient extends ItemIngredient {
   /** Ingredient serializer instance */
   public static final LoadableIngredientSerializer<PotionDisplayIngredient> SERIALIZER = new LoadableIngredientSerializer<>(RecordLoadable.create(ItemsField.INSTANCE, TAG_FIELD, PotionDisplayIngredient::new));
 
-  /** cache for {@link #getItems()} */
-  private ItemStack[] displayStacks = null;
-
   protected PotionDisplayIngredient(List<Item> items, @Nullable TagKey<Item> tag) {
     super(items, tag);
   }
@@ -52,23 +49,8 @@ public class PotionDisplayIngredient extends ItemIngredient {
     return true;
   }
 
-  @Override
-  public Stream<ItemStack> getItems() {
-    // if empty, means we want wildcard, show all potions on the stack
-    if (displayStacks == null) {
-      ItemStack[] parentStacks = super.getItems().toArray(ItemStack[]::new);
-      displayStacks = BuiltInRegistries.POTION.stream()
-        .filter(pot -> pot != Potions.WATER.value())
-        .flatMap(pot -> Arrays.stream(parentStacks).map(item -> setPotion(item.copy(), pot)))
-        .toArray(ItemStack[]::new);
-    }
-    return Arrays.stream(displayStacks);
-  }
-
-  private static ItemStack setPotion(ItemStack stack, Potion potion) {
-    stack.set(DataComponents.POTION_CONTENTS, new PotionContents(BuiltInRegistries.POTION.wrapAsHolder(potion)));
-    return stack;
-  }
+  // TODO(26.1.2): items() now returns Stream<Holder<Item>>, so we can no longer emit one displayed stack per potion variant here.
+  // Showing all potion variants in JEI would need a custom display() override.
 
   @Override
   public IngredientType<?> getType() {

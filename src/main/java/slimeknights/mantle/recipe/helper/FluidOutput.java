@@ -138,12 +138,20 @@ public abstract class FluidOutput implements Supplier<FluidStack> {
   }
 
   /** Class for an output that is just an item, simplifies NBT for serializing as vanilla forces NBT to be set for tools and forge goes through extra steps when NBT is set */
-  @RequiredArgsConstructor
   private static class OfFluid extends FluidOutput {
     private final Fluid fluid;
-    @Getter
     private final int amount;
     private FluidStack cachedStack;
+
+    OfFluid(Fluid fluid, int amount) {
+      this.fluid = fluid;
+      this.amount = amount;
+    }
+
+    @Override
+    public int getAmount() {
+      return amount;
+    }
 
     @Override
     public FluidStack get() {
@@ -163,9 +171,12 @@ public abstract class FluidOutput implements Supplier<FluidStack> {
   }
 
   /** Class for an output that is just a stack */
-  @RequiredArgsConstructor
   private static class OfStack extends FluidOutput {
     private final FluidStack stack;
+
+    OfStack(FluidStack stack) {
+      this.stack = stack;
+    }
 
     @Override
     public FluidStack get() {
@@ -184,15 +195,28 @@ public abstract class FluidOutput implements Supplier<FluidStack> {
   }
 
   /** Class for an output from a tag preference */
-  @RequiredArgsConstructor
   private static class OfTagPreference extends FluidOutput {
-    @Getter
     private final TagKey<Fluid> tag;
-    @Getter
     private final int amount;
     @Nullable
     private final CompoundTag nbt;
     private FluidStack cachedResult = null;
+
+    OfTagPreference(TagKey<Fluid> tag, int amount, @Nullable CompoundTag nbt) {
+      this.tag = tag;
+      this.amount = amount;
+      this.nbt = nbt;
+    }
+
+    @Override
+    public TagKey<Fluid> getTag() {
+      return tag;
+    }
+
+    @Override
+    public int getAmount() {
+      return amount;
+    }
 
     @Override
     public FluidStack get() {

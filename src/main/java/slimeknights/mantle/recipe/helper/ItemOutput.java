@@ -157,12 +157,20 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
   }
 
   /** Class for an output that is just an item, simplifies NBT for serializing as vanilla forces NBT to be set for tools and forge goes through extra steps when NBT is set */
-  @RequiredArgsConstructor
   private static class OfItem extends ItemOutput {
     private final Item item;
-    @Getter
     private final int count;
     private ItemStack cachedStack;
+
+    OfItem(Item item, int count) {
+      this.item = item;
+      this.count = count;
+    }
+
+    @Override
+    public int getCount() {
+      return count;
+    }
 
     @Override
     public ItemStack get() {
@@ -187,9 +195,12 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
   }
 
   /** Class for an output that is just a stack */
-  @RequiredArgsConstructor
   private static class OfStack extends ItemOutput {
     private final ItemStack stack;
+
+    OfStack(ItemStack stack) {
+      this.stack = stack;
+    }
 
     @Override
     public ItemStack get() {
@@ -211,15 +222,28 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
   }
 
   /** Class for an output from a tag preference */
-  @RequiredArgsConstructor
   private static class OfTagPreference extends ItemOutput {
-    @Getter
     private final TagKey<Item> tag;
-    @Getter
     private final int count;
     @Nullable
     private final CompoundTag nbt;
     private ItemStack cachedResult = null;
+
+    OfTagPreference(TagKey<Item> tag, int count, @Nullable CompoundTag nbt) {
+      this.tag = tag;
+      this.count = count;
+      this.nbt = nbt;
+    }
+
+    @Override
+    public TagKey<Item> getTag() {
+      return tag;
+    }
+
+    @Override
+    public int getCount() {
+      return count;
+    }
 
     @Override
     public ItemStack get() {

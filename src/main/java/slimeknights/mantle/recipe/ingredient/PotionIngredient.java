@@ -58,20 +58,13 @@ public class PotionIngredient extends ItemIngredient {
     return super.test(stack) && stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).potion().map(holder -> holder.value() == potion).orElse(false);
   }
 
-  private static ItemStack setPotion(ItemStack stack, Potion potion) {
-    stack.set(DataComponents.POTION_CONTENTS, new PotionContents(BuiltInRegistries.POTION.wrapAsHolder(potion)));
-    return stack;
-  }
-
   @Override
   public boolean isSimple() {
     return false;
   }
 
-  @Override
-  public Stream<ItemStack> getItems() {
-    return super.getItems().map(stack -> setPotion(stack.copy(), potion));
-  }
+  // TODO(26.1.2): items() now returns Stream<Holder<Item>>, so we can no longer attach the potion component to displayed stacks here.
+  // Potion display would need a custom display() override if JEI display fidelity is required.
 
   @Override
   public IngredientType<?> getType() {

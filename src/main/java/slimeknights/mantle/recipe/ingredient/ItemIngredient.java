@@ -31,8 +31,6 @@ public abstract class ItemIngredient implements ICustomIngredient {
   protected final List<Item> items;
   @Nullable
   protected final TagKey<Item> tag;
-  @Nullable
-  private ItemStack[] itemStacks;
 
   /** Constructor letting you supply your own item stream */
   protected ItemIngredient(List<Item> items, @Nullable TagKey<Item> tag) {
@@ -53,18 +51,15 @@ public abstract class ItemIngredient implements ICustomIngredient {
   }
 
   @Override
-  public Stream<ItemStack> getItems() {
-    if (itemStacks == null) {
-      itemStacks = Stream.concat(
-        items.stream().map(ItemStack::new),
-        Stream.ofNullable(tag).flatMap(ItemIngredient::getTagItems)
-      ).toArray(ItemStack[]::new);
-    }
-    return Arrays.stream(itemStacks);
+  public Stream<net.minecraft.core.Holder<Item>> items() {
+    return Stream.concat(
+      items.stream().map(Item::builtInRegistryHolder),
+      Stream.ofNullable(tag).flatMap(ItemIngredient::getTagItems)
+    );
   }
 
-  private static Stream<ItemStack> getTagItems(TagKey<Item> tag) {
-    return StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tag).spliterator(), false).map(holder -> new ItemStack(holder.value()));
+  private static Stream<net.minecraft.core.Holder<Item>> getTagItems(TagKey<Item> tag) {
+    return StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tag).spliterator(), false).map(h -> (net.minecraft.core.Holder<Item>) h);
   }
 
   @Override
@@ -108,7 +103,7 @@ public abstract class ItemIngredient implements ICustomIngredient {
     @Override
     public void encode(FriendlyByteBuf buffer, ItemIngredient parent) {
       // sync both tag and item values to client
-      ITEM_LIST.encode(buffer, parent.getItems().map(ItemStack::getItem).toList());
+      ITEM_LIST.encode(buffer, parent.items().map(net.minecraft.core.Holder::value).toList());
     }
   }
 }
