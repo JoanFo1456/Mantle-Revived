@@ -17,13 +17,15 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
 import javax.annotation.Nullable;
 
 /**
- * Recipe serializer that logs network exceptions before throwing them as otherwise the exceptions may be invisible
+ * Recipe serializer that logs network exceptions before throwing them as otherwise the exceptions may be invisible.
+ * <p>In MC 26.1, {@link RecipeSerializer} is a final record wrapping a codec and stream codec, so this can no longer
+ * implement it directly. Instead call {@link #serializer()} to build the actual serializer record.
  * @param <T>  Recipe class
  */
-public interface LoggingRecipeSerializer<T extends Recipe<?>> extends RecipeSerializer<T> {
+public interface LoggingRecipeSerializer<T extends Recipe<?>> {
   Identifier UNKNOWN_ID = Identifier.fromNamespaceAndPath("mantle", "unknown");
-  LegacySerializer<ShapedRecipe> SHAPED_RECIPE = new LegacySerializer<>(RecipeSerializer.SHAPED_RECIPE);
-  LegacySerializer<ShapelessRecipe> SHAPELESS_RECIPE = new LegacySerializer<>(RecipeSerializer.SHAPELESS_RECIPE);
+  LegacySerializer<ShapedRecipe> SHAPED_RECIPE = new LegacySerializer<>(ShapedRecipe.SERIALIZER);
+  LegacySerializer<ShapelessRecipe> SHAPELESS_RECIPE = new LegacySerializer<>(ShapelessRecipe.SERIALIZER);
 
   T fromJson(Identifier recipeId, JsonObject json);
 
@@ -36,7 +38,11 @@ public interface LoggingRecipeSerializer<T extends Recipe<?>> extends RecipeSeri
     streamCodec().encode((RegistryFriendlyByteBuf)buffer, recipe);
   }
 
-  @Override
+  /** Builds the actual recipe serializer record wrapping this instance's codecs. */
+  default RecipeSerializer<T> serializer() {
+    return new RecipeSerializer<>(codec(), streamCodec());
+  }
+
   default MapCodec<T> codec() {
     return MapCodec.assumeMapUnsafe(Codec.PASSTHROUGH.xmap(dynamic -> {
       JsonObject json = dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
@@ -44,7 +50,6 @@ public interface LoggingRecipeSerializer<T extends Recipe<?>> extends RecipeSeri
     }, recipe -> new Dynamic<>(JsonOps.INSTANCE, new JsonObject())));
   }
 
-  @Override
   default StreamCodec<RegistryFriendlyByteBuf,T> streamCodec() {
     return StreamCodec.of((buffer, recipe) -> toNetworkSafe(buffer, recipe), buffer -> fromNetworkSafe(UNKNOWN_ID, buffer));
   }

@@ -36,6 +36,12 @@ base {
 }
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
+// The io.freefair.lombok 8.6 plugin pins lombok 1.18.30, which predates JDK 25 and silently
+// generates nothing under the JDK 25 toolchain. Override to a lombok release that supports JDK 25.
+lombok {
+    version = '1.18.46'
+}
+
 // sets version to the slimeKnights version format
 task buildInfo {
     try {
@@ -197,5 +203,8 @@ afterEvaluate {
         if (ap != null) {
             options.annotationProcessorPath = ap
         }
+        // JDK 23+ no longer runs annotation processors discovered on the processor path unless
+        // processing is explicitly requested. Without -proc:full lombok silently generates nothing.
+        options.compilerArgs += ['-proc:full']
     }
 }

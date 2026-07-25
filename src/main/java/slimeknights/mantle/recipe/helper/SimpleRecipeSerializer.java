@@ -13,15 +13,18 @@ import java.lang.reflect.Method;
 import java.util.function.Function;
 
 /** Simple implementation of a recipe serializer with no properties other than recipe ID. */
-public record SimpleRecipeSerializer<T extends Recipe<?>>(Function<Identifier,T> constructor) implements RecipeSerializer<T> {
-  @Override
+public record SimpleRecipeSerializer<T extends Recipe<?>>(Function<Identifier,T> constructor) {
+  /** Builds the actual recipe serializer record wrapping this instance's codecs. */
+  public RecipeSerializer<T> serializer() {
+    return new RecipeSerializer<>(codec(), streamCodec());
+  }
+
   public MapCodec<T> codec() {
     return RecordCodecBuilder.mapCodec(instance -> instance.group(
       Identifier.CODEC.optionalFieldOf("id", Mantle.getResource("unknown_simple_recipe")).forGetter(SimpleRecipeSerializer::getRecipeId)
     ).apply(instance, constructor));
   }
 
-  @Override
   public StreamCodec<RegistryFriendlyByteBuf,T> streamCodec() {
     return StreamCodec.of((buffer, recipe) -> buffer.writeIdentifier(getRecipeId(recipe)), buffer -> constructor.apply(buffer.readIdentifier()));
   }

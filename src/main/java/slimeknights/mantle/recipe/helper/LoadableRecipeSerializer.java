@@ -36,7 +36,7 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
   /** Context key to use if you want the recipe type passed into your recipe, requires {@link #of(RecordLoadable, Supplier)} for your serializer. */
   public static final ContextKey<RecipeType<?>> TYPE = new ContextKey<>("type");
   /** Field for a group key in a recipe (common requirement) */
-  public static final LoadableField<String,Recipe<?>> RECIPE_GROUP = StringLoadable.DEFAULT.defaultField("group", "", Recipe::getGroup);
+  public static final LoadableField<String,Recipe<?>> RECIPE_GROUP = StringLoadable.DEFAULT.defaultField("group", "", Recipe::group);
 
   protected final RecordLoadable<T> loadable;
   private final MapCodec<T> codec;
@@ -56,7 +56,7 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
 
   /** Creates a standard serializer from a loadable */
   public static <T extends Recipe<?>> RecipeSerializer<T> of(RecordLoadable<T> loadable) {
-    return new LoadableRecipeSerializer<>(loadable);
+    return new LoadableRecipeSerializer<>(loadable).serializer();
   }
 
   /** Creates a type aware serializer from a loadable */
@@ -66,12 +66,12 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
 
   /** Creates a serializer that is deprecated, logging a warning when used */
   public static <T extends Recipe<?>> RecipeSerializer<T> deprecated(RecordLoadable<T> loadable, String replacement) {
-    return new Deprecated<>(loadable, replacement);
+    return new Deprecated<>(loadable, replacement).serializer();
   }
 
   /** Builds a context for the given ID */
   protected TypedMapBuilder buildContext(@Nullable Identifier id) {
-    TypedMapBuilder builder = TypedMapBuilder.builder().put(ContextKey.DEBUG, id == null ? "Recipe" : "Recipe " + id).put(SERIALIZER, this);
+    TypedMapBuilder builder = TypedMapBuilder.builder().put(ContextKey.DEBUG, id == null ? "Recipe" : "Recipe " + id).put(SERIALIZER, serializer());
     if (id != null) {
       builder.put(ContextKey.ID, id);
     }
@@ -168,7 +168,7 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
     @Override
     public T fromJson(Identifier id, JsonObject json) {
       T recipe = super.fromJson(id, json);
-      Mantle.logger.warn("Using deprecated recipe serializer {}, {}", BuiltInRegistries.RECIPE_SERIALIZER.getKey(this), replacement);
+      Mantle.logger.warn("Using deprecated recipe serializer {}, {}", loadable, replacement);
       return recipe;
     }
   }
