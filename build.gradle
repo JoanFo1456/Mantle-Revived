@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.1.38'
+    id 'net.neoforged.moddev' version '2.0.142'
     id 'io.freefair.lombok' version '8.14'
 }
 
@@ -24,23 +24,24 @@ repositories {
         name "yarn2mcp"
         url "https://maven.tterrag.com/"
     }
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
 }
 
 group = 'slimeknights.mantle'
 base {
     archivesName = 'MantleRevived'
 }
-// MC 26.1.2 decompiled source uses Java 25 PREVIEW features (ScopedValue, flexible constructors),
-// so the Minecraft recompile REQUIRES JDK 25 — JDK 24 cannot build it. This forces JDK 25 even
-// though lombok's JDK 25 support is fragile (see lombok version pin below).
+// MC 26.1.2 ships as Java 25 bytecode (Java 25 preview features), so the toolchain must be JDK 25
+// to compile against it. ModDevGradle uses a standard JavaCompile task, which lets the lombok
+// annotation processor run under JDK 25 (unlike the NeoGradle userdev compile path).
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
-// The io.freefair.lombok 8.6 plugin pins lombok 1.18.30, which predates JDK 24. Override to the
-// latest lombok so its annotation processor runs under the JDK 24 toolchain.
+// KNOWN BLOCKER: lombok does NOT run under JDK 25.0.3 in this environment (neither NeoGradle nor
+// ModDevGradle; stable 1.18.46 nor the edge build; with/without forked-compiler --add-opens). It
+// silently generates nothing, so ~all @Getter/@RequiredArgsConstructor/@Log4j2 code fails to
+// compile (cascading "cannot find symbol"/"argument lists differ"). MC 26.1.2 forces JDK 25 (Java
+// 25 preview features), so we can't drop to a JDK lombok supports. Unblock options for later:
+//   (a) delombok the source on JDK 21 and commit the plain-Java result (removes lombok), or
+//   (b) wait for a lombok release that supports JDK 25 GA.
 lombok {
     version = '1.18.46'
 }
@@ -87,42 +88,35 @@ sourceSets {
     }
 }
 
-minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
+neoForge {
+    version = "${neo_version}"
+    // AccessTransformer at src/main/resources/META-INF/accesstransformer.cfg is auto-detected by MDG.
 
-runs {
-    // applies to all the run configs below
-    configureEach {
-        workingDirectory project.file('run')
-
-        // Recommended logging data for a userdev environment
-        systemProperty 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP,CORE'
-
-        // Recommended logging level for the console
-        systemProperty 'forge.logging.console.level', 'debug'
-
-        modSource project.sourceSets.main
+    runs {
+        configureEach {
+            gameDirectory = project.file('run')
+            systemProperty 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP,CORE'
+            systemProperty 'forge.logging.console.level', 'debug'
+        }
+        client {
+            client()
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+        // NeoForge 26.1.x split datagen into clientData/serverData; re-add once compiling.
     }
 
-    client {
+    mods {
+        mantle {
+            sourceSet sourceSets.main
+        }
     }
-
-    server {
-        argument '--nogui'
-    }
-
-    // NeoForge 26.1.x split datagen into clientData/serverData; 'data' run type no longer exists.
-    // Temporarily disabled during the port; re-add clientData/serverData once compiling.
-    // data {
-    //     arguments.addAll '--mod', 'mantle', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-    // }
 }
 
-configurations {
-    deployerJars
-}
-               
 dependencies {
-    implementation "net.neoforged:neoforge:${neo_version}"
+    // NeoForge/Minecraft is provided by the moddev plugin via neoForge.version above.
 
     // compile against the JEI API but do not include it at runtime
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
@@ -193,34 +187,6 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
     options.compilerArgs += ['-Xmaxerrs', '100000']
-}
-
-// Ensure the lombok annotation processor actually runs for the mod sources. On this Gradle 9 /
-// NeoGradle setup the compileJava task is left with an empty annotationProcessorPath, which
-// silently disables ALL lombok codegen (@RequiredArgsConstructor/@Getter/@Log4j2 generate
-// nothing). Set it after NeoGradle finishes configuring, scoped to compileJava only so the
-// Minecraft recompile task (neoFormRecompile) is untouched.
-afterEvaluate {
-    tasks.named('compileJava').configure {
-        // NeoGradle ("Enabling dist annotations on PMJ") plus the JDK 23+ change to processor
-        // discovery leave lombok silently no-processing on JDK 25. Force it explicitly in doFirst
-        // (applied last, right before javac): re-assert the processor path AND name lombok as an
-        // explicit -processor (bypasses discovery), the approach proven to work on this setup.
-        doFirst {
-            def ap = configurations.findByName('annotationProcessor')
-            if (ap != null && !ap.isEmpty()) {
-                options.annotationProcessorPath = ap
-            }
-            // strip any -proc* flag and any pre-existing '-processor <x>' pair, then add lombok
-            def cleaned = []
-            def cur = options.compilerArgs
-            for (int i = 0; i < cur.size(); i++) {
-                if (cur[i] == '-processor') { i++; continue }
-                if (cur[i].startsWith('-proc')) { continue }
-                cleaned << cur[i]
-            }
-            cleaned += ['-processor', 'lombok.launch.AnnotationProcessorHider$AnnotationProcessor']
-            options.compilerArgs = cleaned
-        }
-    }
+    // JDK 23+ won't run path-discovered processors without explicit processing enabled.
+    options.compilerArgs += ['-proc:full']
 }
