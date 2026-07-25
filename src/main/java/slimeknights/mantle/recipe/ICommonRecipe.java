@@ -1,8 +1,10 @@
 package slimeknights.mantle.recipe;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeInput;
 
 /**
@@ -11,20 +13,28 @@ import net.minecraft.world.item.crafting.RecipeInput;
  */
 public interface ICommonRecipe<C extends RecipeInput> extends Recipe<C> {
   @Override
-  default ItemStack getResultItem(HolderLookup.Provider access) {
+  default ItemStack assemble(C inv) {
     return ItemStack.EMPTY;
   }
 
   @Override
-  default ItemStack assemble(C inv, HolderLookup.Provider access) {
-    return getResultItem(access).copy();
+  default String group() {
+    return "";
   }
 
-  /** @deprecated Means nothing outside of crafting tables */
-  @Deprecated
   @Override
-  default boolean canCraftInDimensions(int width, int height) {
-    return true;
+  default boolean showNotification() {
+    return false;
+  }
+
+  @Override
+  default PlacementInfo placementInfo() {
+    return PlacementInfo.NOT_PLACEABLE;
+  }
+
+  @Override
+  default RecipeBookCategory recipeBookCategory() {
+    return RecipeBookCategories.CRAFTING_MISC;
   }
 
   /**
