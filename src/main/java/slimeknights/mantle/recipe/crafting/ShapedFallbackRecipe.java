@@ -144,7 +144,7 @@ public class ShapedFallbackRecipe extends ShapedRecipe {
       int size = buffer.readVarInt();
       List<Identifier> builder = new ArrayList<>(size);
       for (int i = 0; i < size; i++) {
-        builder.add(buffer.readResourceLocation());
+        builder.add(buffer.readIdentifier());
       }
       return new ShapedFallbackRecipe(group, category, pattern, result, showNotification, List.copyOf(builder));
     }
@@ -157,7 +157,7 @@ public class ShapedFallbackRecipe extends ShapedRecipe {
       buffer.writeBoolean(recipe.showNotification());
       buffer.writeVarInt(recipe.alternatives.size());
       for (Identifier alternative : recipe.alternatives) {
-        buffer.writeResourceLocation(alternative);
+        buffer.writeIdentifier(alternative);
       }
     }
   }

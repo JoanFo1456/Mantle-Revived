@@ -9,7 +9,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -55,7 +55,7 @@ public class RegistryArgument {
 
   /** Creates an argument instance */
   public static ArgumentType<Identifier> registry() {
-    return ResourceLocationArgument.id();
+    return IdentifierArgument.id();
   }
 
   /** Creates an argument builder with the given name */

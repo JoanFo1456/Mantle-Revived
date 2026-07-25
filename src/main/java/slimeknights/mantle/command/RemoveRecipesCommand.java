@@ -12,7 +12,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ResourceArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -92,7 +92,7 @@ public class RemoveRecipesCommand {
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand, CommandBuildContext context) {
     subCommand
       .then(Commands.literal("preset")
-        .then(Commands.argument("preset", ResourceLocationArgument.id()).suggests(SUGGEST_PRESETS)
+        .then(Commands.argument("preset", IdentifierArgument.id()).suggests(SUGGEST_PRESETS)
           .executes(RemoveRecipesCommand::runPreset)))
       .then(Commands.literal("result")
         .then(Commands.argument("recipe_type", ResourceArgument.resource(context, Registries.RECIPE_TYPE))
@@ -105,7 +105,7 @@ public class RemoveRecipesCommand {
           .then(Commands.argument("input", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.ITEM))
             .executes(RemoveRecipesCommand::runByInput))))
       .then(Commands.literal("id")
-        .then(Commands.argument("recipe", ResourceLocationArgument.id()).suggests(SUGGESTS_RECIPES)
+        .then(Commands.argument("recipe", IdentifierArgument.id()).suggests(SUGGESTS_RECIPES)
           .executes(RemoveRecipesCommand::byId)));
   }
 
@@ -142,7 +142,7 @@ public class RemoveRecipesCommand {
   /** Runs the command using a JSON preset */
   private static int runPreset(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
     long startTime = System.nanoTime();
-    Identifier preset = ResourceLocationArgument.getId(context, "preset");
+    Identifier preset = IdentifierArgument.getId(context, "preset");
 
     // load in the preset JSON
     Identifier presetLocation = PRESETS.idToFile(preset);
@@ -239,7 +239,7 @@ public class RemoveRecipesCommand {
   /** Removes a recipe by ID */
   private static int byId(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
     long startTime = System.nanoTime();
-    Identifier id = ResourceLocationArgument.getId(context, "recipe");
+    Identifier id = IdentifierArgument.getId(context, "recipe");
 
     // determine the path for the resulting datapack
     Path pack = GeneratePackHelper.getDatapackPath(context.getSource().getServer());

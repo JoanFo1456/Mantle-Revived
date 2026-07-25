@@ -23,7 +23,7 @@ public record SimpleRecipeSerializer<T extends Recipe<?>>(Function<Identifier,T>
 
   @Override
   public StreamCodec<RegistryFriendlyByteBuf,T> streamCodec() {
-    return StreamCodec.of((buffer, recipe) -> buffer.writeResourceLocation(getRecipeId(recipe)), buffer -> constructor.apply(buffer.readResourceLocation()));
+    return StreamCodec.of((buffer, recipe) -> buffer.writeIdentifier(getRecipeId(recipe)), buffer -> constructor.apply(buffer.readIdentifier()));
   }
 
   /** Gets the recipe ID from legacy recipe classes for 1.21 recipe packets. */

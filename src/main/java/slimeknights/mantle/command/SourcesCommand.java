@@ -8,7 +8,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.FileToIdConverter;
@@ -29,14 +29,14 @@ public class SourcesCommand {
 
   /** Registers this command with the builder */
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand) {
-    subCommand = subCommand.requires(source -> source.hasPermission(MantleCommand.PERMISSION_EDIT_SPAWN));
+    subCommand = subCommand.requires(source -> MantleCommand.hasPermission(source, MantleCommand.PERMISSION_EDIT_SPAWN));
     subCommand.then(Commands.literal("path")
-      .then(Commands.argument("path", ResourceLocationArgument.id())
-        .executes(context -> run(context, context.getSource().getServer().getResourceManager(), ResourceLocationArgument.getId(context, "path")))));
+      .then(Commands.argument("path", IdentifierArgument.id())
+        .executes(context -> run(context, context.getSource().getServer().getResourceManager(), IdentifierArgument.getId(context, "path")))));
     for (SourceFolder source : FOLDERS) {
       subCommand.then(Commands.literal(source.argument)
-        .then(Commands.argument("id", ResourceLocationArgument.id()).suggests(source.suggestionProvider)
-          .executes(context -> run(context, source.folder, ResourceLocationArgument.getId(context, "id"), source.extension))));
+        .then(Commands.argument("id", IdentifierArgument.id()).suggests(source.suggestionProvider)
+          .executes(context -> run(context, source.folder, IdentifierArgument.getId(context, "id"), source.extension))));
     }
   }
 

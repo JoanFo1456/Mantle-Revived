@@ -14,12 +14,12 @@ public class OpenNamedBookPacket implements IThreadsafePacket {
   private final Identifier book;
 
   public OpenNamedBookPacket(FriendlyByteBuf buffer) {
-    this.book = buffer.readResourceLocation();
+    this.book = buffer.readIdentifier();
   }
 
   @Override
   public void encode(FriendlyByteBuf buf) {
-    buf.writeResourceLocation(book);
+    buf.writeIdentifier(book);
   }
 
   @Override

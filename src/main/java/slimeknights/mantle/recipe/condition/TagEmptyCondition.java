@@ -7,7 +7,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.loot.MantleLoot;
 
@@ -26,11 +25,6 @@ public class TagEmptyCondition<T> extends TagCondition<T> implements LootItemCon
 
   public Identifier getID() {
     return SERIALIZER.getID();
-  }
-
-  @Override
-  public LootItemConditionType getType() {
-    return MantleLoot.TAG_EMPTY;
   }
 
   @Override

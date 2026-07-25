@@ -49,9 +49,9 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
       return loadable.deserialize(json, buildContext(null).build());
     }, object -> new Dynamic<>(JsonOps.INSTANCE, loadable.serialize(object))));
     this.streamCodec = StreamCodec.of((buffer, recipe) -> {
-      buffer.writeResourceLocation(getRecipeId(recipe));
+      buffer.writeIdentifier(getRecipeId(recipe));
       toNetworkSafe(buffer, recipe);
-    }, buffer -> fromNetworkSafe(buffer.readResourceLocation(), buffer));
+    }, buffer -> fromNetworkSafe(buffer.readIdentifier(), buffer));
   }
 
   /** Creates a standard serializer from a loadable */

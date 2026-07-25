@@ -6,6 +6,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.server.permissions.PermissionCheck;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.GameRules;
 import net.neoforged.neoforge.common.NeoForge;
@@ -20,13 +21,18 @@ import java.util.function.Consumer;
  */
 public class MantleCommand {
   /** Permission level that allows a user to build in spawn protected areas */
-  public static final int PERMISSION_EDIT_SPAWN = 1;
+  public static final PermissionCheck PERMISSION_EDIT_SPAWN = Commands.LEVEL_MODERATORS;
   /** Permission level that can run standard game commands, used by command blocks and functions */
-  public static final int PERMISSION_GAME_COMMANDS = 2;
+  public static final PermissionCheck PERMISSION_GAME_COMMANDS = Commands.LEVEL_GAMEMASTERS;
   /** Standard permission level for server operators */
-  public static final int PERMISSION_PLAYER_COMMANDS = 3;
+  public static final PermissionCheck PERMISSION_PLAYER_COMMANDS = Commands.LEVEL_ADMINS;
   /** Permission level for the server owner, server console, or the player in single player */
-  public static final int PERMISSION_OWNER = 4;
+  public static final PermissionCheck PERMISSION_OWNER = Commands.LEVEL_OWNERS;
+
+  /** Checks if the given source meets the given permission check */
+  public static boolean hasPermission(CommandSourceStack source, PermissionCheck check) {
+    return check.check(source.permissions());
+  }
 
   /** @deprecated use {@link RegistryArgument#TAG} or {@link TagSourceArgument#TAG} */
   @Deprecated(forRemoval = true)
@@ -80,7 +86,7 @@ public class MantleCommand {
     register(builder, "dump_loot_modifiers", DumpLootModifiers::register);
     register(builder, "harvest_tiers", HarvestTiersCommand::register);
     register(builder, "remove", b -> {
-      b = b.requires(sender -> sender.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS));
+      b = b.requires(sender -> hasPermission(sender, MantleCommand.PERMISSION_GAME_COMMANDS));
       register(b, "recipes", b2 -> RemoveRecipesCommand.register(b2, context));
       RemoveDataCommand.register(b);
     });
@@ -103,7 +109,7 @@ public class MantleCommand {
    * @param reducedDebugLevel  Level to use when reduced debug info is true
    * @return  True if the command can be run
    */
-  public static boolean requiresDebugInfoOrOp(CommandSourceStack source, int reducedDebugLevel) {
-    return !source.getLevel().getGameRules().getBoolean(GameRules.RULE_REDUCEDDEBUGINFO) || source.hasPermission(reducedDebugLevel);
+  public static boolean requiresDebugInfoOrOp(CommandSourceStack source, PermissionCheck reducedDebugLevel) {
+    return !source.getLevel().getGameRules().getBoolean(GameRules.RULE_REDUCEDDEBUGINFO) || hasPermission(source, reducedDebugLevel);
   }
 }

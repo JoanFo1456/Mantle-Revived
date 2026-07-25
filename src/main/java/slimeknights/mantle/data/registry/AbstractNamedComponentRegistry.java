@@ -50,7 +50,7 @@ public abstract class AbstractNamedComponentRegistry<T> implements ResourceLocat
   /** Writes the value to the buffer */
   @Override
   public void encode(FriendlyByteBuf buffer, T value) {
-    buffer.writeResourceLocation(getKey(value));
+    buffer.writeIdentifier(getKey(value));
   }
 
   /** Writes the value to the buffer */
@@ -75,7 +75,7 @@ public abstract class AbstractNamedComponentRegistry<T> implements ResourceLocat
   /** Parse the value from JSON */
   @Override
   public T decode(FriendlyByteBuf buffer, TypedMap context) {
-    return decodeInternal(buffer.readResourceLocation());
+    return decodeInternal(buffer.readIdentifier());
   }
 
   /** Parse the value from JSON */

@@ -125,7 +125,7 @@ public record ResourceOrTagKeyArgument<T>(@Nullable ResourceKey<? extends Regist
     @Override
     public void serializeToNetwork(Template template, FriendlyByteBuf buffer) {
       if (template.registry != null) {
-        buffer.writeResourceLocation(template.registry.location());
+        buffer.writeIdentifier(template.registry.location());
       } else {
         buffer.writeUtf("");
       }

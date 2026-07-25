@@ -59,7 +59,7 @@ public class CombatHelper {
   /** Gets the item stack in the main hand that contributes to attributes. Exposed for benefit of Tinkers' Construct which can optimize these methods for its tools. */
   public static ItemStack getMainhandAttributeStack(LivingEntity entity) {
     // clientside does not use last item stack, so our best choice is the mainhand stack
-    if (entity.level().isClientSide) {
+    if (entity.level().isClientSide()) {
       return entity.getMainHandItem();
     }
     // serverside, use the last item stack instead of the current. Should be the same, but if they mismatch then last item stack has correct attributes
@@ -318,7 +318,7 @@ public class CombatHelper {
           }
 
           // damage the tool
-          if (!player.level().isClientSide && !stack.isEmpty() && parent instanceof LivingEntity living) {
+          if (!player.level().isClientSide() && !stack.isEmpty() && parent instanceof LivingEntity living) {
             ItemStack copy = stack.copy();
             stack.hurtEnemy(living, player);
             if (stack.isEmpty()) {

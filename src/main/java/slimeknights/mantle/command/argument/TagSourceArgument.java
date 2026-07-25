@@ -9,7 +9,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess.RegistryEntry;
 import net.minecraft.network.chat.Component;
@@ -83,7 +83,7 @@ public class TagSourceArgument {
 
   /** Creates an argument instance */
   public static ArgumentType<Identifier> source() {
-    return ResourceLocationArgument.id();
+    return IdentifierArgument.id();
   }
 
   /** Creates an argument builder with the given name */
@@ -93,12 +93,12 @@ public class TagSourceArgument {
 
   /** Creates a tag argument builder with the given name */
   public static RequiredArgumentBuilder<CommandSourceStack,Identifier> tagArgument(String key) {
-    return Commands.argument(key, ResourceLocationArgument.id()).suggests(TAG);
+    return Commands.argument(key, IdentifierArgument.id()).suggests(TAG);
   }
 
   /** Creates a value argument builder with the given name */
   public static RequiredArgumentBuilder<CommandSourceStack,Identifier> valueArgument(String key) {
-    return Commands.argument(key, ResourceLocationArgument.id()).suggests(VALUE);
+    return Commands.argument(key, IdentifierArgument.id()).suggests(VALUE);
   }
 
   /** Creates an entry (tag or value) argument builder with the given name */

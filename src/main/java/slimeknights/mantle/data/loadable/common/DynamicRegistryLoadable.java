@@ -43,7 +43,7 @@ public record DynamicRegistryLoadable<T>(ResourceKey<? extends Registry<T>> regi
 
   @Override
   public T decode(FriendlyByteBuf buffer, TypedMap context) {
-    Identifier name = buffer.readResourceLocation();
+    Identifier name = buffer.readIdentifier();
     try {
       return fromKey(name, "packet", context);
     } catch (JsonSyntaxException e) {
@@ -53,6 +53,6 @@ public record DynamicRegistryLoadable<T>(ResourceKey<? extends Registry<T>> regi
 
   @Override
   public void encode(FriendlyByteBuf buffer, T object) {
-    buffer.writeResourceLocation(getKey(object));
+    buffer.writeIdentifier(getKey(object));
   }
 }

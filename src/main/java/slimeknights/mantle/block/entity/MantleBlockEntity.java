@@ -21,7 +21,7 @@ public class MantleBlockEntity extends BlockEntity {
   }
 
   public boolean isClient() {
-    return this.getLevel() != null && this.getLevel().isClientSide;
+    return this.getLevel() != null && this.getLevel().isClientSide();
   }
 
   /**

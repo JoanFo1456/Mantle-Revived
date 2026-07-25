@@ -6,8 +6,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import slimeknights.mantle.Mantle;
@@ -41,13 +41,13 @@ public class RetexturedLootFunction extends LootItemConditionalFunction {
   }
 
   @Override
-  public Set<LootContextParam<?>> getReferencedContextParams() {
+  public Set<ContextKey<?>> getReferencedContextParams() {
     return Set.of(LootContextParams.BLOCK_ENTITY);
   }
 
   @Override
   protected ItemStack run(ItemStack stack, LootContext context) {
-    BlockEntity te = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+    BlockEntity te = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
     if (te instanceof IRetexturedBlockEntity retextured) {
       RetexturedHelper.setTexture(stack, retextured.getTextureName());
     } else {
@@ -58,7 +58,7 @@ public class RetexturedLootFunction extends LootItemConditionalFunction {
   }
 
   @Override
-  public LootItemFunctionType getType() {
-    return MantleLoot.RETEXTURED_FUNCTION;
+  public MapCodec<? extends LootItemFunction> codec() {
+    return CODEC;
   }
 }

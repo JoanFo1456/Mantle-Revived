@@ -27,12 +27,12 @@ public interface ResourceLocationLoadable<T> extends StringLoadable<T> {
 
     @Override
     public Identifier decode(FriendlyByteBuf buffer, TypedMap context) {
-      return buffer.readResourceLocation();
+      return buffer.readIdentifier();
     }
 
     @Override
     public void encode(FriendlyByteBuf buffer, Identifier value) {
-      buffer.writeResourceLocation(value);
+      buffer.writeIdentifier(value);
     }
   };
 
