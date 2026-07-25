@@ -1,13 +1,14 @@
 package slimeknights.mantle.client.screen.book;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.StringUtils;
+import org.joml.Matrix3x2fStack;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.client.book.data.element.TextData;
 
@@ -35,7 +36,7 @@ public class TextDataRenderer {
     String action = drawText(graphics, x, y, boxWidth, boxHeight, data, mouseX, mouseY, fr, tooltip);
 
     if (!tooltip.isEmpty()) {
-      graphics.renderTooltip(fr, tooltip, Optional.empty(), mouseX, mouseY);
+      graphics.setTooltipForNextFrame(fr, tooltip, Optional.empty(), ItemStack.EMPTY, mouseX, mouseY);
     }
 
     return action;
@@ -313,14 +314,14 @@ public class TextDataRenderer {
   //TODO: does this exist elsewhere now?
   public static void drawScaledString(GuiGraphicsExtractor graphics, Font font, String text, float x, float y, int color, boolean dropShadow, float scale) {
     font = getFont(font);
-    PoseStack poseStack = graphics.pose();
-    poseStack.pushPose();
-    poseStack.translate(x, y, 0);
-    poseStack.scale(scale, scale, 1F);
+    Matrix3x2fStack poseStack = graphics.pose();
+    poseStack.pushMatrix();
+    poseStack.translate(x, y);
+    poseStack.scale(scale, scale);
 
-    graphics.drawString(font, text, 0, 0, color, dropShadow);
+    graphics.text(font, text, 0, 0, color, dropShadow);
 
-    poseStack.popPose();
+    poseStack.popMatrix();
   }
   //END METHODS FROM GUI
 }

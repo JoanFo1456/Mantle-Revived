@@ -1,6 +1,5 @@
 package slimeknights.mantle.client.screen.book;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -263,12 +262,12 @@ public class TextComponentDataRenderer {
    * @param scale         the scale to render as
    */
   public static void drawScaledTextComponent(GuiGraphicsExtractor graphics, Font font, FormattedText textComponent, float x, float y, boolean dropShadow, float scale) {
-    PoseStack poseStack = graphics.pose();
-    poseStack.pushPose();
-    poseStack.translate(x, y, 0);
-    poseStack.scale(scale, scale, 1F);
+    org.joml.Matrix3x2fStack poseStack = graphics.pose();
+    poseStack.pushMatrix();
+    poseStack.translate(x, y);
+    poseStack.scale(scale, scale);
 
-    graphics.drawString(font, Language.getInstance().getVisualOrder(textComponent), 0, 0, 0, dropShadow);
-    poseStack.popPose();
+    graphics.text(font, Language.getInstance().getVisualOrder(textComponent), 0, 0, 0, dropShadow);
+    poseStack.popMatrix();
   }
 }
