@@ -34,7 +34,8 @@ public class ModelHelper {
    */
   @SuppressWarnings("deprecation")
   private static Identifier getParticleTextureInternal(Block block) {
-    TextureAtlasSprite particle = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(block.defaultBlockState()).getParticleIcon();
+    // TODO(26.1.2): particle sprite is now fetched via BlockStateModelSet#getParticleMaterial (Material.Baked)
+    TextureAtlasSprite particle = Minecraft.getInstance().getModelManager().getBlockStateModelSet().getParticleMaterial(block.defaultBlockState()).sprite();
     //noinspection ConstantConditions  dumb mods returning null particle icons
     if (particle != null) {
       return particle.contents().name();

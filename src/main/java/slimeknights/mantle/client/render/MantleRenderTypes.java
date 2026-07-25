@@ -1,60 +1,29 @@
 package slimeknights.mantle.client.render;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormatElement;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import slimeknights.mantle.Mantle;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 
 /**
- * Class for render types defined by Mantle
+ * Class for render types defined by Mantle.
+ *
+ * TODO(26.1.2): The 1.21.4+ render engine rewrite removed {@code RenderStateShard}, {@code RenderType.CompositeState},
+ * and the {@code ShaderInstance} pipeline this class was built on. Both custom render types below relied on Mantle's
+ * own core shaders (fluid fog-fix + block full-bright, see {@link MantleShaders}) which no longer have an equivalent
+ * registration path; custom render types now require building a {@link com.mojang.blaze3d.pipeline.RenderPipeline}
+ * (see {@code net.minecraft.client.renderer.RenderPipelines}) and creating the type via
+ * {@code RenderType.create(String, RenderSetup)}. Until those pipelines are ported, both fields fall back to the
+ * vanilla translucent block render type so dependent code keeps compiling/rendering (without the custom shaders).
  */
-public class MantleRenderTypes extends RenderType {
-
-  private MantleRenderTypes(String name, VertexFormat format, Mode mode, int bufferSize, boolean useDelegate, boolean needsSorting, Runnable setupTaskIn, Runnable clearTaskIn) {
-    super(name, format, mode, bufferSize, useDelegate, needsSorting, setupTaskIn, clearTaskIn);
-  }
-
-  /** Extension of {@link RenderType#POSITION_COLOR_TEX_LIGHTMAP_SHADER} with fog information based on {@link RenderType#ENTITY_TRANSLUCENT_CULL} */
-  public static final RenderStateShard.ShaderStateShard FLUID_SHADER = new RenderStateShard.ShaderStateShard(MantleShaders::getConfiguredFluidShader);
-
+public class MantleRenderTypes {
   /**
    * Render type used for the fluid renderer.
-   * TODO 1.21: can we replace this with {@link RenderType#ENTITY_TRANSLUCENT_CULL}? Would require including normals in our vertex format.
+   * TODO(26.1.2): reimplement the fluid fog-fix shader as a RenderPipeline; falls back to vanilla translucent block.
    */
-  public static final RenderType FLUID = create(
-    Mantle.modId + ":block_render_type",
-    DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, false, true,
-    RenderType.CompositeState.builder()
-      .setLightmapState(LIGHTMAP)
-      .setShaderState(FLUID_SHADER)
-      .setTextureState(BLOCK_SHEET_MIPPED)
-      .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-      .createCompositeState(false));
+  public static final RenderType FLUID = RenderTypes.translucentMovingBlock();
 
   /**
-   * Render type used for the structure renderer
+   * Render type used for the structure renderer.
+   * TODO(26.1.2): reimplement the block full-bright (emissive) shader as a RenderPipeline; falls back to vanilla translucent block.
    */
-  public static final VertexFormat BLOCK_WITH_OVERLAY = VertexFormat.builder()
-    .add("Position", VertexFormatElement.POSITION)
-    .add("Color", VertexFormatElement.COLOR)
-    .add("UV0", VertexFormatElement.UV0)
-    .add("UV1", VertexFormatElement.UV1)
-    .add("UV2", VertexFormatElement.UV2)
-    .add("Normal", VertexFormatElement.NORMAL)
-    .padding(1)
-    .build();
-
-  public static final RenderType TRANSLUCENT_FULLBRIGHT = create(
-    Mantle.modId + ":translucent_fullbright",
-    BLOCK_WITH_OVERLAY, Mode.QUADS, 256, false, false,
-    RenderType.CompositeState.builder()
-      .setShaderState(new RenderStateShard.ShaderStateShard(MantleShaders::getBlockFullBrightShader))
-      .setLightmapState(new RenderStateShard.LightmapStateShard(false))
-      .setOverlayState(OVERLAY)
-      .setTextureState(BLOCK_SHEET_MIPPED)
-      .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-      .createCompositeState(false));
+  public static final RenderType TRANSLUCENT_FULLBRIGHT = RenderTypes.translucentMovingBlock();
 }
