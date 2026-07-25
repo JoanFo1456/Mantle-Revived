@@ -9,7 +9,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.conditions.ICondition.IContext;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.LootTableLoadEvent;
 import net.neoforged.bus.api.EventPriority;
 import slimeknights.mantle.Mantle;
@@ -36,8 +36,8 @@ public enum LootTableInjector implements IEarlyReloadListener {
 
   /** Initializes the loot table injector */
   public static void init() {
-    NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, AddReloadListenerEvent.class, event -> {
-      event.addListener(INSTANCE);
+    NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, AddServerReloadListenersEvent.class, event -> {
+      event.addListener(Mantle.getResource(FOLDER.replace('/', '_')), INSTANCE);
       INSTANCE.context = event.getConditionContext();
     });
     NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, LootTableLoadEvent.class, INSTANCE::lootTableLoad);
