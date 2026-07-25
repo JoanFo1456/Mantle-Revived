@@ -66,7 +66,9 @@ public class StructureElement extends SizedBookElement {
   @Override
   public void draw(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks, Font fontRenderer) {
     MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(new ByteBufferBuilder(786432));
-    PoseStack transform = graphics.pose();
+    // TODO 26.1.2: GUI pose is now 2D (Matrix3x2fStack); 3D block tesselation needs the new PiP render-state path.
+    // Using a standalone 3D PoseStack to keep this compiling; structure preview will not composite correctly yet.
+    PoseStack transform = new PoseStack();
     PoseStack.Pose lastEntryBeforeTry = transform.last();
 
     try {
