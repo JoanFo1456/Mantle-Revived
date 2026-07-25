@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.datafixers.util.Either;
-import lombok.Getter;
 import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelDebugName;
@@ -52,8 +51,12 @@ public class SimpleBlockModel extends AbstractUnbakedModel {
   /** Model parts for baked model */
   private final List<CuboidModelElement> parts;
   /** Textures for iteration, in Mantle's own representation (left = material, right = reference name) */
-  @Getter
   private final Map<String,Either<Material, String>> textures;
+
+  /** Gets the Mantle texture representation for iteration */
+  public Map<String,Either<Material,String>> getTextures() {
+    return textures;
+  }
 
   /**
    * Creates a new simple block model
