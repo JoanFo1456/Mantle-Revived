@@ -1,6 +1,5 @@
 package slimeknights.mantle.client.screen.book.element;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -49,14 +48,8 @@ public class SelectionElement extends SizedBookElement {
     if (hover) {
       graphics.fill(this.iconX, this.iconY, this.iconX + IMG_SIZE, this.iconY + IMG_SIZE, this.parent.book.appearance.hoverColor);
     }
-    if (unlocked) {
-      RenderSystem.setShaderColor(1F, 1F, 1F, hover ? 1F : 0.5F);
-    } else {
-      float r = ((this.parent.book.appearance.lockedSectionColor >> 16) & 0xff) / 255.F;
-      float g = ((this.parent.book.appearance.lockedSectionColor >> 8) & 0xff) / 255.F;
-      float b = (this.parent.book.appearance.lockedSectionColor & 0xff) / 255.F;
-      RenderSystem.setShaderColor(r, g, b, 0.75F);
-    }
+    // TODO 26.1.2: RenderSystem.setShaderColor was removed; tint via the icon's color multiplier (alpha fade no longer applied).
+    this.iconRenderer.colorMultiplier = unlocked ? 0xFFFFFF : (this.parent.book.appearance.lockedSectionColor & 0xFFFFFF);
 
     this.iconRenderer.draw(graphics, mouseX, mouseY, partialTicks, fontRenderer);
 
