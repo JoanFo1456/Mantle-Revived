@@ -201,7 +201,7 @@ public class ItemRegistryAdapter extends EnumRegistryAdapter<Item> {
     } else {
       burnableItem = (block, burnTime) -> new BlockItem(block, defaultProps);
       burnableTallItem = (block) -> new DoubleHighBlockItem(block, defaultProps);
-      burnableSignItem = SignItem::new;
+      burnableSignItem = (props, standing, wall) -> new SignItem(standing, wall, props);
       burnableHangingSignItem = (props, ceiling, wall) -> new HangingSignItem(ceiling, wall, props);
     }
 

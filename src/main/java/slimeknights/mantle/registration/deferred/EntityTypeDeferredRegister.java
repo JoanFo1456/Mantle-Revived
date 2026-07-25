@@ -38,7 +38,7 @@ public class EntityTypeDeferredRegister extends DeferredRegisterWrapper<EntityTy
    * @return  Entity registry object
    */
   public <T extends Entity> DeferredHolder<EntityType<?>,EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> sup) {
-    return register.register(name, () -> sup.get().build(resourceName(name)));
+    return register.register(name, () -> sup.get().build(net.minecraft.resources.ResourceKey.create(Registries.ENTITY_TYPE, net.minecraft.resources.Identifier.parse(resourceName(name)))));
   }
 
   /**

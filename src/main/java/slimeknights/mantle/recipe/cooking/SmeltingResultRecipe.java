@@ -29,6 +29,10 @@ public class SmeltingResultRecipe extends SmeltingRecipe implements CookingResul
     SmeltingResultRecipe::new);
 
   private final ItemOutput result;
+  @Override
+  public ItemOutput getResult() {
+    return result;
+  }
   public SmeltingResultRecipe(String group, CookingBookCategory category, Ingredient ingredient, ItemOutput result, float experience, int cookingTime) {
     super(new Recipe.CommonInfo(false), new AbstractCookingRecipe.CookingBookInfo(category, group), ingredient, ItemStackTemplate.fromNonEmptyStack(result.get()), experience, cookingTime);
     this.result = result;
