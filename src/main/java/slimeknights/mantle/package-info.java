@@ -1,7 +1,4 @@
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 package slimeknights.mantle;
-
-import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;
