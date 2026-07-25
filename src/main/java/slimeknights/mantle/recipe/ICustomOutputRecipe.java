@@ -1,6 +1,5 @@
 package slimeknights.mantle.recipe;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
@@ -9,17 +8,6 @@ import net.minecraft.world.item.crafting.RecipeInput;
  * @param <C>  Inventory type
  */
 public interface ICustomOutputRecipe<C extends RecipeInput> extends ICommonRecipe<C> {
-  /** @deprecated Item stack output not supported */
-  @Override
-  @Deprecated
-  default ItemStack getResultItem(HolderLookup.Provider access) {
-    return ItemStack.EMPTY;
-  }
-
-  /** @deprecated Item stack output not supported */
-  @Override
-  @Deprecated
-  default ItemStack assemble(C inv, HolderLookup.Provider access) {
-    return ItemStack.EMPTY;
-  }
+  // assemble(C) defaulting to empty is inherited from ICommonRecipe.
+  // getResultItem was removed from Recipe in 26.1.2, so there is nothing to override here.
 }

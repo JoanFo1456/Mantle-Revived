@@ -195,7 +195,7 @@ public abstract class EntityIngredient implements Predicate<EntityType<?>>, IAmL
 
     @Override
     public boolean test(EntityType<?> type) {
-      return type.is(tag);
+      return type.builtInRegistryHolder().is(tag);
     }
 
     @SuppressWarnings("deprecation")

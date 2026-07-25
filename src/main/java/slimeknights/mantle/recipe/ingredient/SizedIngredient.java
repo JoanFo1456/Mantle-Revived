@@ -19,8 +19,9 @@ import java.util.stream.Collectors;
  * Extension of the vanilla ingredient to make stack size checks
  */
 public class SizedIngredient implements Predicate<ItemStack> {
-  /** Empty sized ingredient wrapper. Matches only the empty stack of size 0 */
-  public static final SizedIngredient EMPTY = of(Ingredient.EMPTY, 0);
+  /** Empty sized ingredient wrapper. Matches nothing.
+   * Note {@link Ingredient} can no longer be empty in 26.1.2, so this is a null-ingredient sentinel. */
+  public static final SizedIngredient EMPTY = new SizedIngredient(null, 0);
 
   public static final RecordLoadable<SizedIngredient> LOADABLE = RecordLoadable.create(
     IngredientLoadable.DISALLOW_EMPTY.tryDirectField("ingredient", SizedIngredient::getIngredient, "amount_needed"),
@@ -92,7 +93,7 @@ public class SizedIngredient implements Predicate<ItemStack> {
    * @return  Sized ingredient matching any size
    */
   public static SizedIngredient fromTag(TagKey<Item> tag, int amountNeeded) {
-    return of(Ingredient.of(tag), amountNeeded);
+    return of(Ingredient.of(net.minecraft.core.registries.BuiltInRegistries.ITEM.getOrThrow(tag)), amountNeeded);
   }
 
   /**
@@ -106,7 +107,7 @@ public class SizedIngredient implements Predicate<ItemStack> {
 
   @Override
   public boolean test(ItemStack stack) {
-    return stack.getCount() >= amountNeeded && ingredient.test(stack);
+    return ingredient != null && stack.getCount() >= amountNeeded && ingredient.test(stack);
   }
 
   /**
@@ -114,7 +115,7 @@ public class SizedIngredient implements Predicate<ItemStack> {
    * @return  True if the ingredient has no matching stacks
    */
   public boolean isEmpty() {
-    return ingredient.isEmpty();
+    return ingredient == null || ingredient.isEmpty();
   }
 
   /**
@@ -122,6 +123,9 @@ public class SizedIngredient implements Predicate<ItemStack> {
    * @return  List of matching stacks
    */
   public List<ItemStack> getMatchingStacks() {
+    if (ingredient == null) {
+      return List.of();
+    }
     return ingredient.items()
                      .map(holder -> new ItemStack(holder.value(), amountNeeded))
                      .collect(Collectors.toList());

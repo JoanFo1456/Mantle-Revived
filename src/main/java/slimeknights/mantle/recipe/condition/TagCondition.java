@@ -3,8 +3,6 @@ package slimeknights.mantle.recipe.condition;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -20,19 +18,26 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /** Common logic for {@link TagEmptyCondition} and {@link TagFilledCondition} */
-@RequiredArgsConstructor
 public abstract class TagCondition<T> implements ICondition {
-  @Getter
   protected final TagKey<T> tag;
   @Nullable
   private Optional<Registry<T>> registry;
+
+  protected TagCondition(TagKey<T> tag) {
+    this.tag = tag;
+  }
+
+  /** Gets the tag for this condition */
+  public TagKey<T> getTag() {
+    return tag;
+  }
 
   /** Gets the registry */
   @Nullable
   protected Registry<T> registry(LootContext context) {
     // registry is not going to disappear within the lifetime of this object
     if (registry == null) {
-      registry = context.getLevel().registryAccess().registry(tag.registry());
+      registry = context.getLevel().registryAccess().lookup(tag.registry());
       if (registry.isEmpty()) {
         Mantle.logger.error("Failed to find registry for tag " + tag + " in " + getClass().getSimpleName() + ", this indicates a broken resource or datapack.");
       }

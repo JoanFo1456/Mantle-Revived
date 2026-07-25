@@ -74,10 +74,8 @@ public final class ItemNameIngredient {
     }
 
     @Override
-    public Stream<ItemStack> getItems() {
-      return names.stream()
-                  .flatMap(name -> BuiltInRegistries.ITEM.getOptional(name).stream())
-                  .map(ItemStack::new);
+    public Stream<net.minecraft.core.Holder<net.minecraft.world.item.Item>> items() {
+      return names.stream().<net.minecraft.core.Holder<net.minecraft.world.item.Item>>flatMap(name -> BuiltInRegistries.ITEM.get(name).stream());
     }
 
     @Override

@@ -96,7 +96,7 @@ public class FluidContainerIngredient implements ICustomIngredient {
       int drained = handler.extract(0, contained, amount, tx);
       // we need an exact match, and we need the resulting container item to be the same as the item stack's container item
       ItemResource result = access.getResource();
-      return drained == amount && result.matches(stack.getCraftingRemainingItem());
+      return drained == amount && result.matches(stack.getItem().getCraftingRemainder());
     }
   }
 

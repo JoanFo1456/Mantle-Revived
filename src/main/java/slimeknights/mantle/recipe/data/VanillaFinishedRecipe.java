@@ -11,6 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -27,14 +28,17 @@ public record VanillaFinishedRecipe(Identifier getId, Recipe<?> recipe, @Nullabl
   public static RecipeOutput output(Consumer<FinishedRecipe> consumer) {
     return new RecipeOutput() {
       @Override
-      public void accept(Identifier id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
-        consumer.accept(new VanillaFinishedRecipe(id, recipe, advancement));
+      public void accept(ResourceKey<Recipe<?>> id, Recipe<?> recipe, @Nullable AdvancementHolder advancement) {
+        consumer.accept(new VanillaFinishedRecipe(id.location(), recipe, advancement));
       }
 
       @Override
       public Advancement.Builder advancement() {
         return Advancement.Builder.recipeAdvancement();
       }
+
+      @Override
+      public void includeRootAdvancement() {}
     };
   }
 

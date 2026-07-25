@@ -3,8 +3,6 @@ package slimeknights.mantle.recipe.data;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -16,13 +14,33 @@ import javax.annotation.Nullable;
 /**
  * Extension of {@link ItemOutput} for datagen of recipes for compat. Should never be used in an actual recipe
  */
-@RequiredArgsConstructor(staticName = "fromName")
 public class ItemNameOutput extends ItemOutput {
   private final Identifier name;
-  @Getter
   private final int count;
   @Nullable
   private final CompoundTag nbt;
+
+  private ItemNameOutput(Identifier name, int count, @Nullable CompoundTag nbt) {
+    this.name = name;
+    this.count = count;
+    this.nbt = nbt;
+  }
+
+  @Override
+  public int getCount() {
+    return count;
+  }
+
+  /**
+   * Creates an output for the given item
+   * @param name   Item name
+   * @param count  Count
+   * @param nbt    Item NBT
+   * @return  Output
+   */
+  public static ItemNameOutput fromName(Identifier name, int count, @Nullable CompoundTag nbt) {
+    return new ItemNameOutput(name, count, nbt);
+  }
 
   /**
    * Creates an output for the given item with no NBT
