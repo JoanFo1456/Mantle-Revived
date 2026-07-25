@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer.FogMode;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.joml.Vector3f;
@@ -66,7 +66,7 @@ public class ClientTextureFluidType implements IClientFluidTypeExtensions {
     if (fluidColor != -1) {
       // cache the vector for fog color to reduce computation time
       if (fogColor == null) {
-        fogColor = new Vector3f(FastColor.ARGB32.red(fluidColor) / 255f, FastColor.ARGB32.green(fluidColor) / 255f, FastColor.ARGB32.blue(fluidColor) / 255f);
+        fogColor = new Vector3f(ARGB.red(fluidColor) / 255f, ARGB.green(fluidColor) / 255f, ARGB.blue(fluidColor) / 255f);
       }
       fluidFogColor.x *= fogColor.x;
       fluidFogColor.y *= fogColor.y;

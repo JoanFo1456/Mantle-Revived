@@ -14,7 +14,7 @@ import net.minecraft.client.multiplayer.ClientAdvancements;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -132,18 +132,18 @@ public class BookScreen extends Screen {
   }
 
   private Vector3f splitRGB(int color) {
-    float r = FastColor.ARGB32.red(color) / 255.F;
-    float g = FastColor.ARGB32.green(color)  / 255.F;
-    float b = FastColor.ARGB32.blue(color)  / 255.F;
+    float r = ARGB.red(color) / 255.F;
+    float g = ARGB.green(color)  / 255.F;
+    float b = ARGB.blue(color)  / 255.F;
 
     return new Vector3f(r, g, b);
   }
 
   private Vector4f splitRGBA(int color) {
-    float r = FastColor.ARGB32.red(color) / 255.F;
-    float g = FastColor.ARGB32.green(color)  / 255.F;
-    float b = FastColor.ARGB32.blue(color)  / 255.F;
-    float a = FastColor.ARGB32.alpha(color)  / 255.F;
+    float r = ARGB.red(color) / 255.F;
+    float g = ARGB.green(color)  / 255.F;
+    float b = ARGB.blue(color)  / 255.F;
+    float a = ARGB.alpha(color)  / 255.F;
 
     return new Vector4f(r, g, b, a);
   }
