@@ -24,7 +24,9 @@ public class CookingRecipeBuilder<T extends CookingRecipeBuilder<T>> extends Abs
   protected final ItemOutput result;
   protected float experience = 1.0f;
   protected int cookingTime = 200;
-  protected Ingredient ingredient = Ingredient.EMPTY;
+  // Ingredient can no longer be empty in 26.1.2, so null marks "unset".
+  @javax.annotation.Nullable
+  protected Ingredient ingredient = null;
   protected CookingBookCategory category = CookingBookCategory.MISC;
   protected CookingType type = CookingType.SMELTING;
 
@@ -81,7 +83,7 @@ public class CookingRecipeBuilder<T extends CookingRecipeBuilder<T>> extends Abs
 
   /** Sets the input ingredient */
   public T requires(TagKey<Item> tag) {
-    return requires(Ingredient.of(tag));
+    return requires(Ingredient.of(net.minecraft.core.registries.BuiltInRegistries.ITEM.getOrThrow(tag)));
   }
 
   /** Sets the XP gain from this recipe */
@@ -100,7 +102,7 @@ public class CookingRecipeBuilder<T extends CookingRecipeBuilder<T>> extends Abs
   /** Helper to save a recipe */
   @SuppressWarnings("unchecked")
   private <R extends Recipe<?>> T save(Consumer<FinishedRecipe> consumer, Identifier id, RecordLoadable<R> loadable, Function6<String,CookingBookCategory,Ingredient,ItemOutput,Float,Integer,R> constructor, int cookingTime) {
-    if (ingredient == Ingredient.EMPTY) {
+    if (ingredient == null) {
       throw new IllegalStateException("Ingredient must be set");
     }
     Identifier advancementID = buildOptionalAdvancement(id, "cooking");

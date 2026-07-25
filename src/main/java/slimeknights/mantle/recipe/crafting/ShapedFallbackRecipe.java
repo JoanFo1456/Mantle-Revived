@@ -6,88 +6,111 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.recipe.MantleRecipes;
 import slimeknights.mantle.util.JsonHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Shaped recipe that only matches when a set of alternative recipes do not match.
+ * <p>In 26.1.2 {@link ShapedRecipe} keeps its pattern and result private and can no longer be subclassed for custom
+ * serializers, so this composes a delegate {@link ShapedRecipe} rather than extending it.
+ */
 @SuppressWarnings("WeakerAccess")
-public class ShapedFallbackRecipe extends ShapedRecipe {
-  private static final HolderLookup.Provider EMPTY_PROVIDER = HolderLookup.Provider.create(java.util.stream.Stream.empty());
-
+public class ShapedFallbackRecipe implements CraftingRecipe {
+  /** Delegate shaped recipe handling the standard crafting behavior */
+  private final ShapedRecipe base;
   /** Recipes to skip if they match */
   private final List<Identifier> alternatives;
   private List<CraftingRecipe> alternativeCache;
-  private final ItemStack result;
 
   /**
-   * Main constructor, creates a recipe from all parameters
-   * @param id             Recipe ID
-   * @param group          Recipe group
-   * @param width          Recipe width
-   * @param height         Recipe height
-   * @param ingredients    Recipe input ingredients
-   * @param output         Recipe output
-   * @param alternatives   List of recipe names to fail this match if they match
-   */
-  public ShapedFallbackRecipe(Identifier id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> ingredients, ItemStack output, List<Identifier> alternatives) {
-    this(group, category, new ShapedRecipePattern(width, height, ingredients, Optional.empty()), output, true, alternatives);
-  }
-
-  public ShapedFallbackRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack output, boolean showNotification, List<Identifier> alternatives) {
-    super(group, category, pattern, output, showNotification);
-    this.alternatives = alternatives;
-    this.result = output;
-  }
-
-  /**
-   * Creates a recipe using a shaped recipe as a base
-   * @param base          Shaped recipe to copy data from
+   * Creates a recipe wrapping a shaped recipe base
+   * @param base          Shaped recipe to delegate to
    * @param alternatives  List of recipe names to fail this match if they match
    */
   public ShapedFallbackRecipe(ShapedRecipe base, List<Identifier> alternatives) {
-    this(base.getGroup(), base.category(), base.pattern, base.getResultItem(EMPTY_PROVIDER).copy(), base.showNotification(), alternatives);
+    this.base = base;
+    this.alternatives = alternatives;
+  }
+
+  /** Gets the delegate shaped recipe */
+  public ShapedRecipe getBase() {
+    return base;
+  }
+
+  /* Delegate crafting behavior to the base shaped recipe */
+
+  @Override
+  public CraftingBookCategory category() {
+    return base.category();
   }
 
   @Override
-  public ItemStack getResultItem(HolderLookup.Provider registries) {
-    return result;
+  public boolean showNotification() {
+    return base.showNotification();
+  }
+
+  @Override
+  public String group() {
+    return base.group();
+  }
+
+  @Override
+  public PlacementInfo placementInfo() {
+    return base.placementInfo();
+  }
+
+  @Override
+  public List<RecipeDisplay> display() {
+    return base.display();
+  }
+
+  @Override
+  public ItemStack assemble(CraftingInput input) {
+    return base.assemble(input);
   }
 
   @Override
   public boolean matches(CraftingInput inv, Level world) {
     // if this recipe does not match, fail it
-    if (!super.matches(inv, world)) {
+    if (!base.matches(inv, world)) {
       return false;
     }
 
     // fetch all alternatives, fail if any match
     // cache to save effort down the line
     if (alternativeCache == null) {
-      RecipeManager manager = world.getRecipeManager();
+      MinecraftServer server = world.getServer();
+      if (server == null) {
+        // cannot resolve alternatives without the server-side recipe manager; allow the match
+        return true;
+      }
+      RecipeManager manager = server.getRecipeManager();
       alternativeCache = alternatives.stream()
-                                     .map(manager::byKey)
+                                     .map(id -> manager.byKey(ResourceKey.create(Registries.RECIPE, id)))
                                      .flatMap(Optional::stream)
                                      .map(RecipeHolder::value)
                                      .filter(recipe -> {
@@ -102,63 +125,47 @@ public class ShapedFallbackRecipe extends ShapedRecipe {
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends CraftingRecipe> getSerializer() {
     return MantleRecipes.CRAFTING_SHAPED_FALLBACK.get();
   }
 
-  public static class Serializer implements RecipeSerializer<ShapedFallbackRecipe> {
-    private static final Codec<ShapedFallbackRecipe> JSON_CODEC = Codec.PASSTHROUGH.xmap(
-      dynamic -> fromJson(dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject()),
-      recipe -> new Dynamic<>(JsonOps.INSTANCE, toJson(recipe)));
-    private static final MapCodec<ShapedFallbackRecipe> CODEC = MapCodec.assumeMapUnsafe(JSON_CODEC);
-    private static final StreamCodec<RegistryFriendlyByteBuf,ShapedFallbackRecipe> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+  /* Serialization */
 
-    @Override
-    public MapCodec<ShapedFallbackRecipe> codec() {
-      return CODEC;
+  private static final Codec<ShapedFallbackRecipe> JSON_CODEC = Codec.PASSTHROUGH.xmap(
+    dynamic -> fromJson(dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject()),
+    recipe -> new Dynamic<>(JsonOps.INSTANCE, toJson(recipe)));
+  public static final MapCodec<ShapedFallbackRecipe> CODEC = MapCodec.assumeMapUnsafe(JSON_CODEC);
+  public static final StreamCodec<RegistryFriendlyByteBuf,ShapedFallbackRecipe> STREAM_CODEC = StreamCodec.of(ShapedFallbackRecipe::toNetwork, ShapedFallbackRecipe::fromNetwork);
+  /** Recipe serializer instance, RecipeSerializer is now a record wrapping the codecs. */
+  public static final RecipeSerializer<ShapedFallbackRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
+  private static ShapedFallbackRecipe fromJson(JsonObject json) {
+    ShapedRecipe base = ShapedRecipe.MAP_CODEC.codec().parse(JsonOps.INSTANCE, json).getOrThrow(JsonSyntaxException::new);
+    List<Identifier> alternatives = JsonHelper.parseList(json, "alternatives", Loadables.RESOURCE_LOCATION);
+    return new ShapedFallbackRecipe(base, alternatives);
+  }
+
+  private static JsonObject toJson(ShapedFallbackRecipe recipe) {
+    JsonObject json = ShapedRecipe.MAP_CODEC.codec().encodeStart(JsonOps.INSTANCE, recipe.base).getOrThrow(JsonSyntaxException::new).getAsJsonObject();
+    json.add("alternatives", Loadables.RESOURCE_LOCATION.list(0).serialize(recipe.alternatives));
+    return json;
+  }
+
+  private static ShapedFallbackRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+    ShapedRecipe base = ShapedRecipe.STREAM_CODEC.decode(buffer);
+    int size = buffer.readVarInt();
+    List<Identifier> builder = new java.util.ArrayList<>(size);
+    for (int i = 0; i < size; i++) {
+      builder.add(buffer.readIdentifier());
     }
+    return new ShapedFallbackRecipe(base, List.copyOf(builder));
+  }
 
-    @Override
-    public StreamCodec<RegistryFriendlyByteBuf,ShapedFallbackRecipe> streamCodec() {
-      return STREAM_CODEC;
-    }
-
-    private static ShapedFallbackRecipe fromJson(JsonObject json) {
-      ShapedRecipe base = ShapedRecipe.Serializer.CODEC.codec().parse(JsonOps.INSTANCE, json).getOrThrow(JsonSyntaxException::new);
-      List<Identifier> alternatives = JsonHelper.parseList(json, "alternatives", Loadables.RESOURCE_LOCATION);
-      return new ShapedFallbackRecipe(base, alternatives);
-    }
-
-    private static JsonObject toJson(ShapedFallbackRecipe recipe) {
-      JsonObject json = ShapedRecipe.Serializer.CODEC.codec().encodeStart(JsonOps.INSTANCE, recipe).getOrThrow(JsonSyntaxException::new).getAsJsonObject();
-      json.add("alternatives", Loadables.RESOURCE_LOCATION.list(0).serialize(recipe.alternatives));
-      return json;
-    }
-
-    private static ShapedFallbackRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
-      String group = buffer.readUtf();
-      CraftingBookCategory category = buffer.readEnum(CraftingBookCategory.class);
-      ShapedRecipePattern pattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer);
-      ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
-      boolean showNotification = buffer.readBoolean();
-      int size = buffer.readVarInt();
-      List<Identifier> builder = new ArrayList<>(size);
-      for (int i = 0; i < size; i++) {
-        builder.add(buffer.readIdentifier());
-      }
-      return new ShapedFallbackRecipe(group, category, pattern, result, showNotification, List.copyOf(builder));
-    }
-
-    private static void toNetwork(RegistryFriendlyByteBuf buffer, ShapedFallbackRecipe recipe) {
-      buffer.writeUtf(recipe.getGroup());
-      buffer.writeEnum(recipe.category());
-      ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
-      ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
-      buffer.writeBoolean(recipe.showNotification());
-      buffer.writeVarInt(recipe.alternatives.size());
-      for (Identifier alternative : recipe.alternatives) {
-        buffer.writeIdentifier(alternative);
-      }
+  private static void toNetwork(RegistryFriendlyByteBuf buffer, ShapedFallbackRecipe recipe) {
+    ShapedRecipe.STREAM_CODEC.encode(buffer, recipe.base);
+    buffer.writeVarInt(recipe.alternatives.size());
+    for (Identifier alternative : recipe.alternatives) {
+      buffer.writeIdentifier(alternative);
     }
   }
 }

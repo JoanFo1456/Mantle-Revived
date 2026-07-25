@@ -2,10 +2,12 @@ package slimeknights.mantle.recipe.crafting;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import lombok.RequiredArgsConstructor;
 import slimeknights.mantle.recipe.data.FinishedRecipe;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.recipe.MantleRecipes;
 import slimeknights.mantle.recipe.data.VanillaFinishedRecipe;
@@ -18,10 +20,18 @@ import java.util.function.Consumer;
 
 /** Builder for a shaped recipe with fallbacks */
 @SuppressWarnings("unused")
-@RequiredArgsConstructor(staticName = "fallback")
 public class ShapedFallbackRecipeBuilder {
   private final ShapedRecipeBuilder base;
   private final List<Identifier> alternatives = new ArrayList<>();
+
+  private ShapedFallbackRecipeBuilder(ShapedRecipeBuilder base) {
+    this.base = base;
+  }
+
+  /** Creates a builder wrapping the given shaped recipe builder */
+  public static ShapedFallbackRecipeBuilder fallback(ShapedRecipeBuilder base) {
+    return new ShapedFallbackRecipeBuilder(base);
+  }
 
   /**
    * Adds a single alternative to this recipe. Any matching alternative causes this recipe to fail
@@ -57,7 +67,7 @@ public class ShapedFallbackRecipeBuilder {
    * @param id        Recipe ID
    */
   public void build(Consumer<FinishedRecipe> consumer, Identifier id) {
-    base.save(VanillaFinishedRecipe.output(base -> consumer.accept(new Result(base, alternatives))), id);
+    base.save(VanillaFinishedRecipe.output(base -> consumer.accept(new Result(base, alternatives))), ResourceKey.create(Registries.RECIPE, id));
   }
 
   private record Result(FinishedRecipe base, List<Identifier> alternatives) implements FinishedRecipe {

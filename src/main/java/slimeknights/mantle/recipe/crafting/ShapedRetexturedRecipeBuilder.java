@@ -1,13 +1,16 @@
 package slimeknights.mantle.recipe.crafting;
 
 import com.google.gson.JsonObject;
-import lombok.RequiredArgsConstructor;
 import slimeknights.mantle.recipe.data.FinishedRecipe;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
@@ -18,12 +21,20 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
-@RequiredArgsConstructor(staticName = "fromShaped")
 public class ShapedRetexturedRecipeBuilder {
   private final ShapedRecipeBuilder parent;
   private Ingredient texture = null;
   private char textureKey = '\0';
   private boolean matchAll = false;
+
+  private ShapedRetexturedRecipeBuilder(ShapedRecipeBuilder parent) {
+    this.parent = parent;
+  }
+
+  /** Creates a builder wrapping the given shaped recipe builder */
+  public static ShapedRetexturedRecipeBuilder fromShaped(ShapedRecipeBuilder parent) {
+    return new ShapedRetexturedRecipeBuilder(parent);
+  }
 
   /**
    * Sets the texture source to the given ingredient
@@ -42,7 +53,7 @@ public class ShapedRetexturedRecipeBuilder {
    * @return Builder instance
    */
   public ShapedRetexturedRecipeBuilder setSource(TagKey<Item> tag) {
-    return setSource(Ingredient.of(tag));
+    return setSource(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tag)));
   }
 
   /** Sets the texture source to a key from the texture map. Is not validated as that is too much work. */
@@ -78,7 +89,7 @@ public class ShapedRetexturedRecipeBuilder {
    */
   public void build(Consumer<FinishedRecipe> consumer, Identifier location) {
     this.validate();
-    parent.save(VanillaFinishedRecipe.output(base -> consumer.accept(new Result(base))), location);
+    parent.save(VanillaFinishedRecipe.output(base -> consumer.accept(new Result(base))), ResourceKey.create(Registries.RECIPE, location));
   }
 
   /**
