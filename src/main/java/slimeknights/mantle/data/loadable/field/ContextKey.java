@@ -1,8 +1,6 @@
 package slimeknights.mantle.data.loadable.field;
 
 import com.google.gson.JsonObject;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
@@ -18,7 +16,6 @@ import java.util.function.BiFunction;
  * Key for fetching properties from a loadable context. This key doubles as a record field for a required context key.
  * @param <T>  Field type
  */
-@RequiredArgsConstructor
 public class ContextKey<T> implements Key<T> {
   /** Context field representing the object's ID */
   public static final ContextKey<Identifier> ID = new ContextKey<>("id");
@@ -30,8 +27,16 @@ public class ContextKey<T> implements Key<T> {
   public static final ContextKey<HolderLookup.Provider> REGISTRY_ACCESS = new ContextKey<>("registry access");
 
   /** Name of the field, used primarily for debug */
-  @Getter
   private final String name;
+
+  public ContextKey(String name) {
+    this.name = name;
+  }
+
+  /** Name of the field, used primarily for debug */
+  public String getName() {
+    return name;
+  }
 
 
 
