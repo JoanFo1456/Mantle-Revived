@@ -2,9 +2,7 @@ package slimeknights.mantle.client.model.builder;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
-import net.neoforged.neoforge.client.model.generators.ModelBuilder;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.client.model.util.ColoredBlockModel.ColorData;
 
@@ -13,33 +11,47 @@ import java.util.List;
 
 /**
  * Builder for {@link slimeknights.mantle.client.model.util.ColoredBlockModel}, used as a base for other model builders.
- * @param <T>  Builder type
+ * <p>
+ * Ported to the 26.1.2 datagen {@link CustomLoaderBuilder}, which is no longer generic over a model builder and no longer
+ * takes an {@code ExistingFileHelper}.
  */
-public class ColoredModelBuilder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T> {
+public class ColoredModelBuilder extends CustomLoaderBuilder {
   private final List<ColorData> colors = new ArrayList<>();
 
-  public ColoredModelBuilder(T parent, ExistingFileHelper existingFileHelper) {
-    this(Mantle.getResource("colored_block"), parent, existingFileHelper);
+  public ColoredModelBuilder() {
+    this(Mantle.getResource("colored_block"));
   }
 
-  protected ColoredModelBuilder(Identifier loaderId, T parent, ExistingFileHelper existingFileHelper) {
-    super(loaderId, parent, existingFileHelper, true);
+  protected ColoredModelBuilder(Identifier loaderId) {
+    super(loaderId, true);
   }
 
   /** Adds a full color data for the next element */
-  public ColoredModelBuilder<T> colorData(ColorData data) {
+  public ColoredModelBuilder colorData(ColorData data) {
     colors.add(data);
     return this;
   }
 
   /** Sets the color for the next element */
-  public ColoredModelBuilder<T> color(int color) {
+  public ColoredModelBuilder color(int color) {
     return colorData(new ColorData(color, -1, null));
   }
 
   /** Sets the luminosity for the next element */
-  public ColoredModelBuilder<T> luminosity(int luminosity) {
+  public ColoredModelBuilder luminosity(int luminosity) {
     return colorData(new ColorData(-1, luminosity, null));
+  }
+
+  /** Copies the color data into the given builder, for {@link #copyInternal()} */
+  protected void copyColors(ColoredModelBuilder builder) {
+    builder.colors.addAll(this.colors);
+  }
+
+  @Override
+  protected CustomLoaderBuilder copyInternal() {
+    ColoredModelBuilder builder = new ColoredModelBuilder();
+    copyColors(builder);
+    return builder;
   }
 
   @Override

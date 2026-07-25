@@ -1,22 +1,38 @@
 package slimeknights.mantle.client.model.builder;
 
 import com.google.gson.JsonObject;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
-import net.neoforged.neoforge.client.model.generators.ModelBuilder;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
 import slimeknights.mantle.Mantle;
 
 /** Loader for {@link slimeknights.mantle.client.model.NBTKeyModel} */
-@Setter
-@Accessors(fluent = true)
-public class NBTKeyModelBuilder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T> {
+@SuppressWarnings("unused")  // API
+public class NBTKeyModelBuilder extends CustomLoaderBuilder {
   private String key = null;
   private Identifier extraTexturesKey = null;
-  public NBTKeyModelBuilder(Identifier loaderId, T parent, ExistingFileHelper existingFileHelper) {
-    super(Mantle.getResource("nbt_key"), parent, existingFileHelper, true);
+
+  public NBTKeyModelBuilder() {
+    super(Mantle.getResource("nbt_key"), true);
+  }
+
+  /** Sets the NBT key to check */
+  public NBTKeyModelBuilder key(String key) {
+    this.key = key;
+    return this;
+  }
+
+  /** Sets the extra textures key */
+  public NBTKeyModelBuilder extraTexturesKey(Identifier extraTexturesKey) {
+    this.extraTexturesKey = extraTexturesKey;
+    return this;
+  }
+
+  @Override
+  protected CustomLoaderBuilder copyInternal() {
+    NBTKeyModelBuilder builder = new NBTKeyModelBuilder();
+    builder.key = this.key;
+    builder.extraTexturesKey = this.extraTexturesKey;
+    return builder;
   }
 
   @Override

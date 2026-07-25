@@ -341,8 +341,8 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
         throw new IllegalArgumentException("can't handle z-oriented side");
     }
 
-    float dx = side.getNormal().getX() * eps / width;
-    float dy = side.getNormal().getY() * eps / height;
+    float dx = side.getUnitVec3i().getX() * eps / width;
+    float dy = side.getUnitVec3i().getY() * eps / height;
     float u0 = 16f * (x0 - dx);
     float u1 = 16f * (x1 - dx);
     float v0 = 16f * (1f - y0 - dy);

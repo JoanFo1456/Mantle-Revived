@@ -1,8 +1,5 @@
 package slimeknights.mantle.client.render;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
 import slimeknights.mantle.client.model.util.ModelHelper;
@@ -20,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 /** Class representing a cube of fluid, which appears in many model types. */
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class FluidCuboid {
   protected static final Map<Direction, FluidFace> DEFAULT_FACES;
   static {
@@ -41,13 +37,10 @@ public class FluidCuboid {
   public static final BlockStateDataMapLoader<List<FluidCuboid>> REGISTRY = new BlockStateDataMapLoader<>("Block entity fluids", "mantle/model/block_fluids", LIST_LOADABLE);
 
   /** Fluid start, scaled for block models */
-  @Getter
   private final Vector3f from;
   /** Fluid end, scaled for block models */
-  @Getter
   private final Vector3f to;
   /** Block faces for the fluid */
-  @Getter
   private final Map<Direction, FluidFace> faces;
 
   /** Cache for scaled from */
@@ -56,6 +49,27 @@ public class FluidCuboid {
   /** Cache for scaled to */
   @Nullable
   private Vector3f toScaled;
+
+  protected FluidCuboid(Vector3f from, Vector3f to, Map<Direction, FluidFace> faces) {
+    this.from = from;
+    this.to = to;
+    this.faces = faces;
+  }
+
+  /** Fluid start, scaled for block models */
+  public Vector3f getFrom() {
+    return from;
+  }
+
+  /** Fluid end, scaled for block models */
+  public Vector3f getTo() {
+    return to;
+  }
+
+  /** Block faces for the fluid */
+  public Map<Direction, FluidFace> getFaces() {
+    return faces;
+  }
 
   /**
    * Checks if the fluid has the given face
