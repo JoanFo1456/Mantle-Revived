@@ -185,3 +185,17 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
     options.compilerArgs += ['-Xmaxerrs', '100000']
 }
+
+// Ensure the lombok annotation processor actually runs for the mod sources. On this Gradle 9 /
+// NeoGradle setup the compileJava task is left with an empty annotationProcessorPath, which
+// silently disables ALL lombok codegen (@RequiredArgsConstructor/@Getter/@Log4j2 generate
+// nothing). Set it after NeoGradle finishes configuring, scoped to compileJava only so the
+// Minecraft recompile task (neoFormRecompile) is untouched.
+afterEvaluate {
+    tasks.named('compileJava').configure {
+        def ap = configurations.findByName('annotationProcessor')
+        if (ap != null) {
+            options.annotationProcessorPath = ap
+        }
+    }
+}

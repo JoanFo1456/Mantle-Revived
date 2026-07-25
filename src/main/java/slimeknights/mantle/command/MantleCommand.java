@@ -110,6 +110,6 @@ public class MantleCommand {
    * @return  True if the command can be run
    */
   public static boolean requiresDebugInfoOrOp(CommandSourceStack source, PermissionCheck reducedDebugLevel) {
-    return !source.getLevel().getGameRules().getBoolean(GameRules.RULE_REDUCEDDEBUGINFO) || hasPermission(source, reducedDebugLevel);
+    return !source.getLevel().getGameRules().get(GameRules.REDUCED_DEBUG_INFO) || hasPermission(source, reducedDebugLevel);
   }
 }

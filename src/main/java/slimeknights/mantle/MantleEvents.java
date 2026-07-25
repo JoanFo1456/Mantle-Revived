@@ -41,7 +41,7 @@ public class MantleEvents {
   static void onLivingDeath(LivingDeathEvent event) {
     // this is the latest we can add slot markers to the items so we can return them to slots
     LivingEntity entity = event.getEntity();
-    if (!entity.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
+    if (!entity.level().getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
       Inventory inventory = player.getInventory();
 
       // just iterate the whole inventory, no slot specific behavior
@@ -61,7 +61,7 @@ public class MantleEvents {
   static void onPlayerDropItems(LivingDropsEvent event) {
     // only care about real players with keep inventory off
     LivingEntity entity = event.getEntity();
-    if (!entity.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && entity instanceof Player player && !(entity instanceof FakePlayer)) {
+    if (!entity.level().getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(entity instanceof FakePlayer)) {
       Collection<ItemEntity> drops = event.getDrops();
       Iterator<ItemEntity> iter = drops.iterator();
       Inventory inventory = player.getInventory();
@@ -109,7 +109,7 @@ public class MantleEvents {
     Player original = event.getOriginal();
     Player clone = event.getEntity();
     // inventory already copied
-    if (clone.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) || original.isSpectator()) {
+    if (clone.level().getGameRules().get(GameRules.KEEP_INVENTORY) || original.isSpectator()) {
       return;
     }
     // find items with the soulbound tag set and move them over
