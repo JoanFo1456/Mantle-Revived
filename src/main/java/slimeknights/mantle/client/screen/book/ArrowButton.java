@@ -1,7 +1,8 @@
 package slimeknights.mantle.client.screen.book;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.book.data.BookData;
@@ -36,7 +37,7 @@ public class ArrowButton extends Button {
   }
 
   /** Shared logic between public method and vanilla method */
-  private void renderButton(GuiGraphics graphics, @Nullable BookData bookData) {
+  private void renderButton(GuiGraphicsExtractor graphics, @Nullable BookData bookData) {
     Identifier texture;
     if (bookData != null) {
       texture = bookData.appearance.getBookTexture();
@@ -45,25 +46,20 @@ public class ArrowButton extends Button {
     }
 
     int color = this.isHovered ? this.hoverColor : this.color;
+    int argb = 0xFF000000 | color;
 
-    float r = ((color >> 16) & 0xff) / 255.F;
-    float g = ((color >> 8) & 0xff) / 255.F;
-    float b = (color & 0xff) / 255.F;
-
-    graphics.setColor(r, g, b, 1f);
-    graphics.blit(texture, this.getX(), this.getY(), this.width, this.height, this.arrowType.x, this.arrowType.y, this.width, this.height, 512, 512);
-    graphics.setColor(1, 1, 1, 1);
+    graphics.blit(RenderPipelines.GUI_TEXTURED, texture, this.getX(), this.getY(), this.arrowType.x, this.arrowType.y, this.width, this.height, this.width, this.height, 512, 512, argb);
 //    this.renderBg(graphics, mouseX, mouseY, partialTicks);
   }
 
   /** Public method to swap out book data on rendering */
-  public void renderButton(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick, @Nullable BookData bookData) {
+  public void renderButton(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick, @Nullable BookData bookData) {
     this.isHovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
     renderButton(graphics, bookData);
   }
 
   @Override
-  protected void renderWidget(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+  protected void extractContents(GuiGraphicsExtractor graphics, int pMouseX, int pMouseY, float pPartialTick) {
     renderButton(graphics, bookData);
   }
 

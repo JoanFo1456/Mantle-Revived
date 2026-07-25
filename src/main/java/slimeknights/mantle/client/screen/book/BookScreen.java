@@ -7,7 +7,7 @@ import net.minecraft.advancements.AdvancementNode;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientAdvancements;
@@ -149,7 +149,7 @@ public class BookScreen extends Screen {
   }
 
   @Override
-  public void render(GuiGraphics graphics, int mouseX ,int mouseY, float partialTicks) {
+  public void render(GuiGraphicsExtractor graphics, int mouseX ,int mouseY, float partialTicks) {
     if(this.minecraft == null) {
       return;
     }
@@ -257,7 +257,7 @@ public class BookScreen extends Screen {
     return this.page < fullPageCount - 1 || this.book.getPageCount(this.advancementCache) % 2 != 0;
   }
 
-  private void renderCover(GuiGraphics graphics, Vector3f coverColor) {
+  private void renderCover(GuiGraphicsExtractor graphics, Vector3f coverColor) {
     Font fontRenderer = getFontRenderer();
 
     Identifier cover = book.appearance.getCoverTexture();
@@ -296,13 +296,13 @@ public class BookScreen extends Screen {
     }
   }
 
-  private void renderUnderLayer(GuiGraphics graphics, Vector3f coverColor) {
+  private void renderUnderLayer(GuiGraphicsExtractor graphics, Vector3f coverColor) {
     graphics.setColor(coverColor.x(), coverColor.y(), coverColor.z(), 1f);
     graphics.blit(this.book.appearance.getBookTexture(), this.width / 2 - PAGE_WIDTH_UNSCALED, this.height / 2 - PAGE_HEIGHT_UNSCALED / 2, 0, 0, PAGE_WIDTH_UNSCALED * 2, PAGE_HEIGHT_UNSCALED, TEX_SIZE, TEX_SIZE);
     graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
   }
 
-  private void renderPageBackground(GuiGraphics graphics, boolean rightSide) {
+  private void renderPageBackground(GuiGraphicsExtractor graphics, boolean rightSide) {
     Vector3f pageTint = splitRGB(this.book.appearance.getPageTint());
     graphics.setColor(pageTint.x(), pageTint.y(), pageTint.z(), 1f);
     if(!rightSide) {
@@ -313,7 +313,7 @@ public class BookScreen extends Screen {
     graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
   }
 
-  private void renderPageLayer(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, List<BookElement> elements, ILayerRenderFunction layerFunc) {
+  private void renderPageLayer(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks, List<BookElement> elements, ILayerRenderFunction layerFunc) {
     RenderSystem.setShaderTexture(0, book.appearance.getCoverTexture());
 
     Font font = getFontRenderer();

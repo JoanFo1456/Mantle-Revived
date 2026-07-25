@@ -1,6 +1,7 @@
 package slimeknights.mantle.client.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 
 // TODO: class needs some rewrites
@@ -10,27 +11,27 @@ public class ScalableElementScreen extends ElementScreen {
     super(texture, x, y, w, h, texW, texH);
   }
 
-  public int drawScaledX(GuiGraphics graphics, int xPos, int yPos, int width) {
+  public int drawScaledX(GuiGraphicsExtractor graphics, int xPos, int yPos, int width) {
     for (int i = 0; i < width / this.w; i++) {
       this.draw(graphics, xPos + i * this.w, yPos);
     }
     // remainder that doesn't fit total width
     int remainder = width % this.w;
     if (remainder > 0) {
-      graphics.blit(texture, xPos + width - remainder, yPos, this.x, this.y, remainder, this.h, this.texW, this.texH);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, texture, xPos + width - remainder, yPos, this.x, this.y, remainder, this.h, this.texW, this.texH);
     }
 
     return width;
   }
 
-  public int drawScaledY(GuiGraphics graphics, int xPos, int yPos, int height) {
+  public int drawScaledY(GuiGraphicsExtractor graphics, int xPos, int yPos, int height) {
     for (int i = 0; i < height / this.h; i++) {
       this.draw(graphics, xPos, yPos + i * this.h);
     }
     // remainder that doesn't fit total width
     int remainder = height % this.h;
     if (remainder > 0) {
-      graphics.blit(texture, xPos, yPos + height - remainder, this.x, this.y, this.w, remainder, this.texW, this.texH);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, texture, xPos, yPos + height - remainder, this.x, this.y, this.w, remainder, this.texW, this.texH);
     }
 
     return this.w;
@@ -44,18 +45,18 @@ public class ScalableElementScreen extends ElementScreen {
    * @param height       Height to draw
    * @return  Width for some reason
    */
-  public int drawScaledYUp(GuiGraphics graphics, int xPos, int yPos, int height) {
+  public int drawScaledYUp(GuiGraphicsExtractor graphics, int xPos, int yPos, int height) {
     // remainder that doesn't fit total height
     int remainder = height % this.h;
     int offset = this.h - remainder;
     if (remainder > 0) {
-      graphics.blit(texture, xPos, yPos + offset, this.x, this.y + offset, this.w, remainder, this.texW, this.texH);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, texture, xPos, yPos + offset, this.x, this.y + offset, this.w, remainder, this.texW, this.texH);
     }
 
     return this.w;
   }
 
-  public int drawScaled(GuiGraphics graphics, int xPos, int yPos, int width, int height) {
+  public int drawScaled(GuiGraphicsExtractor graphics, int xPos, int yPos, int width, int height) {
     // we draw full height row-wise
     int full = height / this.h;
     for (int i = 0; i < full; i++) {
@@ -75,7 +76,7 @@ public class ScalableElementScreen extends ElementScreen {
     int remainder = width % this.w;
 
     if (remainder > 0) {
-      graphics.blit(texture, xPos + width - remainder, yPos, this.x, this.y, remainder, yRest, this.texW, this.texH);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, texture, xPos + width - remainder, yPos, this.x, this.y, remainder, yRest, this.texW, this.texH);
     }
 
     return width;

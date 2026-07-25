@@ -1,7 +1,7 @@
 package slimeknights.mantle.client.screen;
 
 import lombok.RequiredArgsConstructor;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.MenuScreens.ScreenConstructor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -41,14 +41,14 @@ public class BackgroundContainerScreen<T extends AbstractContainerMenu> extends 
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+	public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(graphics, mouseX, mouseY, partialTicks);
 		super.render(graphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(graphics, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
 		graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 		graphics.blit(this.background, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 	}
