@@ -10,7 +10,7 @@ import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.ResourceLocationException;
+import net.minecraft.IdentifierException;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +45,8 @@ public class JsonHelper {
 
   /** Default GSON instance, use instead of creating a new instance unless you need additional type adapaters */
   public static final Gson DEFAULT_GSON = (new GsonBuilder())
-    .registerTypeAdapter(Identifier.class, new Identifier.Serializer())
+    .registerTypeAdapter(Identifier.class, (com.google.gson.JsonSerializer<Identifier>) (id, type, context) -> new com.google.gson.JsonPrimitive(id.toString()))
+    .registerTypeAdapter(Identifier.class, (com.google.gson.JsonDeserializer<Identifier>) (json, type, context) -> Identifier.parse(GsonHelper.convertToString(json, "identifier")))
     .setPrettyPrinting()
     .disableHtmlEscaping()
     .create();
@@ -167,7 +168,7 @@ public class JsonHelper {
     // basically the inside of Identifier#tryParse, but with a JSON exception instead of being nullable
     try {
       return Identifier.parse(text);
-    } catch (ResourceLocationException ex) {
+    } catch (IdentifierException ex) {
       throw new JsonSyntaxException("Expected " + key + " to be a resource location, was '" + text + "'", ex);
     }
   }
@@ -222,7 +223,7 @@ public class JsonHelper {
   public static <T> T convertToEntry(Registry<T> registry, JsonElement element, String key) {
     Identifier name = JsonHelper.convertToResourceLocation(element, key);
     if (registry.containsKey(name)) {
-      T value = registry.get(name);
+      T value = registry.getValue(name);
       if (value != null) {
         return value;
       }
