@@ -39,7 +39,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 // The io.freefair.lombok 8.6 plugin pins lombok 1.18.30, which predates JDK 25 and silently
 // generates nothing under the JDK 25 toolchain. Override to a lombok release that supports JDK 25.
 lombok {
-    version = '1.18.42'
+    version = '1.18.46'
 }
 
 // sets version to the slimeKnights version format
@@ -203,21 +203,8 @@ afterEvaluate {
         if (ap != null) {
             options.annotationProcessorPath = ap
         }
-        // Under JDK 25 lombok cannot reach the javac internals it patches unless the compiler is
-        // forked with the compiler module opened up. Without this lombok runs but generates nothing.
-        options.fork = true
-        options.forkOptions.jvmArgs += [
-            '--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
-            '--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED',
-        ]
+        // JDK 23+ no longer runs annotation processors discovered on the processor path unless
+        // processing is explicitly requested. Without -proc:full lombok silently generates nothing.
+        options.compilerArgs += ['-proc:full']
     }
 }
