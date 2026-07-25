@@ -1,6 +1,6 @@
 package slimeknights.mantle.client.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
@@ -95,22 +95,22 @@ public abstract class ModuleScreen<P extends MultiModuleScreen<?>, C extends Abs
   /**
    * Callback to draw background elements
    */
-  public void handleDrawGuiContainerBackgroundLayer(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
-    this.renderBg(graphics, partialTicks, mouseX, mouseY);
+  public void handleDrawGuiContainerBackgroundLayer(GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
+    this.extractBackground(graphics, mouseX, mouseY, partialTicks);
   }
 
   /**
    * Callback to draw foreground elements
    */
-  public void handleDrawGuiContainerForegroundLayer(GuiGraphics graphics, int mouseX, int mouseY) {
-    this.renderLabels(graphics, mouseX, mouseY);
+  public void handleDrawGuiContainerForegroundLayer(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    this.extractLabels(graphics, mouseX, mouseY);
   }
 
   /**
    * Callback to draw hovering tooltips
    */
-  public void handleRenderHoveredTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-    this.renderTooltip(graphics, mouseX, mouseY);
+  public void handleRenderHoveredTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    this.extractTooltip(graphics, mouseX, mouseY);
   }
 
   /**

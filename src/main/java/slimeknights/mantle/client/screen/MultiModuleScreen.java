@@ -1,11 +1,12 @@
 package slimeknights.mantle.client.screen;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.renderer.RenderPipelines;
+import org.joml.Matrix3x2fStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -84,49 +85,49 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
 //  }
 
   @Override
-  protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+  public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    super.extractBackground(graphics, mouseX, mouseY, a);
     for (ModuleScreen<?,?> module : this.modules) {
-      module.handleDrawGuiContainerBackgroundLayer(graphics, partialTicks, mouseX, mouseY);
+      module.handleDrawGuiContainerBackgroundLayer(graphics, a, mouseX, mouseY);
     }
   }
 
   @Override
-  protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+  protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     this.drawContainerName(graphics);
     this.drawPlayerInventoryName(graphics);
 
-    PoseStack poses = graphics.pose();
+    Matrix3x2fStack poses = graphics.pose();
     for (ModuleScreen<?,?> module : this.modules) {
       // set correct state for the module
-      poses.pushPose();
-      poses.translate(module.getGuiLeft() - this.leftPos, module.getGuiTop() - this.topPos, 0.0F);
+      poses.pushMatrix();
+      poses.translate(module.getGuiLeft() - this.leftPos, module.getGuiTop() - this.topPos);
       module.handleDrawGuiContainerForegroundLayer(graphics, mouseX, mouseY);
-      poses.popPose();
+      poses.popMatrix();
     }
   }
 
   @Override
-  protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-    super.renderTooltip(graphics, mouseX, mouseY);
+  protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    super.extractTooltip(graphics, mouseX, mouseY);
 
     for (ModuleScreen<?,?> module : this.modules) {
       module.handleRenderHoveredTooltip(graphics, mouseX, mouseY);
     }
   }
 
-  protected void drawBackground(GuiGraphics graphics, Identifier background) {
-    graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-    graphics.blit(background, this.cornerX, this.cornerY, 0, 0, this.realWidth, this.realHeight);
+  protected void drawBackground(GuiGraphicsExtractor graphics, Identifier background) {
+    graphics.blit(RenderPipelines.GUI_TEXTURED, background, this.cornerX, this.cornerY, 0, 0, this.realWidth, this.realHeight, 256, 256);
   }
 
-  protected void drawContainerName(GuiGraphics graphics) {
-    graphics.drawString(this.font, this.getTitle().getVisualOrderText(), 8, 6, 0x404040, false);
+  protected void drawContainerName(GuiGraphicsExtractor graphics) {
+    graphics.text(this.font, this.getTitle().getVisualOrderText(), 8, 6, 0x404040, false);
   }
 
-  protected void drawPlayerInventoryName(GuiGraphics graphics) {
+  protected void drawPlayerInventoryName(GuiGraphicsExtractor graphics) {
     assert Minecraft.getInstance().player != null;
     Component localizedName = Minecraft.getInstance().player.getInventory().getDisplayName();
-    graphics.drawString(this.font, localizedName.getVisualOrderText(), 8, this.imageHeight - 96 + 2, 0x404040, false);
+    graphics.text(this.font, localizedName.getVisualOrderText(), 8, this.imageHeight - 96 + 2, 0x404040, false);
   }
 
   @Override
@@ -140,7 +141,7 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
   }
 
   @Override
-  public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+  public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
     int oldX = this.leftPos;
     int oldY = this.topPos;
     int oldW = this.imageWidth;
@@ -150,8 +151,7 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
     this.topPos = this.cornerY;
     this.imageWidth = this.realWidth;
     this.imageHeight = this.realHeight;
-    super.render(graphics, mouseX, mouseY, partialTicks);
-    this.renderTooltip(graphics, mouseX, mouseY);
+    super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
     this.leftPos = oldX;
     this.topPos = oldY;
     this.imageWidth = oldW;
@@ -189,7 +189,7 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
   }
 
   @Override
-  public void renderSlot(GuiGraphics graphics, Slot slotIn) {
+  public void extractSlot(GuiGraphicsExtractor graphics, Slot slotIn, int mouseX, int mouseY) {
     ModuleScreen<?,?> module = this.getModuleForSlot(slotIn.index);
 
     if (slotIn instanceof WrapperSlot wrapper) {
@@ -208,7 +208,7 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
       }
     }
 
-    super.renderSlot(graphics, slotIn);
+    super.extractSlot(graphics, slotIn, mouseX, mouseY);
   }
 
   public boolean isSlotHovered(Slot slotIn, double mouseX, double mouseY) {

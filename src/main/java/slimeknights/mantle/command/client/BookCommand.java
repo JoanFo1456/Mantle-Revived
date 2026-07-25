@@ -1,12 +1,5 @@
 package slimeknights.mantle.command.client;
 
-import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.pipeline.TextureTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexSorting;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -15,10 +8,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Screenshot;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
@@ -28,9 +18,6 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import org.apache.commons.lang3.text.WordUtils;
-import org.joml.Matrix4f;
-import org.joml.Matrix4fStack;
-import org.lwjgl.opengl.GL11;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.client.book.BookLoader;
 import slimeknights.mantle.client.book.data.BookData;
@@ -177,143 +164,11 @@ public class BookCommand {
    * @return  Integer return
    */
   private static int doExport(Identifier book, int scale, boolean html, String version) throws CommandSyntaxException {
-    BookData bookData = BookLoader.getBook(book);
-
-    Path gameDirectory = Minecraft.getInstance().gameDirectory.toPath();
-    // images go in screenshots
-    Path screenshotDir = Paths.get(gameDirectory.toString(), Screenshot.SCREENSHOT_DIR, "mantle_book", book.getNamespace(), book.getPath());
-    // html goes in root folder
-    Path htmlDir = html ? Paths.get(gameDirectory.toString(), "mantle_book", book.getNamespace(), book.getPath().replace('_', '-')) : null;
-    if (bookData != null) {
-      // ensure outputs exist
-      if (!screenshotDir.toFile().mkdirs() && !screenshotDir.toFile().exists()) {
-        throw commandException(Component.translatable(EXPORT_FAIL_IO, screenshotDir));
-      }
-      if (htmlDir != null && !htmlDir.toFile().mkdirs() && !htmlDir.toFile().exists()) {
-        throw commandException(Component.translatable(EXPORT_FAIL_IO, htmlDir));
-      }
-
-      int width = BookScreen.PAGE_WIDTH_UNSCALED * 2 * scale;
-      int height = BookScreen.PAGE_HEIGHT_UNSCALED * scale;
-      float zFar = 1000.0F + 10000.0F * 3;
-
-      bookData.load();
-      BookScreen screen = new BookScreen(Component.literal("Book"), bookData, "", null, null);
-      screen.init(Minecraft.getInstance(), width / scale, height / scale);
-      screen.drawArrows = false;
-      screen.mouseInput = false;
-      screen.drawText = !html;
-      screen.enableAnimations = false;
-
-      Matrix4f matrix = (new Matrix4f()).setOrtho(0.0F, width, height, 0.0F, 1000.0F, zFar);
-      RenderSystem.setProjectionMatrix(matrix, VertexSorting.ORTHOGRAPHIC_Z);
-
-      Matrix4fStack stack = RenderSystem.getModelViewStack();
-      stack.pushMatrix();
-      stack.identity();
-      stack.translate(0, 0, 1000F - zFar);
-      stack.scale(scale, scale, 1);
-      RenderSystem.applyModelViewMatrix();
-      Lighting.setupFor3DItems();
-
-      RenderTarget target = new TextureTarget(width, height, true, Minecraft.ON_OSX);
-      target.enableStencil();
-
-      try {
-        MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-        target.bindWrite(true);
-
-        GuiGraphics gui = new GuiGraphics(Minecraft.getInstance(), buffer);
-
-        String bookKey = book.getPath() + "_" + version;
-        // title goes export title -> regular title -> path
-        String exportTitle = bookData.appearance.exportTitle;
-        if (exportTitle.isEmpty()) {
-          exportTitle = bookData.appearance.title;
-          if (exportTitle.isEmpty()) {
-            exportTitle = WordUtils.capitalize(book.getPath().replace('_', ' '));
-          }
-        }
-
-        // fetch mod display name if possible
-        ModContainer mod = ModList.get().getModContainerById(book.getNamespace()).orElse(null);
-        String modName = mod == null ? book.getNamespace() : mod.getModInfo().getDisplayName();
-
-        do {
-          RenderSystem.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
-
-          screen.tick();
-
-          RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-            GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-
-          int page = screen.getPage_();
-          // draw text on the cover; we just want it as an image
-          if (html) {
-            screen.drawText = page < 0;
-          }
-
-          gui.pose().pushPose();
-          screen.render(gui, 0, 0, 0);
-          gui.flush();
-          gui.pose().popPose();
-
-          try (NativeImage image = takeScreenshot(target)) {
-            String pageFormat = page < 0 ? "cover" :  (html ? "clean_" : "page_") + page;
-            Path path = Paths.get(screenshotDir.toString(), pageFormat + ".png");
-
-            if (page == -1) { // the cover is half the width
-              try (NativeImage scaled = new NativeImage(image.format(), width / 2, height, false)) {
-                image.copyRect(scaled, image.getWidth() / 2 - width / 4, 0, 0, 0,
-                  width / 2, height, false, false);
-                scaled.writeToFile(path);
-              } catch (Exception e) {
-                Mantle.logger.error("Failed to save screenshot", e);
-                throw commandException(Component.translatable(EXPORT_FAIL));
-              }
-            } else {
-              image.writeToFile(path);
-            }
-          } catch (Exception e) {
-            Mantle.logger.error("Failed to save screenshot", e);
-            throw commandException(Component.translatable(EXPORT_FAIL));
-          }
-
-          if (html) {
-            File file = Paths.get(htmlDir.toString(), page < 0 ? "index.html" : "page-" + page + ".html").toFile();
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-              writer.write(page < 0 ? screen.coverToHtml(bookKey, exportTitle, VERSION_FULL, modName) : screen.pageToHtml(bookKey, exportTitle, VERSION_FULL, modName));
-            } catch (IOException e) {
-              Mantle.logger.error("Failed to export HTML", e);
-              throw commandException(Component.translatable(EXPORT_FAIL));
-            }
-          }
-        } while (screen.nextPage());
-
-        // add gallery page
-        if (html) {
-          File file = Paths.get(htmlDir.toString(), "gallery.html").toFile();
-          try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(galleryHtml(bookKey, exportTitle, modName));
-          } catch (IOException e) {
-            Mantle.logger.error("Failed to export HTML", e);
-            throw commandException(Component.translatable(EXPORT_FAIL));
-          }
-        }
-      } finally {
-        stack.popMatrix();
-        RenderSystem.applyModelViewMatrix();
-        RenderSystem.defaultBlendFunc();
-        target.unbindWrite();
-        target.destroyBuffers();
-      }
-    } else {
-      bookNotFound(book);
-      return 1;
-    }
-
-    sendFileMessage(screenshotDir, htmlDir);
-    return 0;
+    // TODO 26.1.2 BLOCKER: offscreen book export used the removed immediate-mode GUI pipeline
+    // (new GuiGraphics(mc, buffer), gui.flush(), RenderSystem.getModelViewStack/applyModelViewMatrix/
+    // setProjectionMatrix(matrix, VertexSorting), TextureTarget/RenderTarget). Needs a rewrite onto the
+    // new deferred GuiRenderer/GuiRenderState submission flow. Disabled until ported.
+    throw commandException(Component.translatable(EXPORT_FAIL));
   }
 
   /** Creates a command failure from a localized component. */
@@ -348,18 +203,6 @@ public class BookCommand {
     }
   }
 
-  /**
-   * Duplicate of {@link net.minecraft.client.Screenshot#takeScreenshot}, but with transparency
-   */
-  private static NativeImage takeScreenshot(RenderTarget pFramebuffer) {
-    int i = pFramebuffer.width;
-    int j = pFramebuffer.height;
-    NativeImage nativeimage = new NativeImage(i, j, false);
-    RenderSystem.bindTexture(pFramebuffer.getColorTextureId());
-    nativeimage.downloadTexture(0, false);
-    nativeimage.flipY();
-    return nativeimage;
-  }
 
   public static void bookNotFound(Identifier book) {
     Player player = Minecraft.getInstance().player;

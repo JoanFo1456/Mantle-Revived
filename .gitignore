@@ -28,4 +28,4 @@ version.properties
 /*.project
 /.settings/
 /*.launch
-/out
+/out.vscode/

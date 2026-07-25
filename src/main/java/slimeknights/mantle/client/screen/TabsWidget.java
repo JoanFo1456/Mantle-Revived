@@ -1,7 +1,7 @@
 package slimeknights.mantle.client.screen;
 
 import com.google.common.collect.Lists;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
@@ -110,7 +110,7 @@ public class TabsWidget extends Widget {
   }
 
   @Override
-  public void draw(GuiGraphics graphics) {
+  public void draw(GuiGraphicsExtractor graphics) {
     int y = this.yPos + this.yOffset;
     for (int i = 0; i < this.icons.size(); i++) {
       int x = this.xPos + i * this.tab[0].w;
@@ -141,7 +141,7 @@ public class TabsWidget extends Widget {
 
       ItemStack icon = this.icons.get(i);
       if (icon != null) {
-        graphics.renderItem(icon, x + (actualTab.w - 16) / 2, y + (actualTab.h - 16) / 2);
+        graphics.item(icon, x + (actualTab.w - 16) / 2, y + (actualTab.h - 16) / 2);
       }
     }
   }
