@@ -1,11 +1,14 @@
 package slimeknights.mantle.fluid.texture;
 
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.minecraft.core.Registry;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -28,7 +31,7 @@ public class FluidTextureManager implements IEarlySafeManagerReloadListener {
   /** Map of fluid type to texture */
   private Map<FluidType,FluidTexture> textures = Collections.emptyMap();
   /** Fallback texture instance */
-  private static final FluidTexture FALLBACK = new FluidTexture(Identifier.withDefaultNamespace("block/water_still"), Identifier.withDefaultNamespace("block/water_flow"), null, null, 0, -1, -1, false, null, 0, 0);
+  private static final FluidTexture FALLBACK = new FluidTexture(Identifier.withDefaultNamespace("block/water_still"), Identifier.withDefaultNamespace("block/water_flow"), null, null, 0, -1, -1, false, false, 0, 0);
 
   private FluidTextureManager() {}
 
@@ -36,8 +39,8 @@ public class FluidTextureManager implements IEarlySafeManagerReloadListener {
   /**
    * Initializes this manager, registering it with the resource manager
    */
-  public static void init(RegisterClientReloadListenersEvent event) {
-    event.registerReloadListener(INSTANCE);
+  public static void init(AddClientReloadListenersEvent event) {
+    event.addListener(Mantle.getResource("fluid_texture"), INSTANCE);
   }
 
   @Override
@@ -45,7 +48,7 @@ public class FluidTextureManager implements IEarlySafeManagerReloadListener {
     long time = System.nanoTime();
     // fetch JSONs
     Map<Identifier,JsonElement> jsons = new HashMap<>();
-    SimpleJsonResourceReloadListener.scanDirectory(resourceManager, FOLDER, JsonHelper.DEFAULT_GSON, jsons);
+    SimpleJsonResourceReloadListener.scanDirectory(resourceManager, FileToIdConverter.json(FOLDER), JsonOps.INSTANCE, ExtraCodecs.JSON, jsons);
 
     // start building fluid type map
     Map<FluidType, FluidTexture> map = new HashMap<>();
@@ -55,7 +58,7 @@ public class FluidTextureManager implements IEarlySafeManagerReloadListener {
     for (Map.Entry<Identifier,JsonElement> entry : jsons.entrySet()) {
       Identifier id = entry.getKey();
       // first step is to find the matching fluid type, if there is none ignore the file
-      FluidType type = fluidTypeRegistry.get(id);
+      FluidType type = fluidTypeRegistry.getValue(id);
       if (type == null || !id.equals(fluidTypeRegistry.getKey(type))) {
         Mantle.logger.debug("Ignoring fluid texture {} as no fluid type exists with that name", id);
       } else {

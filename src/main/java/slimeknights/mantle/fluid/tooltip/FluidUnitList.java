@@ -1,6 +1,5 @@
 package slimeknights.mantle.fluid.tooltip;
 
-import lombok.RequiredArgsConstructor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
@@ -13,12 +12,17 @@ import java.util.List;
  * Represents a list of tooltip unit types for a fluid
  */
 @SuppressWarnings("ClassCanBeRecord") // needed in GSON
-@RequiredArgsConstructor
 public class FluidUnitList {
   // TODO: switch to fluid ingredient
   @Nullable
   private final TagKey<Fluid> tag;
   private final List<FluidUnit> units;
+
+  // explicit constructor: lombok @RequiredArgsConstructor was unreliable during the 26.1.2 port
+  public FluidUnitList(@Nullable TagKey<Fluid> tag, List<FluidUnit> units) {
+    this.tag = tag;
+    this.units = units;
+  }
 
   /**
    * Checks if this matches the given fluid

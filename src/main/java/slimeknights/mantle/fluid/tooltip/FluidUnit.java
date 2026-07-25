@@ -1,6 +1,5 @@
 package slimeknights.mantle.fluid.tooltip;
 
-import lombok.RequiredArgsConstructor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
@@ -10,11 +9,16 @@ import java.util.List;
  * Single entry for text options
  */
 @SuppressWarnings("ClassCanBeRecord") // needed in GSON
-@RequiredArgsConstructor
 public class FluidUnit {
 
   private final String key;
   private final int needed;
+
+  // explicit constructor: lombok @RequiredArgsConstructor was unreliable during the 26.1.2 port
+  public FluidUnit(String key, int needed) {
+    this.key = key;
+    this.needed = needed;
+  }
 
   /**
    * Gets the display text for this fluid entry
