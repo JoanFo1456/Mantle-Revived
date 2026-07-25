@@ -3,12 +3,12 @@ package slimeknights.mantle.block.entity;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 /**
  * Extension of tile entity to make it namable
@@ -29,18 +29,16 @@ public abstract class NameableBlockEntity extends MantleBlockEntity implements I
 	}
 
 	@Override
-	public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-		super.loadAdditional(tags, registries);
-		if (tags.contains(TAG_CUSTOM_NAME, Tag.TAG_STRING)) {
-			this.customName = Component.Serializer.fromJson(tags.getString(TAG_CUSTOM_NAME), registries);
-		}
+	public void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		this.customName = input.read(TAG_CUSTOM_NAME, ComponentSerialization.CODEC).orElse(null);
 	}
 
 	@Override
-	public void saveSynced(CompoundTag tags, HolderLookup.Provider registries) {
-		super.saveSynced(tags, registries);
+	public void saveSynced(ValueOutput output) {
+		super.saveSynced(output);
 		if (this.hasCustomName()) {
-			tags.putString(TAG_CUSTOM_NAME, Component.Serializer.toJson(this.customName, registries));
+			output.store(TAG_CUSTOM_NAME, ComponentSerialization.CODEC, this.customName);
 		}
 	}
 }

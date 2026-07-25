@@ -1,7 +1,7 @@
 package slimeknights.mantle.registration.adapter;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.models.blockstates.PropertyDispatch.TriFunction;
+import org.apache.commons.lang3.function.TriFunction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BlockItem;
@@ -14,7 +14,6 @@ import net.minecraft.world.item.SignItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.minecraft.core.Registry;
 import slimeknights.mantle.item.BlockTooltipItem;
 import slimeknights.mantle.item.BurnableBlockItem;
@@ -202,7 +201,7 @@ public class ItemRegistryAdapter extends EnumRegistryAdapter<Item> {
     } else {
       burnableItem = (block, burnTime) -> new BlockItem(block, defaultProps);
       burnableTallItem = (block) -> new DoubleHighBlockItem(block, defaultProps);
-      burnableSignItem = SignItem::new;
+      burnableSignItem = (props, standing, wall) -> new SignItem(standing, wall, props);
       burnableHangingSignItem = (props, ceiling, wall) -> new HangingSignItem(ceiling, wall, props);
     }
 
@@ -276,6 +275,7 @@ public class ItemRegistryAdapter extends EnumRegistryAdapter<Item> {
    * @return  Spawn egg item instance
    */
   public SpawnEggItem registerSpawnEgg(Supplier<? extends EntityType<? extends Mob>> type, int primary, int secondary, String baseName) {
-    return register(new DeferredSpawnEggItem(type, primary, secondary, new Properties()), baseName + "_spawn_egg");
+    // TODO(26.1.2): spawn egg colors are now defined via entity client data; primary/secondary are ignored
+    return register(new SpawnEggItem(new Properties().spawnEgg(type.get())), baseName + "_spawn_egg");
   }
 }
