@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import slimeknights.mantle.registration.object.EntityObject;
@@ -52,6 +52,7 @@ public class EntityTypeDeferredRegister extends DeferredRegisterWrapper<EntityTy
    */
   public <T extends Mob> EntityObject<T> registerWithEgg(String name, Supplier<EntityType.Builder<T>> sup, int primary, int secondary) {
     DeferredHolder<EntityType<?>,EntityType<T>> object = register(name, sup);
-    return new EntityObject<>(object, itemRegistry.register(name + "_spawn_egg", () -> new DeferredSpawnEggItem(object, primary, secondary, new Item.Properties())));
+    // TODO(26.1.2): spawn egg colors are now defined via entity client data; primary/secondary are ignored
+    return new EntityObject<>(object, itemRegistry.register(name + "_spawn_egg", () -> new SpawnEggItem(new Item.Properties().spawnEgg(object.get()))));
   }
 }
