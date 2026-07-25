@@ -1,23 +1,14 @@
 package slimeknights.mantle.client.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -35,7 +26,9 @@ public class FluidRenderer {
    * @return  Sprite location
    */
   public static TextureAtlasSprite getBlockSprite(Identifier sprite) {
-    return Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(sprite);
+    // TODO(26.1.2): block atlas moved off ModelManager; now fetched via Minecraft#getAtlasManager (AtlasManager)
+    //   and InventoryMenu.BLOCK_ATLAS -> TextureAtlas.LOCATION_BLOCKS.
+    return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(sprite);
   }
 
   /**
@@ -268,10 +261,16 @@ public class FluidRenderer {
     }
 
     // fluid attributes, fetch once for all fluids to save effort
-    IClientFluidTypeExtensions clientFluid = IClientFluidTypeExtensions.of(fluid.getFluid());
-    TextureAtlasSprite still = getBlockSprite(clientFluid.getStillTexture(fluid));
-    TextureAtlasSprite flowing = getBlockSprite(clientFluid.getFlowingTexture(fluid));
-    int color = clientFluid.getTintColor(fluid);
+    // TODO(26.1.2): IClientFluidTypeExtensions no longer exposes getStillTexture/getFlowingTexture/getTintColor(FluidStack);
+    //   fluid rendering was reworked around FluidStateModelSet. Reimplement sprite+tint lookup against the new fluid model
+    //   system. Falling back to the missing sprite and untinted color so callers keep compiling/rendering a placeholder.
+    // IClientFluidTypeExtensions clientFluid = IClientFluidTypeExtensions.of(fluid.getFluid());
+    // TextureAtlasSprite still = getBlockSprite(clientFluid.getStillTexture(fluid));
+    // TextureAtlasSprite flowing = getBlockSprite(clientFluid.getFlowingTexture(fluid));
+    // int color = clientFluid.getTintColor(fluid);
+    TextureAtlasSprite still = getBlockSprite(MissingTextureAtlasSprite.getLocation());
+    TextureAtlasSprite flowing = still;
+    int color = -1;
     FluidType type = fluid.getFluid().getFluidType();
     light = withBlockLight(light, type.getLightLevel(fluid));
     boolean isGas = type.isLighterThanAir();
@@ -323,12 +322,16 @@ public class FluidRenderer {
     }
 
     // fluid attributes
-    IClientFluidTypeExtensions clientFluid = IClientFluidTypeExtensions.of(fluid.getFluid());
-    TextureAtlasSprite still = getBlockSprite(clientFluid.getStillTexture(fluid));
-    TextureAtlasSprite flowing = getBlockSprite(clientFluid.getFlowingTexture(fluid));
+    // TODO(26.1.2): see renderCuboids - fluid sprite/tint client extension API removed; using placeholder sprite+color.
+    // IClientFluidTypeExtensions clientFluid = IClientFluidTypeExtensions.of(fluid.getFluid());
+    // TextureAtlasSprite still = getBlockSprite(clientFluid.getStillTexture(fluid));
+    // TextureAtlasSprite flowing = getBlockSprite(clientFluid.getFlowingTexture(fluid));
+    // int color = clientFluid.getTintColor(fluid);
+    TextureAtlasSprite still = getBlockSprite(MissingTextureAtlasSprite.getLocation());
+    TextureAtlasSprite flowing = still;
+    int color = -1;
     FluidType type = fluid.getFluid().getFluidType();
     boolean isGas = type.isLighterThanAir();
-    int color = clientFluid.getTintColor(fluid);
     light = withBlockLight(light, type.getLightLevel(fluid));
 
     // determine height based on fluid amount
@@ -350,35 +353,42 @@ public class FluidRenderer {
     renderCuboid(matrices, buffer.getBuffer(MantleRenderTypes.FLUID), cube, still, flowing, from, to, color, light, isGas);
   }
 
-  /** Same as {@link net.minecraft.client.renderer.ScreenEffectRenderer#renderFluid(Minecraft, PoseStack, Identifier)} but with opacity and color control */
+  /**
+   * Same as {@code net.minecraft.client.renderer.ScreenEffectRenderer#renderFluid} but with opacity and color control.
+   *
+   * TODO(26.1.2): This used the removed immediate-mode render API - RenderSystem.setShader/setShaderTexture/setShaderColor/
+   * enableBlend, GameRenderer.getPositionTexShader, Tesselator+BufferBuilder+BufferUploader.drawWithShader, and
+   * LightTexture.getBrightness - none of which survive the 1.21.4+ RenderPipeline rewrite. The whole in-camera fluid
+   * overlay draw needs re-expressing via a RenderPipeline (see RenderPipelines) and the GuiGraphics/screen-effect path.
+   * Stubbed to a no-op; original body preserved below.
+   */
   public static void renderCamera(Minecraft minecraft, PoseStack poseStack, Identifier texture, float opacity, int color) {
-    assert minecraft.player != null;
-    RenderSystem.setShader(GameRenderer::getPositionTexShader);
-    RenderSystem.setShaderTexture(0, texture);
-    BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-    BlockPos pos = BlockPos.containing(minecraft.player.getX(), minecraft.player.getEyeY(), minecraft.player.getZ());
-    Level level = minecraft.player.level();
-    float brightness = LightTexture.getBrightness(level.dimensionType(), level.getMaxLocalRawBrightness(pos));
-    RenderSystem.enableBlend();
-    // apply fluid tint if one is set
-    if (color != -1) {
-      RenderSystem.setShaderColor(
-        brightness * (color >> 16 & 255) / 255f,
-        brightness * (color >> 8 & 255) / 255f,
-        brightness * (color & 255) / 255f,
-        opacity * (color >>> 24) / 255f);
-    } else {
-      RenderSystem.setShaderColor(brightness, brightness, brightness, opacity);
-    }
-    float yRot = -minecraft.player.getYRot() / 64;
-    float xRot = minecraft.player.getXRot() / 64;
-    Matrix4f matrix = poseStack.last().pose();
-    buffer.addVertex(matrix, -1, -1, -0.5f).setUv(4 + yRot, 4 + xRot);
-    buffer.addVertex(matrix,  1, -1, -0.5f).setUv(0 + yRot, 4 + xRot);
-    buffer.addVertex(matrix,  1,  1, -0.5f).setUv(0 + yRot, 0 + xRot);
-    buffer.addVertex(matrix, -1,  1, -0.5f).setUv(4 + yRot, 0 + xRot);
-    BufferUploader.drawWithShader(buffer.buildOrThrow());
-    RenderSystem.setShaderColor(1, 1, 1, 1);
-    RenderSystem.disableBlend();
+    // assert minecraft.player != null;
+    // RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    // RenderSystem.setShaderTexture(0, texture);
+    // BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+    // BlockPos pos = BlockPos.containing(minecraft.player.getX(), minecraft.player.getEyeY(), minecraft.player.getZ());
+    // Level level = minecraft.player.level();
+    // float brightness = LightTexture.getBrightness(level.dimensionType(), level.getMaxLocalRawBrightness(pos));
+    // RenderSystem.enableBlend();
+    // if (color != -1) {
+    //   RenderSystem.setShaderColor(
+    //     brightness * (color >> 16 & 255) / 255f,
+    //     brightness * (color >> 8 & 255) / 255f,
+    //     brightness * (color & 255) / 255f,
+    //     opacity * (color >>> 24) / 255f);
+    // } else {
+    //   RenderSystem.setShaderColor(brightness, brightness, brightness, opacity);
+    // }
+    // float yRot = -minecraft.player.getYRot() / 64;
+    // float xRot = minecraft.player.getXRot() / 64;
+    // Matrix4f matrix = poseStack.last().pose();
+    // buffer.addVertex(matrix, -1, -1, -0.5f).setUv(4 + yRot, 4 + xRot);
+    // buffer.addVertex(matrix,  1, -1, -0.5f).setUv(0 + yRot, 4 + xRot);
+    // buffer.addVertex(matrix,  1,  1, -0.5f).setUv(0 + yRot, 0 + xRot);
+    // buffer.addVertex(matrix, -1,  1, -0.5f).setUv(4 + yRot, 0 + xRot);
+    // BufferUploader.drawWithShader(buffer.buildOrThrow());
+    // RenderSystem.setShaderColor(1, 1, 1, 1);
+    // RenderSystem.disableBlend();
   }
 }
