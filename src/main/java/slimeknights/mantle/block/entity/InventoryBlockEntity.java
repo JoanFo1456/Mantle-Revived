@@ -20,6 +20,9 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import slimeknights.mantle.util.ItemStackList;
 
 // Updated version of InventoryLogic in Mantle. Also contains a few bugfixes DOES NOT OVERRIDE createMenu
@@ -55,7 +58,7 @@ public abstract class InventoryBlockEntity extends NameableBlockEntity implement
 
   /** Registers this base inventory handler for a concrete block entity type. */
   public static <T extends InventoryBlockEntity> void registerItemHandler(RegisterCapabilitiesEvent event, BlockEntityType<T> type) {
-    event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, type, (be, side) -> be.getItemHandler());
+    event.registerBlockEntity(Capabilities.Item.BLOCK, type, (be, side) -> VanillaContainerWrapper.of(be));
   }
 
   /* Inventory management */
@@ -194,82 +197,65 @@ public abstract class InventoryBlockEntity extends NameableBlockEntity implement
   /* NBT */
 
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
+  public void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
     if (saveSizeToNBT) {
-      this.resizeInternal(tags.getInt(TAG_INVENTORY_SIZE));
+      this.resizeInternal(input.getIntOr(TAG_INVENTORY_SIZE, this.inventory.size()));
     }
-    this.readInventoryFromNBT(tags, registries);
+    this.readInventoryFromNBT(input);
   }
 
   @Override
-  public void saveSynced(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveSynced(tags, registries);
+  public void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
     // only sync the size to the client by default
     if (saveSizeToNBT) {
-      tags.putInt(TAG_INVENTORY_SIZE, this.inventory.size());
+      output.putInt(TAG_INVENTORY_SIZE, this.inventory.size());
     }
   }
-  
+
   @Override
-  public void saveAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveAdditional(tags, registries);
-    this.writeInventoryToNBT(tags, registries);
+  public void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    this.writeInventoryToNBT(output);
   }
 
   /**
    * Writes the contents of the inventory to the tag
    */
-  public void writeInventoryToNBT(CompoundTag tag, HolderLookup.Provider registries) {
+  public void writeInventoryToNBT(ValueOutput output) {
     Container inventory = this;
-    ListTag nbttaglist = new ListTag();
+    ValueOutput.ValueOutputList list = output.childrenList(TAG_ITEMS);
 
     for (int i = 0; i < inventory.getContainerSize(); i++) {
-      if (!inventory.getItem(i).isEmpty()) {
-        CompoundTag itemTag = (CompoundTag) inventory.getItem(i).save(registries, new CompoundTag());
+      ItemStack stack = inventory.getItem(i);
+      if (!stack.isEmpty()) {
+        ValueOutput itemTag = list.addChild();
+        itemTag.store(ItemStack.MAP_CODEC, stack);
         itemTag.putByte(TAG_SLOT, (byte) i);
-        nbttaglist.add(itemTag);
       }
     }
-
-    tag.put(TAG_ITEMS, nbttaglist);
-  }
-
-  /** Compatibility overload for code still using the old no-registry inventory save hook. */
-  @Deprecated(forRemoval = true)
-  public void writeInventoryToNBT(CompoundTag tag) {
-    writeInventoryToNBT(tag, BUILTIN_LOOKUP);
   }
 
   /**
    * Reads an inventory from the tag. Overwrites current content
    */
-  public void readInventoryFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
-    ListTag list = tag.getList(TAG_ITEMS, Tag.TAG_COMPOUND);
-
+  public void readInventoryFromNBT(ValueInput input) {
     for (int slot = 0; slot < this.inventory.size(); slot++) {
       this.inventory.set(slot, ItemStack.EMPTY);
     }
 
     int limit = this.getMaxStackSize();
-    ItemStack stack;
-    for (int i = 0; i < list.size(); ++i) {
-      CompoundTag itemTag = list.getCompound(i);
-      int slot = itemTag.getByte(TAG_SLOT) & 255;
+    for (ValueInput itemTag : input.childrenListOrEmpty(TAG_ITEMS)) {
+      int slot = itemTag.getByteOr(TAG_SLOT, (byte) 0) & 255;
       if (slot < this.inventory.size()) {
-        stack = ItemStack.parseOptional(registries, itemTag);
+        ItemStack stack = itemTag.read(ItemStack.MAP_CODEC).orElse(ItemStack.EMPTY);
         if (!stack.isEmpty() && stack.getCount() > limit) {
           stack.setCount(limit);
         }
         this.inventory.set(slot, stack);
       }
     }
-  }
-
-  /** Compatibility overload for code still using the old no-registry inventory load hook. */
-  @Deprecated(forRemoval = true)
-  public void readInventoryFromNBT(CompoundTag tag) {
-    readInventoryFromNBT(tag, BUILTIN_LOOKUP);
   }
 
   @Override
