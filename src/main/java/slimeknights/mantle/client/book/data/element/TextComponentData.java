@@ -1,7 +1,5 @@
 package slimeknights.mantle.client.book.data.element;
 
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
 import slimeknights.mantle.client.book.HTMLUtils;
 import slimeknights.mantle.client.book.IHTML;
@@ -13,8 +11,6 @@ import slimeknights.mantle.util.html.HtmlSerializable;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@Accessors(fluent = true)
-@Setter
 public class TextComponentData implements IHTML {
   /** @deprecated use {@link #linebreak} */
   @Deprecated
@@ -39,6 +35,12 @@ public class TextComponentData implements IHTML {
 
   public TextComponentData(String text) {
     this(Component.literal(text));
+  }
+
+  // explicit fluent setter: lombok @Setter/@Accessors was unreliable during the 26.1.2 port
+  public TextComponentData linebreak(boolean linebreak) {
+    this.linebreak = linebreak;
+    return this;
   }
 
   @Override

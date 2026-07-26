@@ -4,10 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.world.inventory.InventoryMenu;
 
 import static slimeknights.mantle.client.screen.book.element.ItemElement.ITEM_SIZE_HARDCODED;
 
@@ -23,7 +23,7 @@ public class SpriteElement extends SizedBookElement {
   }
 
   public SpriteElement(int x, int y, float scale, Identifier location) {
-    this(x, y, scale, Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(location));
+    this(x, y, scale, Minecraft.getInstance().getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS).getSprite(location));
   }
 
   @Override
