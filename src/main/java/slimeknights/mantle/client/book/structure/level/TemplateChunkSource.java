@@ -38,7 +38,7 @@ public class TemplateChunkSource extends ChunkSource {
     Map<ChunkPos, List<StructureBlockInfo>> byChunk = new HashMap<>();
 
     for (StructureBlockInfo info : blocks) {
-      byChunk.computeIfAbsent(new ChunkPos(info.pos()), $ -> new ArrayList<>()).add(info);
+      byChunk.computeIfAbsent(ChunkPos.containing(info.pos()), $ -> new ArrayList<>()).add(info);
     }
 
     this.chunks = byChunk.entrySet().stream()
@@ -49,7 +49,7 @@ public class TemplateChunkSource extends ChunkSource {
   @Nullable
   @Override
   public ChunkAccess getChunk(int chunkX, int chunkZ, @Nonnull ChunkStatus requiredStatus, boolean load) {
-    return this.chunks.computeIfAbsent(new ChunkPos(chunkX, chunkZ), p -> new EmptyLevelChunk(level, p, level.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(Biomes.PLAINS)));
+    return this.chunks.computeIfAbsent(new ChunkPos(chunkX, chunkZ), p -> new EmptyLevelChunk(level, p, level.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(Biomes.PLAINS)));
   }
 
   @Override

@@ -3,31 +3,26 @@
 package slimeknights.mantle.client.book.structure.level;
 
 import net.minecraft.world.Difficulty;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.storage.WritableLevelData;
 
+/**
+ * TODO(26.1.2): the LevelData/WritableLevelData interface was reworked; spawn point/angle, day time, and weather were
+ * removed and spawn is now represented by a {@link LevelData.RespawnData} record. This minimal impl keeps the fake
+ * structure-preview level compiling.
+ */
 public class FakeLevelData implements WritableLevelData {
 
-  private static final GameRules RULES = new GameRules();
-
-  private BlockPos spawn = BlockPos.ZERO;
-  private float spawnAngle;
+  private LevelData.RespawnData respawnData = LevelData.RespawnData.DEFAULT;
 
   @Override
-  public void setSpawn(BlockPos spawnPoint, float spawnAngle) {
-    this.spawn = spawnPoint;
-    this.spawnAngle = spawnAngle;
+  public void setSpawn(LevelData.RespawnData respawnData) {
+    this.respawnData = respawnData;
   }
 
   @Override
-  public BlockPos getSpawnPos() {
-    return this.spawn;
-  }
-
-  @Override
-  public float getSpawnAngle() {
-    return this.spawnAngle;
+  public LevelData.RespawnData getRespawnData() {
+    return this.respawnData;
   }
 
   @Override
@@ -36,33 +31,8 @@ public class FakeLevelData implements WritableLevelData {
   }
 
   @Override
-  public long getDayTime() {
-    return 0;
-  }
-
-  @Override
-  public boolean isThundering() {
-    return false;
-  }
-
-  @Override
-  public boolean isRaining() {
-    return false;
-  }
-
-  @Override
-  public void setRaining(boolean isRaining) {
-
-  }
-
-  @Override
   public boolean isHardcore() {
     return false;
-  }
-
-  @Override
-  public GameRules getGameRules() {
-    return RULES;
   }
 
   @Override
