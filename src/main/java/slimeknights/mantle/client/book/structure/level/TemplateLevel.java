@@ -29,6 +29,7 @@ import net.minecraft.world.level.gameevent.GameEvent.Context;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapId;
+import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Scoreboard;
@@ -194,6 +195,11 @@ public class TemplateLevel extends Level {
   @Override
   public FeatureFlagSet enabledFeatures() {
     return FeatureFlagSet.of();
+  }
+
+  @Override
+  public int getSeaLevel() {
+    return 63;
   }
 
   @Nonnull

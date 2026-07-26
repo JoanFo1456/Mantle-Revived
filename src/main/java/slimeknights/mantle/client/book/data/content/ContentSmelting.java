@@ -2,14 +2,20 @@ package slimeknights.mantle.client.book.data.content;
 
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import org.apache.commons.lang3.StringUtils;
@@ -122,10 +128,22 @@ public class ContentSmelting extends PageContent {
       return;
     }
 
-    Recipe<?> foundRecipe = level.getRecipeManager().byKey(recipeId).map(RecipeHolder::value).orElse(null);
+    // As of 26.1.2 the client no longer syncs full recipes by id (RecipeAccess exposes only property sets); the
+    // integrated server's recipe manager is the only place a recipe can be resolved from its id, so book recipe
+    // auto-population is available in singleplayer only.
+    IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
+    if (server == null) {
+      if (!recipeMissingLogged) {
+        Mantle.logger.warn("Book smelting recipe {} cannot be auto-populated: recipes are only available on the integrated server (singleplayer).", recipeId);
+        recipeMissingLogged = true;
+      }
+      return;
+    }
+
+    Recipe<?> foundRecipe = server.getRecipeManager().byKey(ResourceKey.create(Registries.RECIPE, recipeId)).map(RecipeHolder::value).orElse(null);
     if (foundRecipe == null) {
       if (!recipeMissingLogged) {
-        Mantle.logger.warn("Book smelting recipe {} was not found in the client recipe manager; will retry when the page is opened.", recipeId);
+        Mantle.logger.warn("Book smelting recipe {} was not found in the recipe manager; will retry when the page is opened.", recipeId);
         recipeMissingLogged = true;
       }
       return;
@@ -138,10 +156,26 @@ public class ContentSmelting extends PageContent {
       return;
     }
 
-    this.input = IngredientData.getItemStackData(NonNullList.of(ItemStack.EMPTY, cookingRecipe.getIngredients().get(0).getItems()));
-    this.cookTime = cookingRecipe.getCookingTime();
-    this.result = IngredientData.getItemStackData(cookingRecipe.getResultItem(level.registryAccess()));
+    // build the input from the recipe ingredient (item holders resolved to display stacks)
+    NonNullList<ItemStack> inputStacks = NonNullList.create();
+    cookingRecipe.input().items().forEach(holder -> inputStacks.add(new ItemStack(holder)));
+    this.input = IngredientData.getItemStackData(inputStacks);
+    this.cookTime = cookingRecipe.cookingTime();
+    // resolve the result through the recipe display system
+    ContextMap context = SlotDisplayContext.fromLevel(level);
+    this.result = IngredientData.getItemStackData(resolveResult(cookingRecipe.display(), context));
     recipeLoaded = true;
+  }
+
+  /** Resolves the result item stack from a recipe's display list, or empty if none is available */
+  private static ItemStack resolveResult(List<RecipeDisplay> displays, ContextMap context) {
+    if (!displays.isEmpty()) {
+      List<ItemStack> stacks = displays.get(0).result().resolveForStacks(context);
+      if (!stacks.isEmpty()) {
+        return stacks.get(0);
+      }
+    }
+    return ItemStack.EMPTY;
   }
 
   static {

@@ -23,7 +23,7 @@ public class SpriteElement extends SizedBookElement {
   }
 
   public SpriteElement(int x, int y, float scale, Identifier location) {
-    this(x, y, scale, Minecraft.getInstance().getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS).getSprite(location));
+    this(x, y, scale, Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(location));
   }
 
   @Override
