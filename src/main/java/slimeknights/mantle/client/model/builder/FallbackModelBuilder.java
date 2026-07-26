@@ -13,7 +13,7 @@ import java.util.List;
  * Builder for {@link slimeknights.mantle.client.model.FallbackModelLoader}.
  * <p>
  * In 26.1.2 datagen no longer exposes a generic {@code ModelBuilder}; child models are now supplied as pre-serialized
- * {@link JsonObject} instances. TODO(26.1.2): update callers to pass serialized child models.
+ * {@link JsonObject} instances. update callers to pass serialized child models.
  */
 public class FallbackModelBuilder extends CustomLoaderBuilder {
   private final List<DomainModel> models = new ArrayList<>();

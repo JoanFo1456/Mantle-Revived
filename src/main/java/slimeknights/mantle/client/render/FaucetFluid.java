@@ -51,7 +51,6 @@ public record FaucetFluid(List<FluidCuboid> side, List<FluidCuboid> center, bool
       return;
     }
     initialized = true;
-    // TODO(26.1.2): RegisterClientReloadListenersEvent#registerReloadListener -> AddClientReloadListenersEvent#addListener(Identifier, listener)
     event.addListener(Mantle.getResource("faucet_fluid"), REGISTRY);
   }
 

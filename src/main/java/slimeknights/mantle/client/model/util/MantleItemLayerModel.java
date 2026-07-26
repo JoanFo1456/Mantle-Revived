@@ -45,7 +45,7 @@ import java.util.PrimitiveIterator;
  * <p>
  * In 26.1.2 the item model system ({@code ItemLayerModel}, {@code CompositeModel}, {@code RenderTypeGroup}) was removed;
  * this now produces a {@link QuadCollection} through {@link #geometry()} using the surviving quad-baking pipeline.
- * TODO(26.1.2): per-layer render type selection is no longer applied (transparency now comes from the sprite material).
+ * per-layer render type selection is no longer applied (transparency now comes from the sprite material).
  */
 @SuppressWarnings("WeakerAccess")
 public class MantleItemLayerModel extends AbstractUnbakedModel {

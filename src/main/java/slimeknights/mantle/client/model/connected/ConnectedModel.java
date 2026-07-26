@@ -36,7 +36,7 @@ import java.util.function.Function;
  * mutable {@code BlockElement} representation were removed, so per-state connection rebaking must be reimplemented on the
  * new {@code BlockStateModel}/{@code DynamicBlockStateModel} system. This port preserves the deserialization, the
  * connection registry hookup, and the pure connection bit math, delegating static geometry to the wrapped model.
- * TODO(26.1.2): reimplement dynamic connected rebaking on the new block state model pipeline.
+ * reimplement dynamic connected rebaking on the new block state model pipeline.
  */
 public class ConnectedModel extends DelegateUnbakedModel {
   /** Loader instance */

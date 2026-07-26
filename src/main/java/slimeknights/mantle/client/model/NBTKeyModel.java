@@ -30,7 +30,7 @@ import java.util.List;
  * <p>
  * In 26.1.2 the item model system was rewritten ({@code ItemOverrides} removed in favor of the item model / select
  * property system). This port keeps the extra-texture registry and deserialization and renders the default layer;
- * TODO(26.1.2): NBT-driven variant switching must be reimplemented on the new item model select-property system.
+ * NBT-driven variant switching must be reimplemented on the new item model select-property system.
  */
 public class NBTKeyModel extends AbstractUnbakedModel {
   /** Model loader instance */

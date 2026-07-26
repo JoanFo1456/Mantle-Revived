@@ -275,7 +275,7 @@ public class ItemRegistryAdapter extends EnumRegistryAdapter<Item> {
    * @return  Spawn egg item instance
    */
   public SpawnEggItem registerSpawnEgg(Supplier<? extends EntityType<? extends Mob>> type, int primary, int secondary, String baseName) {
-    // TODO(26.1.2): spawn egg colors are now defined via entity client data; primary/secondary are ignored
+    // spawn egg colors are now defined via entity client data; primary/secondary are ignored
     return register(new SpawnEggItem(new Properties().spawnEgg(type.get())), baseName + "_spawn_egg");
   }
 }

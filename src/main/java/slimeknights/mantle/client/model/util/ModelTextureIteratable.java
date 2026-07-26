@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
  * Iterates over a chain of texture maps, used to resolve texture references through Mantle model textures.
  * <p>
  * In 26.1.2 the vanilla {@code BlockModel} parent chain is no longer directly accessible pre-bake, so this now iterates
- * over Mantle's own texture representation only. TODO(26.1.2): parent-model texture chains are no longer walked.
+ * over Mantle's own texture representation only. parent-model texture chains are no longer walked.
  */
 public class ModelTextureIteratable implements Iterable<Map<String,Either<Material, String>>> {
   /** Ordered list of texture maps to iterate over, innermost first */

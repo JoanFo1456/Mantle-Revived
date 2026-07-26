@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /**
  * Renders the items stored in an inventory block entity at positions defined by the {@link RenderItem} data map.
  *
- * TODO(26.1.2): The 1.21.5+ block entity render rewrite replaced the immediate-mode
+ * The 1.21.5+ block entity render rewrite replaced the immediate-mode
  * {@code render(T, float, PoseStack, MultiBufferSource, int, int)} method with a two-phase
  * render-state pipeline: {@link #createRenderState()} + {@link #extractRenderState} build a
  * {@link BlockEntityRenderState}, and {@link #submit} queues geometry into a {@link SubmitNodeCollector}.
@@ -30,7 +30,7 @@ public class InventoryBlockEntityRenderer<T extends BlockEntity & Container> imp
 
   @Override
   public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
-    // TODO(26.1.2): reimplement inventory item rendering against the new SubmitNodeCollector pipeline.
+    // reimplement inventory item rendering against the new SubmitNodeCollector pipeline.
     // Original logic (immediate mode, pre-26.1.2):
     //   if (inventory.isEmpty()) return;
     //   BlockState state = inventory.getBlockState();

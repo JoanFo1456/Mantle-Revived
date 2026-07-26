@@ -106,7 +106,7 @@ public class TextureColorHelper {
 
   /**
    * Computes the color for an item based on the particle icon.
-   * TODO(26.1.2): item model particle access was reworked (BakedModel/getParticleIcon removed); falls back to -1.
+   * item model particle access was reworked (BakedModel/getParticleIcon removed); falls back to -1.
    */
   private static final ToIntFunction<Item> COMPUTE_ITEM_COLOR = item -> {
     if (item instanceof net.minecraft.world.item.BlockItem blockItem) {

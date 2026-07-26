@@ -37,7 +37,6 @@ public record ChannelFluids(FluidCuboid down, Center center, Side side) {
       return;
     }
     initialized = true;
-    // TODO(26.1.2): RegisterClientReloadListenersEvent#registerReloadListener -> AddClientReloadListenersEvent#addListener(Identifier, listener)
     event.addListener(Mantle.getResource("channel_fluids"), REGISTRY);
   }
 

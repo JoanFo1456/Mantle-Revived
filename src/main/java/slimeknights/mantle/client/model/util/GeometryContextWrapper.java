@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
  * Lightweight texture source used to override textures for dynamic models.
  * <p>
  * In 26.1.2 {@code IGeometryBakingContext} was removed; the "owner" is now the unbaked model itself. This class is
- * retained as a minimal texture-override chain used by the connected and retextured models. TODO(26.1.2): this is no
+ * retained as a minimal texture-override chain used by the connected and retextured models. this is no
  * longer wired into the vanilla {@link net.minecraft.client.resources.model.sprite.TextureSlots} baking pipeline.
  */
 @SuppressWarnings("WeakerAccess")

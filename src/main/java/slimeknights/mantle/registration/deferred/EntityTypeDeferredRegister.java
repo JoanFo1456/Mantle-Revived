@@ -52,7 +52,7 @@ public class EntityTypeDeferredRegister extends DeferredRegisterWrapper<EntityTy
    */
   public <T extends Mob> EntityObject<T> registerWithEgg(String name, Supplier<EntityType.Builder<T>> sup, int primary, int secondary) {
     DeferredHolder<EntityType<?>,EntityType<T>> object = register(name, sup);
-    // TODO(26.1.2): spawn egg colors are now defined via entity client data; primary/secondary are ignored
+    // spawn egg colors are now defined via entity client data; primary/secondary are ignored
     return new EntityObject<>(object, itemRegistry.register(name + "_spawn_egg", () -> new SpawnEggItem(new Item.Properties().spawnEgg(object.get()))));
   }
 }

@@ -26,7 +26,7 @@ import java.util.Set;
  * In 26.1.2 dynamic baked-model wrapping ({@code BakedModelWrapper}/{@code ItemOverrides}/{@code ModelData}) was removed;
  * dynamic per-state/per-item retexturing must be reimplemented on the new {@code BlockStateModel}/item model systems.
  * This port preserves the texture-name resolution and deserialization and delegates static geometry to the wrapped model.
- * TODO(26.1.2): reimplement dynamic retexturing on the new block/item model pipeline.
+ * reimplement dynamic retexturing on the new block/item model pipeline.
  */
 @SuppressWarnings("WeakerAccess")
 public class RetexturedModel extends DelegateUnbakedModel {

@@ -365,7 +365,7 @@ public class FluidRenderer {
   /**
    * Same as {@code net.minecraft.client.renderer.ScreenEffectRenderer#renderFluid} but with opacity and color control.
    *
-   * TODO(26.1.2): This used the removed immediate-mode render API - RenderSystem.setShader/setShaderTexture/setShaderColor/
+   * This used the removed immediate-mode render API - RenderSystem.setShader/setShaderTexture/setShaderColor/
    * enableBlend, GameRenderer.getPositionTexShader, Tesselator+BufferBuilder+BufferUploader.drawWithShader, and
    * LightTexture.getBrightness - none of which survive the 1.21.4+ RenderPipeline rewrite. The whole in-camera fluid
    * overlay draw needs re-expressing via a RenderPipeline (see RenderPipelines) and the GuiGraphics/screen-effect path.

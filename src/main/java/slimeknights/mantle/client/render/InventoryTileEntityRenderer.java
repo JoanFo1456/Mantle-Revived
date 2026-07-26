@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /**
  * @deprecated use {@link InventoryBlockEntityRenderer} for the new render item registry.
  *
- * TODO(26.1.2): ported to a correct-shaped stub for the 1.21.5+ render-state pipeline; see
+ * ported to a correct-shaped stub for the 1.21.5+ render-state pipeline; see
  * {@link InventoryBlockEntityRenderer} for details. Original logic preserved in the comment below.
  */
 @Deprecated(forRemoval = true)
@@ -26,7 +26,7 @@ public class InventoryTileEntityRenderer<T extends BlockEntity & Container> impl
 
   @Override
   public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
-    // TODO(26.1.2): reimplement against the new SubmitNodeCollector pipeline.
+    // reimplement against the new SubmitNodeCollector pipeline.
     // Original logic (immediate mode, pre-26.1.2):
     //   if (inventory.isEmpty()) return;
     //   BlockState state = inventory.getBlockState();

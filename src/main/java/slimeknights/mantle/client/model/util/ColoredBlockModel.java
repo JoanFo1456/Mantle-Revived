@@ -62,7 +62,7 @@ public class ColoredBlockModel extends SimpleBlockModel {
 
   /**
    * Applies the color data to the model elements, overriding emissivity where requested.
-   * TODO(26.1.2): static per-vertex color and per-element uv lock are not yet reimplemented on the new immutable BakedQuad pipeline.
+   * static per-vertex color and per-element uv lock are not yet reimplemented on the new immutable BakedQuad pipeline.
    */
   private static List<CuboidModelElement> applyColorData(List<CuboidModelElement> elements, List<ColorData> colorData) {
     if (colorData.isEmpty()) {
