@@ -202,6 +202,11 @@ public class TemplateLevel extends Level {
     return 63;
   }
 
+  @Override
+  public net.minecraft.world.level.border.WorldBorder getWorldBorder() {
+    return new net.minecraft.world.level.border.WorldBorder();
+  }
+
   @Nonnull
   @Override
   public List<? extends Player> players() {
