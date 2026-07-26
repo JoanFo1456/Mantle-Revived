@@ -1,6 +1,5 @@
 package slimeknights.mantle.network.packet;
 
-import lombok.AllArgsConstructor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
@@ -15,9 +14,13 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 /**
  * Packet to drop the book as item from lectern
  */
-@AllArgsConstructor
 public class DropLecternBookPacket implements IThreadsafePacket {
   private final BlockPos pos;
+
+  // explicit constructor: lombok @AllArgsConstructor was unreliable during the 26.1.2 port
+  public DropLecternBookPacket(BlockPos pos) {
+    this.pos = pos;
+  }
 
   public DropLecternBookPacket(FriendlyByteBuf buffer) {
     this.pos = buffer.readBlockPos();

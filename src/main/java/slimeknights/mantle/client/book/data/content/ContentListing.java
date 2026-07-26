@@ -93,7 +93,7 @@ public class ContentListing extends PageContent {
       yOff = 16;
     }
     if (this.subText != null) {
-      yOff += sectionData.parent.getFontRenderer().wordWrapHeight(this.subText, BookScreen.PAGE_WIDTH) * 12 / 9;
+      yOff += sectionData.parent.getFontRenderer().wordWrapHeight(net.minecraft.network.chat.FormattedText.of(this.subText), BookScreen.PAGE_WIDTH) * 12 / 9;
     }
     return getColumnHeight(yOff) / LINE_HEIGHT;
   }
@@ -181,7 +181,7 @@ public class ContentListing extends PageContent {
 
       int yOff = 0;
       if (this.title != null) yOff = 16;
-      if (this.subText != null) yOff += book.getFontRenderer().wordWrapHeight(subText, BookScreen.PAGE_WIDTH) * 12 / 9;
+      if (this.subText != null) yOff += book.getFontRenderer().wordWrapHeight(net.minecraft.network.chat.FormattedText.of(subText), BookScreen.PAGE_WIDTH) * 12 / 9;
       int rows = getColumnHeight(yOff) / LINE_HEIGHT;
 
       for (List<TextData> entry : entries) {

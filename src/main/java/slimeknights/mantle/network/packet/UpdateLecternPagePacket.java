@@ -1,6 +1,5 @@
 package slimeknights.mantle.network.packet;
 
-import lombok.AllArgsConstructor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
@@ -14,10 +13,16 @@ import slimeknights.mantle.util.BlockEntityHelper;
 /**
  * Packet to update the book page in a lectern
  */
-@AllArgsConstructor
 public class UpdateLecternPagePacket implements IThreadsafePacket {
   private final BlockPos pos;
   private final String page;
+
+  // explicit constructor: lombok @AllArgsConstructor was unreliable during the 26.1.2 port
+  public UpdateLecternPagePacket(BlockPos pos, String page) {
+    this.pos = pos;
+    this.page = page;
+  }
+
   public UpdateLecternPagePacket(FriendlyByteBuf buffer) {
     this.pos = buffer.readBlockPos();
     this.page = buffer.readUtf(100);

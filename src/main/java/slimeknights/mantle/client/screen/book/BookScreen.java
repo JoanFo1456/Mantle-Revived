@@ -519,6 +519,7 @@ public class BookScreen extends Screen {
   @Override
   public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
     int button = event.button();
+    boolean right = false;
     double mouseX = this.getMouseX(false);
     double mouseY = this.getMouseY();
 

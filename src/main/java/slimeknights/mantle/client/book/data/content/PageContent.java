@@ -1,7 +1,6 @@
 package slimeknights.mantle.client.book.data.content;
 
-import lombok.Getter;
-import lombok.Setter;
+import net.minecraft.network.chat.FormattedText;
 import slimeknights.mantle.client.book.IHTML;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.data.PageData;
@@ -25,11 +24,17 @@ public abstract class PageContent implements IHTML {
   public transient BookRepository source;
 
   /** If true, the title will be centered */
-  @Setter @Getter @Nullable
+  @Nullable
   private Boolean centerTitle;
   /** If true, the title will be large */
-  @Setter @Getter @Nullable
+  @Nullable
   private Boolean largeTitle;
+
+  // explicit accessors: lombok @Getter/@Setter was unreliable during the 26.1.2 port
+  @Nullable public Boolean getCenterTitle() { return centerTitle; }
+  public void setCenterTitle(@Nullable Boolean centerTitle) { this.centerTitle = centerTitle; }
+  @Nullable public Boolean getLargeTitle() { return largeTitle; }
+  public void setLargeTitle(@Nullable Boolean largeTitle) { this.largeTitle = largeTitle; }
 
   /** Returns the title for this page content, for the sake of indexes */
   @Nullable
@@ -162,7 +167,7 @@ public abstract class PageContent implements IHTML {
       subText.useOldColor = false;
       subText.rgbColor = color;
     }
-    int height = this.parent.parent.parent.getFontRenderer().wordWrapHeight(text, BookScreen.PAGE_WIDTH) * 12 / 9;
+    int height = this.parent.parent.parent.getFontRenderer().wordWrapHeight(FormattedText.of(text), BookScreen.PAGE_WIDTH) * 12 / 9;
     list.add(new TextElement(5, y, BookScreen.PAGE_WIDTH, height, subText));
     return height;
   }
