@@ -25,10 +25,10 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
       JsonObject object = element.getAsJsonObject();
       if (object.has("type") && "forge:nbt".equals(object.get("type").getAsString())) {
         ItemStack stack = ItemStackLoadable.REQUIRED_STACK_NBT.deserialize(object, context);
-        return Ingredient.of(stack);
+        return Ingredient.of(stack.getItem());
       }
     }
-    return (this == ALLOW_EMPTY ? Ingredient.CODEC : Ingredient.CODEC_NONEMPTY).parse(JsonOps.INSTANCE, element).getOrThrow(JsonParseException::new);
+    return Ingredient.CODEC.parse(JsonOps.INSTANCE, element).getOrThrow(JsonParseException::new);
   }
 
   /** NeoForge's ingredient map codec no longer accepts array ingredients nested inside custom ingredient children. */
@@ -75,7 +75,7 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
     if (namedItem != null) {
       return namedItem;
     }
-    return (this == ALLOW_EMPTY ? Ingredient.CODEC : Ingredient.CODEC_NONEMPTY).encodeStart(JsonOps.INSTANCE, object).getOrThrow(JsonParseException::new);
+    return Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, object).getOrThrow(JsonParseException::new);
   }
 
   @Override

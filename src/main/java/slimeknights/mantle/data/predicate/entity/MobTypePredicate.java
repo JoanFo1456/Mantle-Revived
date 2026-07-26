@@ -20,10 +20,10 @@ public record MobTypePredicate(LivingEntityPredicate type) implements LivingEnti
 
   /** Registers the vanilla mob type replacements. */
   public static void registerDefaults() {
-    MOB_TYPES.register(Identifier.withDefaultNamespace("undefined"), LivingEntityPredicate.simple(entity -> !entity.getType().is(EntityTypeTags.UNDEAD)
-      && !entity.getType().is(EntityTypeTags.ARTHROPOD)
-      && !entity.getType().is(EntityTypeTags.ILLAGER)
-      && !entity.getType().is(EntityTypeTags.AQUATIC)));
+    MOB_TYPES.register(Identifier.withDefaultNamespace("undefined"), LivingEntityPredicate.simple(entity -> !entity.getType().builtInRegistryHolder().is(EntityTypeTags.UNDEAD)
+      && !entity.getType().builtInRegistryHolder().is(EntityTypeTags.ARTHROPOD)
+      && !entity.getType().builtInRegistryHolder().is(EntityTypeTags.ILLAGER)
+      && !entity.getType().builtInRegistryHolder().is(EntityTypeTags.AQUATIC)));
     MOB_TYPES.register(Identifier.withDefaultNamespace("undead"), tagged(EntityTypeTags.UNDEAD));
     MOB_TYPES.register(Identifier.withDefaultNamespace("arthropod"), tagged(EntityTypeTags.ARTHROPOD));
     MOB_TYPES.register(Identifier.withDefaultNamespace("illager"), tagged(EntityTypeTags.ILLAGER));
@@ -31,7 +31,7 @@ public record MobTypePredicate(LivingEntityPredicate type) implements LivingEnti
   }
 
   private static LivingEntityPredicate tagged(TagKey<EntityType<?>> tag) {
-    return LivingEntityPredicate.simple(entity -> entity.getType().is(tag));
+    return LivingEntityPredicate.simple(entity -> entity.getType().builtInRegistryHolder().is(tag));
   }
 
   @Override

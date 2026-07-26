@@ -18,6 +18,7 @@ import slimeknights.mantle.data.GenericDataProvider;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
@@ -75,7 +76,16 @@ public abstract class GenericTextureGenerator extends GenericDataProvider {
     return CompletableFuture.runAsync(() -> {
       try {
         Path path = pathProvider.file(location, "png");
-        byte[] bytes = image.asByteArray();
+        // NativeImage no longer exposes a byte-array/PNG export as of 26.1.2 (asByteArray was removed and
+        // writeToChannel is private), so encode the PNG via a temporary file to obtain the exact STB output bytes.
+        Path temp = Files.createTempFile("mantle_texture", ".png");
+        byte[] bytes;
+        try {
+          image.writeToFile(temp);
+          bytes = Files.readAllBytes(temp);
+        } finally {
+          Files.deleteIfExists(temp);
+        }
         cache.writeIfNeeded(path, bytes, Hashing.sha1().hashBytes(bytes));
       } catch (IOException e) {
         Mantle.logger.error("Couldn't write image for {}", location, e);
