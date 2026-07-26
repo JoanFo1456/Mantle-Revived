@@ -11,8 +11,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.storage.LevelResource;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
-import net.neoforged.neoforge.common.conditions.FalseCondition;
+import net.neoforged.neoforge.common.conditions.NeverCondition;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.fml.ModList;
 import slimeknights.mantle.Mantle;
@@ -72,7 +71,7 @@ public class GeneratePackHelper {
   /** Saves a JSON that removes the given resource using forge conditions */
   public static boolean saveConditionRemove(Path path, String conditionKey) {
     JsonObject json = new JsonObject();
-    json.add(conditionKey, slimeknights.mantle.recipe.condition.ConditionHelper.serialize(new ICondition[]{FalseCondition.INSTANCE}));
+    json.add(conditionKey, slimeknights.mantle.recipe.condition.ConditionHelper.serialize(new ICondition[]{NeverCondition.INSTANCE}));
     return saveJson(json, path);
   }
 

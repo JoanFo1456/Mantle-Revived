@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -53,7 +53,7 @@ public class BookCommand {
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand) {
     subCommand.requires(source -> source.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS) && source.getEntity() instanceof AbstractClientPlayer)
       .then(Commands.literal("open")
-        .then(Commands.argument("id", ResourceLocationArgument.id()).suggests(MantleClientCommand.REGISTERED_BOOKS)
+        .then(Commands.argument("id", IdentifierArgument.id()).suggests(MantleClientCommand.REGISTERED_BOOKS)
           .executes(BookCommand::openBook)))
 
       .then(Commands.literal("export_images")
@@ -63,7 +63,7 @@ public class BookCommand {
             .executes(context -> exportDomainImages(context, IntegerArgumentType.getInteger(context, "scale"))))
           .executes(context -> exportDomainImages(context, DEFAULT_SCALE)))
         // mantle book export_images <domain> [version]
-        .then(Commands.argument("id", ResourceLocationArgument.id()).suggests(MantleClientCommand.REGISTERED_BOOKS)
+        .then(Commands.argument("id", IdentifierArgument.id()).suggests(MantleClientCommand.REGISTERED_BOOKS)
           .then(Commands.argument("scale", IntegerArgumentType.integer(1, 16))
             .executes(context -> exportImages(context, IntegerArgumentType.getInteger(context, "scale"))))
           .executes(context -> exportImages(context, DEFAULT_SCALE))))
@@ -75,7 +75,7 @@ public class BookCommand {
             .executes(context -> exportDomainHtml(context, StringArgumentType.getString(context, "version"))))
           .executes(context -> exportDomainHtml(context, DEFAULT_BOOK_VERSION)))
         // mantle book export_html <id> [version]
-        .then(Commands.argument("id", ResourceLocationArgument.id()).suggests(MantleClientCommand.REGISTERED_BOOKS)
+        .then(Commands.argument("id", IdentifierArgument.id()).suggests(MantleClientCommand.REGISTERED_BOOKS)
           .then(Commands.argument("version", StringArgumentType.word())
             .executes(context -> exportHTML(context, StringArgumentType.getString(context, "version"))))
           .executes(context -> exportHTML(context, DEFAULT_BOOK_VERSION))));
@@ -87,7 +87,7 @@ public class BookCommand {
    * @return  Integer return
    */
   private static int openBook(CommandContext<CommandSourceStack> context) {
-    Identifier book = ResourceLocationArgument.getId(context, "id");
+    Identifier book = IdentifierArgument.getId(context, "id");
 
     BookData bookData = BookLoader.getBook(book);
     if(bookData != null) {
@@ -109,7 +109,7 @@ public class BookCommand {
    * @return  Integer return
    */
   private static int exportImages(CommandContext<CommandSourceStack> context, int scale) throws CommandSyntaxException {
-    Identifier book = ResourceLocationArgument.getId(context, "id");
+    Identifier book = IdentifierArgument.getId(context, "id");
     return doExport(book, scale, false, DEFAULT_BOOK_VERSION);
   }
 
@@ -135,7 +135,7 @@ public class BookCommand {
    * @return Integer return
    */
   private static int exportHTML(CommandContext<CommandSourceStack> context, String version) throws CommandSyntaxException {
-    Identifier book = ResourceLocationArgument.getId(context, "id");
+    Identifier book = IdentifierArgument.getId(context, "id");
     return doExport(book, 2, true, version);
   }
 

@@ -14,7 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
 import slimeknights.mantle.Mantle;
 
@@ -56,7 +56,7 @@ public class HarvestTiersCommand {
 
   /** Runs the command, dumping the tag */
   private static int list(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-    List<Tier> sortedTiers = List.of();
+    List<ToolMaterial> sortedTiers = List.of();
 
     // start building output message
     MutableComponent output = Component.translatable("command.mantle.harvest_tiers.success_list");
@@ -64,7 +64,7 @@ public class HarvestTiersCommand {
     if (sortedTiers.isEmpty()) {
       output.append("\n* ").append(EMPTY);
     } else {
-      for (Tier tier : sortedTiers) {
+      for (ToolMaterial tier : sortedTiers) {
         output.append("\n* ");
         TagKey<Block> tag = tier.getIncorrectBlocksForDrops();
         Identifier id = Identifier.withDefaultNamespace(tier.toString().toLowerCase(java.util.Locale.ROOT));
@@ -81,11 +81,11 @@ public class HarvestTiersCommand {
 
   /** Runs the command, dumping the tag */
   private static int run(CommandContext<CommandSourceStack> context, boolean saveFile) throws CommandSyntaxException {
-    List<Tier> sortedTiers = List.of();
+    List<ToolMaterial> sortedTiers = List.of();
 
     // save the list as JSON
     JsonArray entries = new JsonArray();
-    for (Tier location : sortedTiers) {
+    for (ToolMaterial location : sortedTiers) {
       entries.add(Objects.requireNonNull(Identifier.withDefaultNamespace(location.toString().toLowerCase(java.util.Locale.ROOT))).toString());
     }
     JsonObject json = new JsonObject();

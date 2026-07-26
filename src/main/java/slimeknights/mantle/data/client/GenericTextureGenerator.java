@@ -3,16 +3,15 @@ package slimeknights.mantle.data.client;
 import com.google.common.hash.Hashing;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.PathProvider;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.data.GenericDataProvider;
 
@@ -26,27 +25,24 @@ import java.util.concurrent.CompletionException;
 
 /** Data generator to create png image files */
 public abstract class GenericTextureGenerator extends GenericDataProvider {
+  /**
+   * Resource manager used to read existing textures during generation. As of 26.1.2 NeoForge removed
+   * {@code ExistingFileHelper}; the datagen resource manager (from {@code GatherDataEvent#getResourceManager})
+   * is the replacement for reading the mod's client resources.
+   */
   @Nullable
-  protected final ExistingFileHelper existingFileHelper;
-  @Nullable
-  private final ExistingFileHelper.ResourceType resourceType;
+  protected final ResourceManager resourceManager;
+  /** Folder textures are located in, used to build the full resource path */
+  protected final String folder;
 
-  /** Constructor which marks files as existing */
-  public GenericTextureGenerator(PackOutput packOutput, @Nullable ExistingFileHelper existingFileHelper, String folder) {
+  public GenericTextureGenerator(PackOutput packOutput, @Nullable ResourceManager resourceManager, String folder) {
     super(packOutput, Target.RESOURCE_PACK, folder);
-    this.existingFileHelper = existingFileHelper;
-    if (existingFileHelper != null) {
-      this.resourceType = new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".png", folder);
-    } else {
-      this.resourceType = null;
-    }
+    this.resourceManager = resourceManager;
+    this.folder = folder;
   }
 
   /** Saves the given image to the given location */
   protected CompletableFuture<?> saveImage(CachedOutput cache, Identifier location, NativeImage image) {
-    if (existingFileHelper != null && resourceType != null) {
-      existingFileHelper.trackGenerated(location, resourceType);
-    }
     return saveImage(cache, pathProvider, location, image);
   }
 
@@ -59,9 +55,12 @@ public abstract class GenericTextureGenerator extends GenericDataProvider {
   /* Helpers */
 
   /** Reads an image from disk. Note the caller is responsible for closing the resource */
-  public static NativeImage read(ExistingFileHelper existingFileHelper, String folder, Identifier path) throws IOException {
+  public static NativeImage read(ResourceManager resourceManager, String folder, Identifier path) throws IOException {
+    // build the full resource path the same way ExistingFileHelper did: <folder>/<path>.png
+    Identifier location = Identifier.fromNamespaceAndPath(path.getNamespace(), folder + '/' + path.getPath() + ".png");
     try {
-      Resource resource = existingFileHelper.getResource(path, PackType.CLIENT_RESOURCES, ".png", folder);
+      Resource resource = resourceManager.getResource(location)
+        .orElseThrow(() -> new NoSuchElementException("Missing texture " + location));
       try (InputStream stream = resource.open()) {
         return NativeImage.read(stream);
       }

@@ -14,7 +14,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -27,18 +27,18 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("unused") // API
 public class ContainerFoodItem extends Item {
-  private final UseAnim useAnim;
-  public ContainerFoodItem(Properties props, UseAnim useAnim) {
+  private final ItemUseAnimation useAnim;
+  public ContainerFoodItem(Properties props, ItemUseAnimation useAnim) {
     super(props);
     this.useAnim = useAnim;
   }
 
   public ContainerFoodItem(Properties props) {
-    this(props, UseAnim.DRINK);
+    this(props, ItemUseAnimation.DRINK);
   }
 
   @Override
-  public UseAnim getUseAnimation(ItemStack pStack) {
+  public ItemUseAnimation getUseAnimation(ItemStack pStack) {
     return useAnim;
   }
 
