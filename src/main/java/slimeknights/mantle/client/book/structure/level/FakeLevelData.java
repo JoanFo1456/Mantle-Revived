@@ -7,7 +7,7 @@ import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.storage.WritableLevelData;
 
 /**
- * TODO(26.1.2): the LevelData/WritableLevelData interface was reworked; spawn point/angle, day time, and weather were
+ * Note: the LevelData/WritableLevelData interface was reworked; spawn point/angle, day time, and weather were
  * removed and spawn is now represented by a {@link LevelData.RespawnData} record. This minimal impl keeps the fake
  * structure-preview level compiling.
  */

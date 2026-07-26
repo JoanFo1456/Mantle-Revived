@@ -26,7 +26,7 @@ public class ClientTextureFluidType implements IClientFluidTypeExtensions {
     this.type = type;
   }
 
-  /* TODO(26.1.2): the still/flowing/overlay/tint texture hooks were removed from IClientFluidTypeExtensions.
+  /* Note: the still/flowing/overlay/tint texture hooks were removed from IClientFluidTypeExtensions.
    * Fluid textures are now supplied through the FluidStateModelSet/model system. These accessors are kept for
    * internal use (and for other Mantle code) but no longer participate in fluid rendering. */
   public int getTintColor() {
@@ -79,7 +79,7 @@ public class ClientTextureFluidType implements IClientFluidTypeExtensions {
   @Override
   public void modifyFogRender(Camera camera, FogEnvironment environment, float renderDistance, float partialTick, FogData fogData) {
     FluidTexture data = FluidTextureManager.getData(type);
-    // TODO(26.1.2): fog shape was removed; we now only clamp the environmental fog start/end when a custom range is set
+    // Note: fog shape was removed; we now only clamp the environmental fog start/end when a custom range is set
     if (data.customFog()) {
       float start = data.fogStart();
       if (start < fogData.environmentalStart) {

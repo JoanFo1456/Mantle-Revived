@@ -15,7 +15,7 @@ import java.util.Objects;
 
 /**
  * Record representing a fluid texture.
- * TODO(26.1.2): lombok (@Data/@AllArgsConstructor) proved unreliable during the port, so accessors and the
+ * Note: lombok (@Data/@AllArgsConstructor) proved unreliable during the port, so accessors and the
  * all-args constructor are written explicitly. Accessors are fluent (no "get" prefix) to match the previous API.
  */
 public final class FluidTexture {
@@ -30,7 +30,7 @@ public final class FluidTexture {
   // fog
   private int fogColor;
   private final boolean calculateFogColor;
-  // TODO(26.1.2): FogShape was removed from the client fog API; we now track only whether a custom fog range is present
+  // Note: FogShape was removed from the client fog API; we now track only whether a custom fog range is present
   private final boolean customFog;
   private final float fogStart;
   private final float fogEnd;
@@ -128,7 +128,7 @@ public final class FluidTexture {
     int color = ColorLoadable.ALPHA.getOrWhite(json, "color");
     int fogColor = color | 0xFF000000; // default fog color to opaque variant of fluid color. If no tint this will end up as -1
     boolean calculateFogColor = false;
-    // TODO(26.1.2): fog "shape" was removed from the client fog API; a custom fog range is now signaled by presence of start/end
+    // Note: fog "shape" was removed from the client fog API; a custom fog range is now signaled by presence of start/end
     boolean customFog = false;
     float fogStart = 0.25f;
     float fogEnd = 1;
@@ -266,7 +266,7 @@ public final class FluidTexture {
       return this;
     }
 
-    /** Sets the fog range. TODO(26.1.2): fog shape was removed from the client fog API. */
+    /** Sets the fog range. Note: fog shape was removed from the client fog API. */
     public Builder fog(float start, float end) {
       return customFog(true).fogStart(start).fogEnd(end);
     }

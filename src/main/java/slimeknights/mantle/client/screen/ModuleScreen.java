@@ -22,7 +22,7 @@ public abstract class ModuleScreen<P extends MultiModuleScreen<?>, C extends Abs
   public int xOffset = 0;
 
   // imageWidth/imageHeight are final in AbstractContainerScreen as of 26.1.2; hide them with mutable fields so this
-  // sub-gui can still resize itself. TODO(26.1.2): base container render still reads the final base dimensions.
+  // sub-gui can still resize itself. Note: base container render still reads the final base dimensions.
   protected int imageWidth = this.getImageWidth();
   protected int imageHeight = this.getImageHeight();
 

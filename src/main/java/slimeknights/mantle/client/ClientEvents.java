@@ -162,7 +162,7 @@ public class ClientEvents {
         if (!isHotbar && minecraft.options.getCameraType().isFirstPerson()) {
           if (!minecraft.getDebugOverlay().showDebugScreen() || settings.hideGui || minecraft.player.isReducedDebugInfo() || settings.reducedDebugInfo().get()) {
             // mostly cloned from vanilla attack indicator
-            // TODO(26.1.2): the special ONE_MINUS_DST_COLOR blend used by the vanilla crosshair indicator is no longer
+            // Note: the special ONE_MINUS_DST_COLOR blend used by the vanilla crosshair indicator is no longer
             // expressible through RenderSystem; the GUI render pipeline now owns blending. Draw with the standard GUI pipeline.
             int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
             // integer division makes this a pain to line up, there might be a simplier version of this formula but I cannot think of one

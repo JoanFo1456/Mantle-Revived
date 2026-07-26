@@ -25,7 +25,7 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
   protected List<ModuleScreen<?,?>> modules = Lists.newArrayList();
 
   // imageWidth/imageHeight are final in AbstractContainerScreen as of 26.1.2; hide them with mutable fields so the
-  // multi-module layout can still resize itself. TODO(26.1.2): the base container render path still reads the final
+  // multi-module layout can still resize itself. Note: the base container render path still reads the final
   // base dimensions, so sizing during super.* calls falls back to the vanilla default (176x166).
   protected int imageWidth = this.getImageWidth();
   protected int imageHeight = this.getImageHeight();
@@ -76,7 +76,7 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
     }
     // TODO: this is a small ordering change, does it need another hook?
     for (ModuleScreen<?,?> module : this.modules) {
-      // TODO(26.1.2): Screen.init(Minecraft, w, h) was removed; minecraft/font are now always the singleton via the base constructor
+      // Note: Screen.init(Minecraft, w, h) was removed; minecraft/font are now always the singleton via the base constructor
       module.init(width, height);
       this.updateSubmodule(module);
     }
@@ -260,7 +260,7 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
     ModuleScreen<?,?> module = this.getModuleForPoint(event.x(), event.y());
 
     if (module != null) {
-      // TODO(26.1.2): timeSinceLastClick is no longer provided by the drag event; passing 0
+      // Note: timeSinceLastClick is no longer provided by the drag event; passing 0
       if (module.handleMouseClickMove(event.x(), event.y(), event.button(), 0)) {
         return false;
       }

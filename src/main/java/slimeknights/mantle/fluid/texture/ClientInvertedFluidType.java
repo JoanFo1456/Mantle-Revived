@@ -14,7 +14,7 @@ public class ClientInvertedFluidType extends ClientTextureFluidType {
     super(type);
   }
 
-  // TODO(26.1.2): per-position flowing texture hook was removed from IClientFluidTypeExtensions (textures now come from FluidStateModelSet)
+  // Note: per-position flowing texture hook was removed from IClientFluidTypeExtensions (textures now come from FluidStateModelSet)
   public Identifier getFlowingTexture(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
     Identifier flowing = getFlowingTexture();
     if (flowing == lastFlowing) {
