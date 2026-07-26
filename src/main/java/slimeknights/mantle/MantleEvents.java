@@ -1,8 +1,8 @@
 package slimeknights.mantle;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -40,7 +40,7 @@ public class MantleEvents {
   static void onLivingDeath(LivingDeathEvent event) {
     // this is the latest we can add slot markers to the items so we can return them to slots
     LivingEntity entity = event.getEntity();
-    if (!entity.level().getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
+    if (!((ServerLevel) entity.level()).getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
       Inventory inventory = player.getInventory();
 
       // just iterate the whole inventory, no slot specific behavior
@@ -60,7 +60,7 @@ public class MantleEvents {
   static void onPlayerDropItems(LivingDropsEvent event) {
     // only care about real players with keep inventory off
     LivingEntity entity = event.getEntity();
-    if (!entity.level().getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(entity instanceof FakePlayer)) {
+    if (!((ServerLevel) entity.level()).getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(entity instanceof FakePlayer)) {
       Collection<ItemEntity> drops = event.getDrops();
       Iterator<ItemEntity> iter = drops.iterator();
       Inventory inventory = player.getInventory();
@@ -70,8 +70,8 @@ public class MantleEvents {
         ItemStack stack = itemEntity.getItem();
         // find items with our soulbound tag set and move them back into the inventory, will move them over later
         CompoundTag tag = getCustomData(stack);
-        if (tag != null && tag.contains(SOULBOUND_SLOT, Tag.TAG_ANY_NUMERIC)) {
-          int slot = tag.getInt(SOULBOUND_SLOT);
+        if (tag != null && tag.contains(SOULBOUND_SLOT)) {
+          int slot = tag.getIntOr(SOULBOUND_SLOT, 0);
           // return the tool to its requested slot if possible, remove from the drops
           if (inventory.getItem(slot).isEmpty()) {
             inventory.setItem(slot, stack);
@@ -108,7 +108,7 @@ public class MantleEvents {
     Player original = event.getOriginal();
     Player clone = event.getEntity();
     // inventory already copied
-    if (clone.level().getGameRules().get(GameRules.KEEP_INVENTORY) || original.isSpectator()) {
+    if (((ServerLevel) clone.level()).getGameRules().get(GameRules.KEEP_INVENTORY) || original.isSpectator()) {
       return;
     }
     // find items with the soulbound tag set and move them over
@@ -120,7 +120,7 @@ public class MantleEvents {
       ItemStack stack = originalInv.getItem(i);
       if (!stack.isEmpty()) {
         CompoundTag tag = getCustomData(stack);
-        if (tag != null && tag.contains(SOULBOUND_SLOT, Tag.TAG_ANY_NUMERIC)) {
+        if (tag != null && tag.contains(SOULBOUND_SLOT)) {
           if (cloneInv.getItem(i).isEmpty()) {
             cloneInv.setItem(i, stack);
           } else {

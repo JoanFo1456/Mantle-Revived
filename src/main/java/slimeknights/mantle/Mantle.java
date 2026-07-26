@@ -104,14 +104,16 @@ public class Mantle {
     instance = this;
     bus.addListener(EventPriority.NORMAL, false, FMLCommonSetupEvent.class, this::commonSetup);
     bus.addListener(EventPriority.NORMAL, false, RegisterCapabilitiesEvent.class, this::registerCapabilities);
-    bus.addListener(EventPriority.NORMAL, false, GatherDataEvent.class, this::gatherData);
+    // 26.1.2 split GatherDataEvent into Server/Client subclasses; register for both and detect which via instanceof
+    bus.addListener(EventPriority.NORMAL, false, GatherDataEvent.Server.class, this::gatherData);
+    bus.addListener(EventPriority.NORMAL, false, GatherDataEvent.Client.class, this::gatherData);
     bus.addListener(EventPriority.NORMAL, false, RegisterPayloadHandlersEvent.class, MantleNetwork::registerPackets);
     bus.addListener(EventPriority.NORMAL, false, RegisterEvent.class, this::register);
     MantleNetwork.init();
     MantleRecipes.init(bus);
     NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, PlayerInteractEvent.RightClickBlock.class, LecternBookItem::interactWithBlock);
 
-    if (FMLEnvironment.dist == Dist.CLIENT) {
+    if (FMLEnvironment.getDist() == Dist.CLIENT) {
       ClientEvents.onConstruct();
     }
   }
@@ -214,8 +216,8 @@ public class Mantle {
 
   private void gatherData(final GatherDataEvent event) {
     DataGenerator generator = event.getGenerator();
-    boolean server = event.includeServer();
-    boolean client = event.includeClient();
+    boolean server = event instanceof GatherDataEvent.Server;
+    boolean client = event instanceof GatherDataEvent.Client;
     PackOutput packOutput = generator.getPackOutput();
     CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
     generator.addProvider(server, new MantleBlockTagProvider(packOutput, lookupProvider));

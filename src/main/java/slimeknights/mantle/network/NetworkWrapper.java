@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -115,7 +116,9 @@ public class NetworkWrapper {
    * @param msg  Packet to send
    */
   public void sendToServer(Object msg) {
-    PacketDistributor.sendToServer(payload(msg));
+    // 26.1.2 moved the client->server distributor to the client-only ClientPacketDistributor;
+    // this method is only ever invoked client-side, so referencing it here is safe.
+    ClientPacketDistributor.sendToServer(payload(msg));
   }
 
   /**

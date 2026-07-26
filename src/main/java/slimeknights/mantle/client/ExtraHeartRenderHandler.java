@@ -1,12 +1,13 @@
 package slimeknights.mantle.client;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -92,7 +93,7 @@ public class ExtraHeartRenderHandler {
     if (!(renderViewEnity instanceof Player player)) {
       return;
     }
-    this.mc.getProfiler().push("health");
+    Profiler.get().push("health");
 
     // based on the top of Gui#renderPlayerHealth
     int tickCount = this.mc.gui.getGuiTicks();
@@ -218,15 +219,15 @@ public class ExtraHeartRenderHandler {
     }
 
     // prepare the GUI for the event
-    RenderSystem.setShaderTexture(0, ICON_VANILLA);
+    // Note: the GUI render pipeline now owns shader/texture/blend state, so the former
+    // RenderSystem.setShaderTexture/disableBlend calls are no longer needed.
     gui.leftHeight += ROW_HEIGHT;
     if (!compactAbsorption && absorb > 0) {
       gui.leftHeight += absorptionOffset;
     }
 
     event.setCanceled(true);
-    RenderSystem.disableBlend();
-    this.mc.getProfiler().pop();
+    Profiler.get().pop();
     //noinspection UnstableApiUsage  I do what I want (more accurately, we override the renderer but want to let others still respond in post)
     NeoForge.EVENT_BUS.post(new RenderGuiLayerEvent.Post(graphics, event.getPartialTick(), VanillaGuiLayers.PLAYER_HEALTH, event.getLayer()));
   }
@@ -330,11 +331,11 @@ public class ExtraHeartRenderHandler {
   private void renderHeartRow(GuiGraphicsExtractor graphics, int x, int y, int indexOffset, int uOffset, int vOffset, int start, int end, boolean half) {
     // draw full hearts
     for (int i = start; i < end; i += 1) {
-      graphics.blit(ICON_HEARTS, x + HEART_OFFSET * i, y + offsets[i + indexOffset], uOffset, vOffset, HEART_SIZE, HEART_SIZE);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, ICON_HEARTS, x + HEART_OFFSET * i, y + offsets[i + indexOffset], uOffset, vOffset, HEART_SIZE, HEART_SIZE, 256, 256);
     }
     // draw half heart
     if (half) {
-      graphics.blit(ICON_HEARTS, x + HEART_OFFSET * end, y + offsets[end + indexOffset], uOffset + HEART_SIZE, vOffset, HEART_SIZE, HEART_SIZE);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, ICON_HEARTS, x + HEART_OFFSET * end, y + offsets[end + indexOffset], uOffset + HEART_SIZE, vOffset, HEART_SIZE, HEART_SIZE, 256, 256);
     }
   }
 

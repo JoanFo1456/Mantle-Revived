@@ -229,7 +229,7 @@ public class CombatHelper {
         damage += enchantmentDamage;
 
         // check if we can do a sweep attack
-        boolean canSweep = fullyCharged && !(critical && hitResult.disableSweep()) && !sprinting && player.onGround() && (player.walkDist - player.walkDistO) < player.getSpeed() && stack.canPerformAction(ItemAbilities.SWORD_SWEEP);
+        boolean canSweep = fullyCharged && !(critical && hitResult.disableSweep()) && !sprinting && player.onGround() && player.getKnownMovement().horizontalDistanceSqr() < Mth.square(player.getSpeed() * 2.5f) && stack.canPerformAction(ItemAbilities.SWORD_SWEEP);
         canSweep = CommonHooks.fireSweepAttack(player, target, canSweep).isSweeping();
 
         // apply fire aspect and fetch health
@@ -247,13 +247,13 @@ public class CombatHelper {
           AttributeInstance knockbackAttribute = targetLiving.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
           if (knockbackAttribute != null && !knockbackAttribute.hasModifier(ANTI_KNOCKBACK_MODIFIER.id())) {
             knockbackAttribute.addTransientModifier(ANTI_KNOCKBACK_MODIFIER);
-            hit = target.hurt(damageSource, damage);
+            hit = target.hurtOrSimulate(damageSource, damage);
             knockbackAttribute.removeModifier(ANTI_KNOCKBACK_MODIFIER);
           } else {
-            hit = target.hurt(damageSource, damage);
+            hit = target.hurtOrSimulate(damageSource, damage);
           }
         } else {
-          hit = target.hurt(damageSource, damage);
+          hit = target.hurtOrSimulate(damageSource, damage);
         }
 
         // apply hit effects
@@ -282,7 +282,12 @@ public class CombatHelper {
             }
 
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
-            player.sweepAttack();
+            // Player.sweepAttack() was inlined into Player#doSweepAttack in 26.1.2; spawn the sweep particle directly (matches vanilla)
+            if (player.level() instanceof ServerLevel sweepLevel) {
+              double dx = -Mth.sin(player.getYRot() * TO_RADIAN);
+              double dz = Mth.cos(player.getYRot() * TO_RADIAN);
+              sweepLevel.sendParticles(ParticleTypes.SWEEP_ATTACK, player.getX() + dx, player.getY(0.5D), player.getZ() + dz, 0, dx, 0.0D, dz, 0.0D);
+            }
           }
 
           // sync player motion
@@ -357,7 +362,7 @@ public class CombatHelper {
 
   /** Makes a damage source from the given key */
   public static Holder<DamageType> damageType(RegistryAccess access, ResourceKey<DamageType> key) {
-    return access.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key);
+    return access.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(key);
   }
 
   /** Makes a damage source from the given key */

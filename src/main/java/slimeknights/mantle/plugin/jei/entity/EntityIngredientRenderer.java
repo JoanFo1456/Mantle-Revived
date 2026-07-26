@@ -1,20 +1,17 @@
 package slimeknights.mantle.plugin.jei.entity;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.RequiredArgsConstructor;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.Registry;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.TooltipFlag;
@@ -68,7 +65,7 @@ public class EntityIngredientRenderer implements IIngredientRenderer<EntityIngre
           entity = Minecraft.getInstance().player;
         } else {
           // entity is created with the client world, but the entity map is thrown away when JEI restarts so they should be okay I think
-          entity = ENTITY_MAP.computeIfAbsent(type, t -> t.create(world));
+          entity = ENTITY_MAP.computeIfAbsent(type, t -> t.create(world, EntitySpawnReason.LOAD));
         }
         // only can draw living entities, plus non-living ones don't get recipes anyways
         if (entity instanceof LivingEntity livingEntity) {
@@ -81,7 +78,7 @@ public class EntityIngredientRenderer implements IIngredientRenderer<EntityIngre
           }
           // catch exceptions drawing the entity to be safe, any caught exceptions blacklist the entity
           try {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, 0, 0, size, size, scale, 0, size / 2f, size / 2f, livingEntity);
+            InventoryScreen.extractEntityInInventoryFollowsMouse(graphics, 0, 0, size, size, scale, 0, size / 2f, size / 2f, livingEntity);
             return;
           } catch (Exception e) {
             Mantle.logger.error("Error drawing entity " + BuiltInRegistries.ENTITY_TYPE.getKey(type), e);
@@ -96,10 +93,9 @@ public class EntityIngredientRenderer implements IIngredientRenderer<EntityIngre
       }
 
       // fallback, draw a pink and black "spawn egg"
-      RenderSystem.setShader(GameRenderer::getPositionTexShader);
-      RenderSystem.setShaderColor(1, 1, 1, 1);
+      // 26.1.2: shader/blend state is owned by the GUI render pipeline, so the former RenderSystem setup calls are gone
       int offset = (size - 16) / 2;
-      graphics.blit(MISSING, offset, offset, 0, 0, 16, 16, 16, 16);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, MISSING, offset, offset, 0, 0, 16, 16, 16, 16);
     }
   }
 
