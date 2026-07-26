@@ -23,10 +23,13 @@ import java.util.Set;
 /**
  * Model that dynamically retextures a list of textures based on data from {@link slimeknights.mantle.util.RetexturedHelper}.
  * <p>
- * In 26.1.2 dynamic baked-model wrapping ({@code BakedModelWrapper}/{@code ItemOverrides}/{@code ModelData}) was removed;
- * dynamic per-state/per-item retexturing must be reimplemented on the new {@code BlockStateModel}/item model systems.
- * This port preserves the texture-name resolution and deserialization and delegates static geometry to the wrapped model.
- * reimplement dynamic retexturing on the new block/item model pipeline.
+ * In 26.1.2 dynamic baked-model wrapping ({@code BakedModelWrapper}/{@code ItemOverrides}/{@code ModelData}) was removed.
+ * This class preserves the texture-name resolution and deserialization and delegates static geometry to the wrapped model.
+ * To retexture dynamically per placed block, register a {@code CustomUnbakedBlockStateModel} in the block's blockstate JSON
+ * whose baked model extends {@link slimeknights.mantle.client.model.util.DynamicBakedWrapper} and swaps the baked variant
+ * from {@link slimeknights.mantle.util.RetexturedHelper#BLOCK_PROPERTY} in the block's {@code ModelData}; for the item form
+ * use a {@link slimeknights.mantle.client.model.util.DynamicItemModel} keyed on the stored texture. Both require the
+ * per-variant re-bake plus the blockstate/item JSON wiring, which must be validated visually in-game.
  */
 @SuppressWarnings("WeakerAccess")
 public class RetexturedModel extends DelegateUnbakedModel {

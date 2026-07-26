@@ -29,8 +29,11 @@ import java.util.List;
  * Model which uses a key in NBT to select which texture variant to load.
  * <p>
  * In 26.1.2 the item model system was rewritten ({@code ItemOverrides} removed in favor of the item model / select
- * property system). This port keeps the extra-texture registry and deserialization and renders the default layer;
- * NBT-driven variant switching must be reimplemented on the new item model select-property system.
+ * property system). This class keeps the extra-texture registry, deserialization and per-variant geometry; to switch the
+ * variant per stack, drive it from a {@link slimeknights.mantle.client.model.util.DynamicItemModel} keyed on the NBT string
+ * (registered as an item-model type via {@code RegisterItemModelsEvent}, referenced from the item's client model JSON),
+ * whose {@code bakeModel} bakes this geometry with the variant's texture. The item-model wiring must be validated visually
+ * in-game.
  */
 public class NBTKeyModel extends AbstractUnbakedModel {
   /** Model loader instance */

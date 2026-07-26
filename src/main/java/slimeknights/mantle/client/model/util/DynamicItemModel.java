@@ -48,7 +48,12 @@ public abstract class DynamicItemModel<K> implements ItemModel {
   @Nullable
   protected abstract K getCacheKey(ItemStack stack);
 
-  /** Bakes the item model for the given key using {@link #context} and {@link #transform}. */
+  /**
+   * Bakes the item model for the given key using {@link #context} and {@link #transform}. Typically this bakes the desired
+   * geometry into a {@link net.minecraft.client.resources.model.geometry.QuadCollection} (via
+   * {@link SimpleBlockModel#bakeElements} / {@link SimpleBlockModel#bakePart} with a {@link QuadTransformer} for tint) and
+   * wraps it in a {@link net.minecraft.client.renderer.item.CuboidItemModelWrapper} (the vanilla geometry-to-item model).
+   */
   protected abstract ItemModel bakeModel(K key);
 
   /** Model to render when the stack has no key (e.g. missing NBT); defaults to an empty render state. */

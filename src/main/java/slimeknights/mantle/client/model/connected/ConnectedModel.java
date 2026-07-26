@@ -33,10 +33,12 @@ import java.util.function.Function;
  * Model that handles generating variants for connected textures.
  * <p>
  * In 26.1.2 the dynamic model-data pipeline ({@code ModelData}/{@code ModelProperty}/{@code BakedModelWrapper}) and the
- * mutable {@code BlockElement} representation were removed, so per-state connection rebaking must be reimplemented on the
- * new {@code BlockStateModel}/{@code DynamicBlockStateModel} system. This port preserves the deserialization, the
- * connection registry hookup, and the pure connection bit math, delegating static geometry to the wrapped model.
- * reimplement dynamic connected rebaking on the new block state model pipeline.
+ * mutable {@code BlockElement} representation were removed. This class preserves the deserialization, the connection
+ * registry hookup, and the pure connection bit math, delegating static geometry to the wrapped model. To connect textures
+ * dynamically, register a {@code CustomUnbakedBlockStateModel} whose baked model extends
+ * {@link slimeknights.mantle.client.model.util.DynamicBakedWrapper} and, from the connection bits in the block's
+ * {@code ModelData}, selects the pre-baked connected variant. The per-connection re-bake plus the blockstate JSON wiring
+ * must be validated visually in-game.
  */
 public class ConnectedModel extends DelegateUnbakedModel {
   /** Loader instance */
