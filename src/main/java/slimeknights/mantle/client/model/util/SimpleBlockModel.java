@@ -113,6 +113,22 @@ public class SimpleBlockModel extends AbstractUnbakedModel {
   }
 
   /**
+   * Bakes a single model element and applies the given quad transformer to the result. Useful for dynamic models that
+   * need to tint or make emissive individual parts (e.g. Tinkers material blocks), replacing the old {@code bakePart}
+   * that mutated a baked model builder.
+   * @param element      Element to bake
+   * @param textureSlots Resolved texture slots
+   * @param baker        Model baker
+   * @param transform    Model state
+   * @param name         Debug name
+   * @param transformer  Transformer applied to the baked quads (e.g. {@link QuadTransformer#applyingColor(int)})
+   * @return  Baked, transformed quad collection for the element
+   */
+  public static QuadCollection bakePart(CuboidModelElement element, TextureSlots textureSlots, ModelBaker baker, ModelState transform, ModelDebugName name, QuadTransformer transformer) {
+    return transformer.process(UnbakedCuboidGeometry.bake(List.of(element), textureSlots, baker, transform, name));
+  }
+
+  /**
    * Bakes this model's elements into a quad collection.
    * @param textureSlots Resolved texture slots
    * @param baker        Model baker

@@ -30,9 +30,10 @@ import java.util.Map;
 /**
  * Block model for setting color, luminosity, and per element uv lock. Similar to {@link MantleItemLayerModel} but for blocks.
  * <p>
- * In 26.1.2 the vanilla baked quad became immutable and stores emissivity ("light emission") directly on the element, and
- * per-vertex color has no direct equivalent (coloring is handled by tint indices / block colors). This port preserves the
- * emissivity behavior by overriding the element light emission; the static per-vertex color is left as a TODO.
+ * In 26.1.2 the vanilla baked quad became immutable and stores emissivity ("light emission") directly on the element.
+ * Static per-vertex color is expressed through NeoForge's {@link net.neoforged.neoforge.client.model.quad.BakedColors}
+ * field on the quad; {@link #applyColorQuadTransformer(int)} builds a reusable {@link QuadTransformer} for that, and
+ * emissivity is applied by overriding the element light emission during baking.
  */
 @SuppressWarnings("unused")  // API
 public class ColoredBlockModel extends SimpleBlockModel {
@@ -61,36 +62,52 @@ public class ColoredBlockModel extends SimpleBlockModel {
   }
 
   /**
-   * Applies the color data to the model elements, overriding emissivity where requested.
-   * static per-vertex color and per-element uv lock are not yet reimplemented on the new immutable BakedQuad pipeline.
+   * Applies the requested light emission (emissivity) to a single element, returning a copy if changed.
+   * Per-element uv lock now follows the model state's face transformation, so it is not overridden here.
    */
-  private static List<CuboidModelElement> applyColorData(List<CuboidModelElement> elements, List<ColorData> colorData) {
+  private static CuboidModelElement withEmissivity(CuboidModelElement part, ColorData colors) {
+    int emissivity = colors.luminosity;
+    if (emissivity >= 0 && emissivity != part.lightEmission()) {
+      return new CuboidModelElement(part.from(), part.to(), part.faces(), part.rotation(), part.shade(), emissivity);
+    }
+    return part;
+  }
+
+  /**
+   * Bakes the given elements applying per-part color and emissivity. Each element is baked individually so its own
+   * {@link ColorData#color()} can be applied as a static color modulator on the resulting quads.
+   */
+  public static QuadCollection bakeColored(List<CuboidModelElement> elements, List<ColorData> colorData, TextureSlots textureSlots, ModelBaker baker, ModelState transform, ModelDebugName name) {
     if (colorData.isEmpty()) {
-      return elements;
+      return UnbakedCuboidGeometry.bake(elements, textureSlots, baker, transform, name);
     }
+    QuadCollection.Builder builder = new QuadCollection.Builder();
     int size = elements.size();
-    List<CuboidModelElement> result = new ArrayList<>(size);
     for (int i = 0; i < size; i++) {
-      CuboidModelElement part = elements.get(i);
       ColorData colors = LogicHelper.getOrDefault(colorData, i, ColorData.DEFAULT);
-      int emissivity = colors.luminosity;
-      if (emissivity >= 0 && emissivity != part.lightEmission()) {
-        part = new CuboidModelElement(part.from(), part.to(), part.faces(), part.rotation(), part.shade(), emissivity);
-      }
-      result.add(part);
+      CuboidModelElement part = withEmissivity(elements.get(i), colors);
+      QuadCollection baked = UnbakedCuboidGeometry.bake(List.of(part), textureSlots, baker, transform, name);
+      builder.addAll(applyColorQuadTransformer(colors.color).process(baked));
     }
-    return result;
+    return builder.build();
+  }
+
+  /**
+   * Creates a reusable transformer applying the given ARGB color as a static per-quad color modulator. Fully opaque white
+   * ({@code -1}) is a no-op. Consumers (e.g. Tinkers material models) apply this to the quads produced when baking parts.
+   */
+  public static QuadTransformer applyColorQuadTransformer(int color) {
+    return QuadTransformer.applyingColor(color);
   }
 
   @Override
   public UnbakedGeometry geometry() {
-    List<CuboidModelElement> elements = applyColorData(getElements(), colorData);
-    return (textureSlots, baker, state, name) -> UnbakedCuboidGeometry.bake(elements, textureSlots, baker, state, name);
+    return (textureSlots, baker, state, name) -> bakeColored(getElements(), colorData, textureSlots, baker, state, name);
   }
 
   @Override
   public QuadCollection bake(TextureSlots textureSlots, ModelBaker baker, ModelState transform, ModelDebugName name) {
-    return UnbakedCuboidGeometry.bake(applyColorData(getElements(), colorData), textureSlots, baker, transform, name);
+    return bakeColored(getElements(), colorData, textureSlots, baker, transform, name);
   }
 
   /**
