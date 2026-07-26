@@ -1,14 +1,17 @@
 package slimeknights.mantle.recipe.ingredient;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -16,9 +19,8 @@ import slimeknights.mantle.recipe.MantleRecipes;
 import slimeknights.mantle.recipe.helper.LoadableIngredientSerializer;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /** Ingredient that shows all potion variants on the displayed item list */
 public class PotionDisplayIngredient extends ItemIngredient {
@@ -49,8 +51,27 @@ public class PotionDisplayIngredient extends ItemIngredient {
     return true;
   }
 
-  // TODO(26.1.2): items() now returns Stream<Holder<Item>>, so we can no longer emit one displayed stack per potion variant here.
-  // Showing all potion variants in JEI would need a custom display() override.
+  /** Builds a display stack for the given item carrying the given potion */
+  private static ItemStack withPotion(Holder<Item> item, Potion potion) {
+    ItemStack stack = new ItemStack(item);
+    stack.set(DataComponents.POTION_CONTENTS, new PotionContents(BuiltInRegistries.POTION.wrapAsHolder(potion)));
+    return stack;
+  }
+
+  @Override
+  public SlotDisplay display() {
+    // show every non-water potion variant on each matched item
+    List<Holder<Item>> baseItems = items().toList();
+    List<SlotDisplay> displays = new ArrayList<>();
+    BuiltInRegistries.POTION.stream()
+                            .filter(potion -> potion != Potions.WATER.value())
+                            .forEach(potion -> {
+                              for (Holder<Item> item : baseItems) {
+                                displays.add(new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(withPotion(item, potion))));
+                              }
+                            });
+    return new SlotDisplay.Composite(displays);
+  }
 
   @Override
   public IngredientType<?> getType() {

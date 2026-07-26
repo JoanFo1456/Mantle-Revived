@@ -13,12 +13,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
+import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
 import slimeknights.mantle.util.JsonHelper;
@@ -28,7 +29,7 @@ import java.util.function.Consumer;
 
 /** Fluid transfer info that fills a fluid into an item */
 @RequiredArgsConstructor
-public class FillFluidContainerTransfer implements IFluidContainerTransfer.WithDirection {
+public class FillFluidContainerTransfer implements IFluidContainerTransfer {
   public static final Identifier ID = Mantle.getResource("fill_item");
 
   private final Ingredient input;
@@ -54,15 +55,15 @@ public class FillFluidContainerTransfer implements IFluidContainerTransfer.WithD
 
   @Nullable
   @Override
-  public TransferResult transfer(ItemStack stack, FluidStack fluid, IFluidHandler handler, TransferDirection direction) {
+  public TransferResult transfer(ItemStack stack, FluidStack fluid, ResourceHandler<FluidResource> handler, TransferDirection direction) {
     if (!direction.canFill()) {
       return null;
     }
     int amount = this.fluid.getAmount(fluid.getFluid());
     FluidStack toDrain = fluid.copyWithAmount(amount);
-    FluidStack simulated = handler.drain(toDrain.copy(), FluidAction.SIMULATE);
+    FluidStack simulated = FluidTransferHelper.drain(handler, toDrain, false);
     if (simulated.getAmount() == amount) {
-      FluidStack actual = handler.drain(toDrain.copy(), FluidAction.EXECUTE);
+      FluidStack actual = FluidTransferHelper.drain(handler, toDrain, true);
       if (actual.getAmount() != amount) {
         Mantle.logger.error("Wrong amount drained from {}, expected {}, filled {}", BuiltInRegistries.ITEM.getKey(stack.getItem()), fluid.getAmount(), actual.getAmount());
       }

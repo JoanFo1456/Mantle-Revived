@@ -13,12 +13,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
+import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.util.JsonHelper;
@@ -28,7 +29,7 @@ import java.util.function.Consumer;
 
 /** Fluid transfer info that empties a fluid from an item */
 @RequiredArgsConstructor
-public class EmptyFluidContainerTransfer implements IFluidContainerTransfer.WithDirection {
+public class EmptyFluidContainerTransfer implements IFluidContainerTransfer {
   public static final Identifier ID = Mantle.getResource("empty_item");
 
   protected final Ingredient input;
@@ -60,14 +61,14 @@ public class EmptyFluidContainerTransfer implements IFluidContainerTransfer.With
 
   @Nullable
   @Override
-  public TransferResult transfer(ItemStack stack, FluidStack fluid, IFluidHandler handler, TransferDirection direction) {
+  public TransferResult transfer(ItemStack stack, FluidStack fluid, ResourceHandler<FluidResource> handler, TransferDirection direction) {
     if (!direction.canEmpty()) {
       return null;
     }
     FluidStack contained = getFluid(stack);
-    int simulated = handler.fill(contained.copy(), FluidAction.SIMULATE);
+    int simulated = FluidTransferHelper.fill(handler, contained, false);
     if (simulated == contained.getAmount()) {
-      int actual = handler.fill(contained.copy(), FluidAction.EXECUTE);
+      int actual = FluidTransferHelper.fill(handler, contained, true);
       if (actual > 0) {
         if (actual != this.fluid.getAmount()) {
           Mantle.logger.error("Wrong amount filled from {}, expected {}, filled {}", BuiltInRegistries.ITEM.getKey(stack.getItem()), this.fluid.getAmount(), actual);

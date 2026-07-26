@@ -1,14 +1,17 @@
 package slimeknights.mantle.recipe.ingredient;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +23,6 @@ import slimeknights.mantle.recipe.helper.LoadableIngredientSerializer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 /** Simple ingredient checking for an item with a specific potion */
 public class PotionIngredient extends ItemIngredient {
@@ -63,8 +65,20 @@ public class PotionIngredient extends ItemIngredient {
     return false;
   }
 
-  // TODO(26.1.2): items() now returns Stream<Holder<Item>>, so we can no longer attach the potion component to displayed stacks here.
-  // Potion display would need a custom display() override if JEI display fidelity is required.
+  /** Builds a display stack for the given item carrying this ingredient's potion */
+  private ItemStack withPotion(Holder<Item> item) {
+    ItemStack stack = new ItemStack(item);
+    stack.set(DataComponents.POTION_CONTENTS, new PotionContents(BuiltInRegistries.POTION.wrapAsHolder(potion)));
+    return stack;
+  }
+
+  @Override
+  public SlotDisplay display() {
+    // items() only yields the base items/tag; attach the potion component so recipe viewers show the correct potion
+    return new SlotDisplay.Composite(items()
+      .<SlotDisplay>map(item -> new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(withPotion(item))))
+      .toList());
+  }
 
   @Override
   public IngredientType<?> getType() {
