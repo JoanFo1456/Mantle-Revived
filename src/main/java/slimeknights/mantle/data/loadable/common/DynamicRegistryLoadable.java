@@ -3,9 +3,11 @@ package slimeknights.mantle.data.loadable.common;
 import com.google.gson.JsonSyntaxException;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.CommonHooks;
@@ -44,8 +46,24 @@ public record DynamicRegistryLoadable<T>(ResourceKey<? extends Registry<T>> regi
   @Override
   public T decode(FriendlyByteBuf buffer, TypedMap context) {
     ResourceLocation name = buffer.readResourceLocation();
+    // The decode context is typically empty on the network thread, and dynamic registries (e.g.
+    // minecraft:enchantment) cannot be resolved via CommonHooks there - it only sees static/built-in
+    // registries, so the lookup fails while joining a world. Mantle packets use RegistryFriendlyByteBuf,
+    // which carries the connection's registry access; prefer that to resolve the registry.
+    HolderLookup.Provider provider = context.get(ContextKey.REGISTRY_ACCESS);
+    if (provider == null && buffer instanceof RegistryFriendlyByteBuf registryBuffer) {
+      provider = registryBuffer.registryAccess();
+    }
     try {
-      return fromKey(name, "packet", context);
+      HolderLookup.RegistryLookup<T> lookup = provider == null
+        ? CommonHooks.resolveLookup(registryKey)
+        : provider.lookup(registryKey).orElse(null);
+      if (lookup == null) {
+        throw new JsonSyntaxException("Unable to parse packet as registry " + registryKey.location() + " cannot be located");
+      }
+      return lookup.get(ResourceKey.create(registryKey, name))
+        .map(Holder::value)
+        .orElseThrow(() -> new JsonSyntaxException("Unable to parse packet as registry " + registryKey.location() + " does not contain ID " + name));
     } catch (JsonSyntaxException e) {
       throw new DecoderException(e);
     }
