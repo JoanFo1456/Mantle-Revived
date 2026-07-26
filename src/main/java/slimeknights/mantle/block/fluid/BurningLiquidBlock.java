@@ -1,12 +1,15 @@
 package slimeknights.mantle.block.fluid;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import slimeknights.mantle.registration.deferred.FluidDeferredRegister;
 
@@ -25,13 +28,15 @@ public class BurningLiquidBlock extends LiquidBlock {
     this.damage = damage;
   }
 
-  @SuppressWarnings("deprecation")  // useless annotation on block methods
   @Override
-  public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-    if (!entity.fireImmune() && entity.getFluidTypeHeight(this.fluid.getFluidType()) > 0) {
+  protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+    // in 26.1.2 there is no per-fluid-type submersion height on the entity; check that the entity is below this block's fluid surface instead
+    FluidState fluidState = state.getFluidState();
+    if (!entity.fireImmune() && !fluidState.isEmpty() && entity.getY() < pos.getY() + fluidState.getHeight(level, pos)) {
       entity.igniteForSeconds(burnTime);
-      if (entity.hurt(entity.damageSources().lava(), damage)) {
-        entity.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + level.random.nextFloat() * 0.4F);
+      // hurt() no longer returns whether damage applied; use the server-side variant to preserve the "only play sound when damaged" behavior
+      if (level instanceof ServerLevel server && entity.hurtServer(server, entity.damageSources().lava(), damage)) {
+        entity.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + level.getRandom().nextFloat() * 0.4F);
       }
     }
   }

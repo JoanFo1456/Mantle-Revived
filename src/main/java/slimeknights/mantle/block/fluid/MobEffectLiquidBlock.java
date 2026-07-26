@@ -3,11 +3,13 @@ package slimeknights.mantle.block.fluid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import slimeknights.mantle.registration.deferred.FluidDeferredRegister;
 
@@ -23,8 +25,10 @@ public class MobEffectLiquidBlock extends LiquidBlock {
   }
 
   @Override
-  public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-    if (entity.getFluidTypeHeight(this.fluid.getFluidType()) > 0 && entity instanceof LivingEntity living) {
+  protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+    // in 26.1.2 there is no per-fluid-type submersion height on the entity; check that the entity is below this block's fluid surface instead
+    FluidState fluidState = state.getFluidState();
+    if (!fluidState.isEmpty() && entity.getY() < pos.getY() + fluidState.getHeight(level, pos) && entity instanceof LivingEntity living) {
       MobEffectInstance effect = this.effect.get();
       living.addEffect(effect);
     }

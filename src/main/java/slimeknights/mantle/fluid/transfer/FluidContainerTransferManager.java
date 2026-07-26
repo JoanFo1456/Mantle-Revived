@@ -2,14 +2,19 @@ package slimeknights.mantle.fluid.transfer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
@@ -36,14 +41,15 @@ import java.util.function.Consumer;
 
 /** Logic for filling and emptying fluid containers that are not fluid handlers */
 @Log4j2
-public class FluidContainerTransferManager extends SimpleJsonResourceReloadListener {
+public class FluidContainerTransferManager extends SimpleJsonResourceReloadListener<JsonElement> {
   /** Map of all modifier types that are expected to load in data packs */
   public static final GenericRegisteredSerializer<IFluidContainerTransfer> TRANSFER_LOADERS = new GenericRegisteredSerializer<>();
   /** Folder for saving the logic */
   public static final String FOLDER = "mantle/fluid_transfer";
   /** GSON instance */
   public static final Gson GSON = (new GsonBuilder())
-    .registerTypeAdapter(Identifier.class, new Identifier.Serializer())
+    .registerTypeAdapter(Identifier.class, (JsonSerializer<Identifier>) (src, type, ctx) -> new JsonPrimitive(src.toString()))
+    .registerTypeAdapter(Identifier.class, (JsonDeserializer<Identifier>) (json, type, ctx) -> Identifier.parse(json.getAsString()))
     .registerTypeHierarchyAdapter(IFluidContainerTransfer.class, TRANSFER_LOADERS)
     .setPrettyPrinting()
     .disableHtmlEscaping()
@@ -62,7 +68,9 @@ public class FluidContainerTransferManager extends SimpleJsonResourceReloadListe
   private IContext context = IContext.EMPTY;
 
   private FluidContainerTransferManager() {
-    super(GSON, FOLDER);
+    // in 26.1.2 SimpleJsonResourceReloadListener is generic; keep raw-JSON handling by using ExtraCodecs.JSON as the element codec.
+    // The custom GSON above is still used to deserialize the JsonElements into IFluidContainerTransfer instances in loadFluidTransfer.
+    super(ExtraCodecs.JSON, FileToIdConverter.json(FOLDER));
   }
 
   /** Lazily initializes the set of container items */

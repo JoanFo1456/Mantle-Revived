@@ -4,13 +4,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
@@ -23,8 +24,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.util.TranslationHelper;
 
@@ -73,18 +74,17 @@ public class GaugeBlock extends Block {
       Direction side = state.getValue(FACING);
       BlockEntity te = world.getBlockEntity(pos.relative(side.getOpposite()));
       if (te != null) {
-        IFluidHandler handler = world.getCapability(Capabilities.FluidHandler.BLOCK, pos.relative(side.getOpposite()), side);
-        if (handler == null) {
-          handler = EmptyFluidHandler.INSTANCE;
-        }
-        if (handler.getTanks() > 0) {
-          FluidStack fluid = handler.getFluidInTank(0);
-          if (fluid.isEmpty()) {
+        ResourceHandler<FluidResource> handler = world.getCapability(Capabilities.Fluid.BLOCK, pos.relative(side.getOpposite()), side);
+        if (handler != null && handler.size() > 0) {
+          FluidResource resource = handler.getResource(0);
+          int capacity = handler.getCapacityAsInt(0, resource);
+          if (resource.isEmpty()) {
             // show simple empty message if gauge amount is hidden
-            player.displayClientMessage(formatCapacity(handler.getTankCapacity(0)), true);
+            player.sendOverlayMessage(formatCapacity(capacity));
           } else {
-            Component contents = Component.translatable(CONTENTS_FORMAT, COMMA_FORMAT.format(fluid.getAmount()), COMMA_FORMAT.format(handler.getTankCapacity(0)), fluid.getDisplayName());
-            player.displayClientMessage(Component.translatable(CONTENTS_KEY, contents), true);
+            FluidStack fluid = resource.toStack(handler.getAmountAsInt(0));
+            Component contents = Component.translatable(CONTENTS_FORMAT, COMMA_FORMAT.format(fluid.getAmount()), COMMA_FORMAT.format(capacity), fluid.getHoverName());
+            player.sendOverlayMessage(Component.translatable(CONTENTS_KEY, contents));
           }
         }
       }
@@ -108,7 +108,7 @@ public class GaugeBlock extends Block {
   @Override
   public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
     Direction direction = state.getValue(FACING);
-    return world instanceof Level level && level.getCapability(Capabilities.FluidHandler.BLOCK, pos.relative(direction.getOpposite()), direction) != null;
+    return world instanceof Level level && level.getCapability(Capabilities.Fluid.BLOCK, pos.relative(direction.getOpposite()), direction) != null;
   }
 
   @Override
@@ -131,8 +131,8 @@ public class GaugeBlock extends Block {
   @SuppressWarnings("deprecation")
   @Deprecated
   @Override
-  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-    return facing.getOpposite() == state.getValue(FACING) && !state.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : state;
+  protected BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess scheduledTickAccess, BlockPos currentPos, Direction facing, BlockPos facingPos, BlockState facingState, RandomSource random) {
+    return facing.getOpposite() == state.getValue(FACING) && !state.canSurvive(world, currentPos) ? Blocks.AIR.defaultBlockState() : state;
   }
 
   @Override

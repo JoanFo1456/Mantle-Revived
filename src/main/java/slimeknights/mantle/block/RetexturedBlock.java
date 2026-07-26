@@ -1,11 +1,8 @@
 package slimeknights.mantle.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -17,7 +14,6 @@ import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.mantle.util.RetexturedHelper;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * Logic for a retexturable block. Use alongside {@link IRetexturedBlockEntity} and {@link RetexturedHelper}
@@ -35,14 +31,13 @@ public abstract class RetexturedBlock extends Block implements EntityBlock {
   }
 
   @Override
-  public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+  protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
     return level instanceof BlockGetter blockGetter ? getPickBlock(blockGetter, pos, state) : new ItemStack(state.getBlock());
   }
 
-  @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-    RetexturedHelper.addTooltip(stack, tooltip, flag);
-  }
+  // Note: Block#appendHoverText no longer exists in 26.1.2 (BlockItem no longer delegates tooltips to the block).
+  // The retextured tooltip is now contributed on the item side; downstream block items should call
+  // RetexturedHelper#addTooltip (see BlockTooltipItem) to show the retextured block name.
 
 
   /* Utils */

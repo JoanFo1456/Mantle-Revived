@@ -2,6 +2,7 @@ package slimeknights.mantle.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
@@ -16,8 +17,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import slimeknights.mantle.block.entity.INameableMenuProvider;
 import slimeknights.mantle.inventory.BaseContainerMenu;
 
@@ -95,47 +96,26 @@ public abstract class InventoryBlock extends Block implements EntityBlock {
 
   /* Inventory handling */
 
-  @SuppressWarnings("deprecation")
-  @Deprecated
   @Override
-  public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (state.getBlock() != newState.getBlock()) {
-      BlockEntity te = worldIn.getBlockEntity(pos);
-      if (te != null) {
-        IItemHandler inventory = worldIn.getCapability(Capabilities.ItemHandler.BLOCK, pos, null);
-        if (inventory != null) {
-          dropInventoryItems(state, worldIn, pos, inventory);
-        }
-        worldIn.updateNeighbourForOutputSignal(pos, this);
-      }
-    }
-
-    super.onRemove(state, worldIn, pos, newState, isMoving);
-  }
-
-  /**
-   * Called when the block is replaced to drop contained items.
-   * @param state       Block state
-   * @param worldIn     Tile world
-   * @param pos         Tile position
-   * @param inventory   Item handler
-   */
-  protected void dropInventoryItems(BlockState state, Level worldIn, BlockPos pos, IItemHandler inventory) {
-    dropInventoryItems(worldIn, pos, inventory);
+  protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+    // in 26.1.2 the block entity is already removed by the time this runs, so contained items are dropped by the
+    // block entity's Container#preRemoveSideEffects (all Mantle inventory block entities implement Container).
+    // here we only need to notify comparators, replacing the old updateNeighbourForOutputSignal call.
+    Containers.updateNeighboursAfterDestroy(state, level, pos);
   }
 
   /**
    * Drops all items from the given inventory in world
    * @param world      World instance
    * @param pos        Position to drop
-   * @param inventory  Inventory instance
+   * @param inventory  Item handler
    */
-  public static void dropInventoryItems(Level world, BlockPos pos, IItemHandler inventory) {
+  public static void dropInventoryItems(Level world, BlockPos pos, ResourceHandler<ItemResource> inventory) {
     double x = pos.getX();
     double y = pos.getY();
     double z = pos.getZ();
-    for(int i = 0; i < inventory.getSlots(); ++i) {
-      Containers.dropItemStack(world, x, y, z, inventory.getStackInSlot(i));
+    for (int i = 0; i < inventory.size(); ++i) {
+      Containers.dropItemStack(world, x, y, z, inventory.getResource(i).toStack(inventory.getAmountAsInt(i)));
     }
   }
 

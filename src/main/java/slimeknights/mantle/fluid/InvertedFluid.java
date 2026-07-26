@@ -8,10 +8,10 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -41,7 +41,16 @@ public abstract class InvertedFluid extends BaseFlowingFluid {
     return state.isEmpty() || state.getType().isSame(this);
   }
 
-  private void spreadToSides(Level level, BlockPos pos, FluidState fluidState, BlockState blockState) {
+  /**
+   * Reimplements the {@code canSpreadTo} check removed from FlowingFluid in 26.1.2.
+   * Combines the block-passage check with the "can be replaced" check, matching the new vanilla spread primitives.
+   */
+  private boolean canSpreadTo(BlockGetter level, BlockPos pos, BlockState state, Direction direction, BlockPos spreadPos, BlockState spreadState, FluidState spreadFluid, Fluid fluid) {
+    return this.canPassThrough(level, fluid, pos, state, direction, spreadPos, spreadState, spreadFluid)
+      && spreadFluid.canBeReplacedWith(level, spreadPos, fluid, direction);
+  }
+
+  private void spreadToSides(ServerLevel level, BlockPos pos, FluidState fluidState, BlockState blockState) {
     int amount = fluidState.getAmount() - this.getDropOff(level);
     if (fluidState.getValue(FALLING)) {
       amount = 7;
@@ -160,10 +169,9 @@ public abstract class InvertedFluid extends BaseFlowingFluid {
   }
 
   @Override
-  protected void spread(Level level, BlockPos pos, FluidState fluid) {
+  protected void spread(ServerLevel level, BlockPos pos, BlockState block, FluidState fluid) {
     // recreation that swaps downs for ups
     if (!fluid.isEmpty()) {
-      BlockState block = level.getBlockState(pos);
       BlockPos above = pos.above();
       BlockState aboveBlock = level.getBlockState(above);
       FluidState aboveFluid = this.getNewLiquid(level, above, aboveBlock);
@@ -179,7 +187,7 @@ public abstract class InvertedFluid extends BaseFlowingFluid {
   }
 
   @Override
-  protected FluidState getNewLiquid(Level level, BlockPos pos, BlockState block) {
+  protected FluidState getNewLiquid(ServerLevel level, BlockPos pos, BlockState block) {
     int maxSide = 0;
     int sourceSides = 0;
 
@@ -188,7 +196,8 @@ public abstract class InvertedFluid extends BaseFlowingFluid {
       BlockState sideBlock = level.getBlockState(side);
       FluidState sideFluid = sideBlock.getFluidState();
       if (sideFluid.getType().isSame(this) && this.canPassThroughWall(direction, level, pos, block, side, sideBlock)) {
-        if (sideFluid.isSource() && sideFluid.canConvertToSource(level, side) && EventHooks.canCreateFluidSource(level, side, sideBlock)) {
+        // 26.1.2 dropped FluidState#canConvertToSource; new vanilla getNewLiquid only gates on the source-creation event
+        if (sideFluid.isSource() && EventHooks.canCreateFluidSource(level, side, sideBlock)) {
           sourceSides++;
         }
         maxSide = Math.max(maxSide, sideFluid.getAmount());
@@ -214,8 +223,9 @@ public abstract class InvertedFluid extends BaseFlowingFluid {
   }
 
 
-  @Override
-  protected int getSlopeDistance(LevelReader level, BlockPos spreadPos, int distance, Direction direction, BlockState spreadBlock, BlockPos sourcePos, Short2ObjectMap<Pair<BlockState, FluidState>> stateCache, Short2BooleanMap waterHoleCache) {
+  // NOTE: in 26.1.2 FlowingFluid#getSlopeDistance takes a package-private FlowingFluid.SpreadContext (whose ctor is inaccessible to
+  // subclasses), so we keep our own cache-based slope search rather than overriding it. It is only invoked from our getSpread override.
+  private int getSlopeDistance(LevelReader level, BlockPos spreadPos, int distance, Direction direction, BlockState spreadBlock, BlockPos sourcePos, Short2ObjectMap<Pair<BlockState, FluidState>> stateCache, Short2BooleanMap waterHoleCache) {
     int minSlope = 1000;
 
     for (Direction horizontal : Direction.Plane.HORIZONTAL) {
@@ -257,7 +267,7 @@ public abstract class InvertedFluid extends BaseFlowingFluid {
   }
 
   @Override
-  protected Map<Direction, FluidState> getSpread(Level level, BlockPos pos, BlockState block) {
+  protected Map<Direction, FluidState> getSpread(ServerLevel level, BlockPos pos, BlockState block) {
     int minDistance = 1000;
     Map<Direction, FluidState> spread = Maps.newEnumMap(Direction.class);
     Short2ObjectMap<Pair<BlockState, FluidState>> stateCache = new Short2ObjectOpenHashMap<>();
