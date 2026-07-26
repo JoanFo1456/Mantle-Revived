@@ -287,7 +287,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
     ShapedRecipeBuilder.shaped(items(), RecipeCategory.DECORATIONS, wood.getHangingSign(), 6)
                        .group("hanging_sign")
                        .define('#', wood.getStrippedLog())
-                       .define('X', Items.CHAIN)
+                       .define('X', Items.IRON_CHAIN)
                        .pattern("X X").pattern("###").pattern("###")
                        .unlockedBy("has_stripped_logs", has(wood.getStrippedLog()))
                        .save(VanillaFinishedRecipe.output(consumer), key(location(folder + "hanging_sign")));

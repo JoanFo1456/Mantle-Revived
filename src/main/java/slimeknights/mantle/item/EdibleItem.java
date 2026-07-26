@@ -9,9 +9,15 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import slimeknights.mantle.util.TranslationHelper;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class EdibleItem extends Item {
   public EdibleItem(FoodProperties foodIn) {
@@ -23,15 +29,17 @@ public class EdibleItem extends Item {
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-    TranslationHelper.addOptionalTooltip(stack, tooltip);
-    // TODO: use ContainerFoodItem helper for more potion like effects?
-    FoodProperties food = stack.get(DataComponents.FOOD);
-    if (food != null) {
-      for (FoodProperties.PossibleEffect possibleEffect : food.effects()) {
-        MobEffectInstance effect = possibleEffect.effect();
-        if (effect != null) {
-          tooltip.add(Component.literal(I18n.get(effect.getDescriptionId()).trim()).withStyle(ChatFormatting.GRAY));
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flagIn) {
+    List<Component> optional = new ArrayList<>();
+    TranslationHelper.addOptionalTooltip(stack, optional);
+    optional.forEach(tooltip);
+    Consumable consumable = stack.get(DataComponents.CONSUMABLE);
+    if (consumable != null) {
+      for (ConsumeEffect consumeEffect : consumable.onConsumeEffects()) {
+        if (consumeEffect instanceof ApplyStatusEffectsConsumeEffect applyEffects) {
+          for (MobEffectInstance effect : applyEffects.effects()) {
+            tooltip.accept(Component.literal(I18n.get(effect.getDescriptionId()).trim()).withStyle(ChatFormatting.GRAY));
+          }
         }
       }
     }

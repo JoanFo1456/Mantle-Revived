@@ -32,7 +32,7 @@ public class TagPreferenceLootEntry extends LootPoolSingletonContainer {
   }
 
   @Override
-  public MapCodec<? extends LootPoolEntryContainer> codec() {
+  public MapCodec<? extends LootPoolSingletonContainer> codec() {
     return CODEC;
   }
 

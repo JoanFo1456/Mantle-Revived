@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
@@ -145,7 +147,8 @@ public abstract class SingleItemHandler<T extends MantleBlockEntity> implements 
     CompoundTag nbt = new CompoundTag();
     if (!stack.isEmpty()) {
       HolderLookup.Provider registries = parent.getLevel() != null ? parent.getLevel().registryAccess() : HolderLookup.Provider.create(Stream.empty());
-      nbt = (CompoundTag) stack.save(registries, nbt);
+      Tag saved = ItemStack.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), stack).getOrThrow();
+      nbt = (CompoundTag) saved;
     }
     return nbt;
   }
@@ -156,6 +159,6 @@ public abstract class SingleItemHandler<T extends MantleBlockEntity> implements 
    */
   public void readFromNBT(CompoundTag nbt) {
     HolderLookup.Provider registries = parent.getLevel() != null ? parent.getLevel().registryAccess() : HolderLookup.Provider.create(Stream.empty());
-    stack = ItemStack.parseOptional(registries, nbt);
+    stack = ItemStack.OPTIONAL_CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), nbt).result().orElse(ItemStack.EMPTY);
   }
 }

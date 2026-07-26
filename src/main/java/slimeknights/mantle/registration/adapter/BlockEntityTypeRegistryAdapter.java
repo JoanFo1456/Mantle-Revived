@@ -51,7 +51,7 @@ public class BlockEntityTypeRegistryAdapter extends RegistryAdapter<BlockEntityT
    */
   @SuppressWarnings("ConstantConditions")
   public <T extends BlockEntity> BlockEntityType<T> register(BlockEntitySupplier<? extends T> factory, Block block, String name) {
-    return register(BlockEntityType.Builder.<T>of(factory, block).build(getType(name)), name);
+    return register(new BlockEntityType<>(factory, Set.of(block)), name);
   }
 
   /**
@@ -64,7 +64,7 @@ public class BlockEntityTypeRegistryAdapter extends RegistryAdapter<BlockEntityT
    */
   @SuppressWarnings("ConstantConditions")
   public <T extends BlockEntity> BlockEntityType<T> register(BlockEntitySupplier<? extends T> factory, Collection<? extends Block> blocks, String name) {
-    return register(new BlockEntityType<>(factory, Set.copyOf(blocks), getType(name)), name);
+    return register(new BlockEntityType<>(factory, Set.copyOf(blocks)), name);
   }
 
   /**

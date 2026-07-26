@@ -58,7 +58,7 @@ public class RetexturedLootFunction extends LootItemConditionalFunction {
   }
 
   @Override
-  public MapCodec<? extends LootItemFunction> codec() {
+  public MapCodec<? extends LootItemConditionalFunction> codec() {
     return CODEC;
   }
 }

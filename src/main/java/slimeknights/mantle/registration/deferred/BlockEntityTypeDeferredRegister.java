@@ -45,7 +45,7 @@ public class BlockEntityTypeDeferredRegister extends DeferredRegisterWrapper<Blo
    */
   @SuppressWarnings("ConstantConditions")
   public <T extends BlockEntity> DeferredHolder<BlockEntityType<?>,BlockEntityType<T>> register(String name, BlockEntitySupplier<? extends T> factory, Supplier<? extends Block> block) {
-    return register.register(name, () ->  BlockEntityType.Builder.<T>of(factory, block.get()).build(getType(name)));
+    return register.register(name, () ->  new BlockEntityType<>(factory, ImmutableSet.of(block.get())));
   }
 
   /**
@@ -58,7 +58,7 @@ public class BlockEntityTypeDeferredRegister extends DeferredRegisterWrapper<Blo
    */
   @SuppressWarnings("ConstantConditions")
   public <T extends BlockEntity> DeferredHolder<BlockEntityType<?>,BlockEntityType<T>> register(String name, BlockEntitySupplier<? extends T> factory, EnumObject<?, ? extends Block> blocks) {
-    return register.register(name, () ->  new BlockEntityType<>(factory, ImmutableSet.copyOf(blocks.values()), getType(name)));
+    return register.register(name, () ->  new BlockEntityType<>(factory, ImmutableSet.copyOf(blocks.values())));
   }
 
   /**
@@ -74,7 +74,7 @@ public class BlockEntityTypeDeferredRegister extends DeferredRegisterWrapper<Blo
     return register.register(name, () ->  {
       ImmutableSet.Builder<Block> blocks = ImmutableSet.builder();
       blockCollector.accept(blocks);
-      return new BlockEntityType<>(factory, blocks.build(), getType(name));
+      return new BlockEntityType<>(factory, blocks.build());
     });
   }
 }

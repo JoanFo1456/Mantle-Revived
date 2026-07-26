@@ -13,8 +13,10 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import slimeknights.mantle.loot.MantleLoot;
 
 import java.util.List;
@@ -47,16 +49,21 @@ public class SetFluidLootFunction extends LootItemConditionalFunction {
 
   @Override
   protected ItemStack run(ItemStack stack, LootContext context) {
-    IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+    int count = stack.getCount();
+    ItemAccess access = ItemAccess.forStack(stack.copyWithCount(1));
+    ResourceHandler<FluidResource> handler = access.getCapability(Capabilities.Fluid.ITEM);
     if (handler != null) {
-      handler.fill(fluid.copy(), FluidAction.EXECUTE);
-      return handler.getContainer();
+      try (Transaction tx = Transaction.openRoot()) {
+        handler.insert(FluidResource.of(fluid), fluid.getAmount(), tx);
+        tx.commit();
+      }
+      return access.getResource().toStack(count);
     }
     return stack;
   }
 
   @Override
-  public MapCodec<? extends LootItemFunction> codec() {
+  public MapCodec<? extends LootItemConditionalFunction> codec() {
     return CODEC;
   }
 

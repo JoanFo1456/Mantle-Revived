@@ -41,8 +41,8 @@ public class ReplaceItemLootModifier extends LootModifier {
   /** Functions merged into a single function for ease of use */
   private final BiFunction<ItemStack, LootContext, ItemStack> combinedFunctions;
 
-  protected ReplaceItemLootModifier(LootItemCondition[] conditionsIn, Ingredient original, ItemOutput replacement, LootItemFunction[] functions) {
-    super(conditionsIn);
+  protected ReplaceItemLootModifier(LootItemCondition[] conditionsIn, int priority, Ingredient original, ItemOutput replacement, LootItemFunction[] functions) {
+    super(conditionsIn, priority);
     this.original = original;
     this.replacement = replacement;
     this.functions = functions;
@@ -90,7 +90,7 @@ public class ReplaceItemLootModifier extends LootModifier {
 
     /** Builds the final modifier */
     public ReplaceItemLootModifier build() {
-      return new ReplaceItemLootModifier(getConditions(), input, replacement, functions.toArray(new LootItemFunction[0]));
+      return new ReplaceItemLootModifier(getConditions(), IGlobalLootModifier.DEFAULT_PRIORITY, input, replacement, functions.toArray(new LootItemFunction[0]));
     }
   }
 }

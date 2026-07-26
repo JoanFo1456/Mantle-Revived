@@ -43,7 +43,7 @@ public class BaseContainerMenu<TILE extends BlockEntity> extends AbstractContain
 
   public void syncOnOpen(ServerPlayer playerOpened) {
     // find another player that already has the gui for this tile open
-    ServerLevel server = playerOpened.serverLevel();
+    ServerLevel server = (ServerLevel) playerOpened.level();
 
     for (Player player : server.players()) {
       if (player == playerOpened) {
@@ -322,6 +322,6 @@ public class BaseContainerMenu<TILE extends BlockEntity> extends AbstractContain
     if (buf == null) {
       return null;
     }
-    return FMLEnvironment.dist == Dist.CLIENT ? BlockEntityHelper.get(type, Minecraft.getInstance().level, buf.readBlockPos()).orElse(null) : null;
+    return FMLEnvironment.getDist() == Dist.CLIENT ? BlockEntityHelper.get(type, Minecraft.getInstance().level, buf.readBlockPos()).orElse(null) : null;
   }
 }

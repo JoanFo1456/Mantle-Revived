@@ -28,8 +28,8 @@ public record VanillaFinishedRecipe(Identifier getId, Recipe<?> recipe, @Nullabl
   public static RecipeOutput output(Consumer<FinishedRecipe> consumer) {
     return new RecipeOutput() {
       @Override
-      public void accept(ResourceKey<Recipe<?>> id, Recipe<?> recipe, @Nullable AdvancementHolder advancement) {
-        consumer.accept(new VanillaFinishedRecipe(id.location(), recipe, advancement));
+      public void accept(ResourceKey<Recipe<?>> id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
+        consumer.accept(new VanillaFinishedRecipe(id.identifier(), recipe, advancement));
       }
 
       @Override
