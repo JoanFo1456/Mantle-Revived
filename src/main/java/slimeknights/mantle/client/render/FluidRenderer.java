@@ -7,6 +7,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.world.level.material.FluidState;
+import net.neoforged.neoforge.client.fluid.FluidTintSource;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -26,9 +29,25 @@ public class FluidRenderer {
    * @return  Sprite location
    */
   public static TextureAtlasSprite getBlockSprite(Identifier sprite) {
-    // TODO(26.1.2): block atlas moved off ModelManager; now fetched via Minecraft#getAtlasManager (AtlasManager)
-    //   and InventoryMenu.BLOCK_ATLAS -> TextureAtlas.LOCATION_BLOCKS.
     return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(sprite);
+  }
+
+  /** Client-side visual attributes of a fluid: still/flowing sprites and tint color */
+  public record FluidTextures(TextureAtlasSprite still, TextureAtlasSprite flowing, int color) {}
+
+  /**
+   * Looks up the still/flowing sprites and tint color for the given fluid using the 26.1 fluid model system
+   * ({@link net.minecraft.client.renderer.block.FluidStateModelSet}), replacing the removed client fluid extension
+   * texture accessors. Tint is resolved position-independently via {@link FluidTintSource#colorAsStack(FluidStack)}.
+   */
+  public static FluidTextures getFluidTextures(FluidStack fluid) {
+    FluidState state = fluid.getFluid().defaultFluidState();
+    FluidModel model = Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(state);
+    int color = -1;
+    if (model.tintSource() instanceof FluidTintSource tint) {
+      color = tint.colorAsStack(fluid);
+    }
+    return new FluidTextures(model.stillMaterial().sprite(), model.flowingMaterial().sprite(), color);
   }
 
   /**
@@ -261,16 +280,10 @@ public class FluidRenderer {
     }
 
     // fluid attributes, fetch once for all fluids to save effort
-    // TODO(26.1.2): IClientFluidTypeExtensions no longer exposes getStillTexture/getFlowingTexture/getTintColor(FluidStack);
-    //   fluid rendering was reworked around FluidStateModelSet. Reimplement sprite+tint lookup against the new fluid model
-    //   system. Falling back to the missing sprite and untinted color so callers keep compiling/rendering a placeholder.
-    // IClientFluidTypeExtensions clientFluid = IClientFluidTypeExtensions.of(fluid.getFluid());
-    // TextureAtlasSprite still = getBlockSprite(clientFluid.getStillTexture(fluid));
-    // TextureAtlasSprite flowing = getBlockSprite(clientFluid.getFlowingTexture(fluid));
-    // int color = clientFluid.getTintColor(fluid);
-    TextureAtlasSprite still = getBlockSprite(MissingTextureAtlasSprite.getLocation());
-    TextureAtlasSprite flowing = still;
-    int color = -1;
+    FluidTextures textures = getFluidTextures(fluid);
+    TextureAtlasSprite still = textures.still();
+    TextureAtlasSprite flowing = textures.flowing();
+    int color = textures.color();
     FluidType type = fluid.getFluid().getFluidType();
     light = withBlockLight(light, type.getLightLevel(fluid));
     boolean isGas = type.isLighterThanAir();
@@ -322,14 +335,10 @@ public class FluidRenderer {
     }
 
     // fluid attributes
-    // TODO(26.1.2): see renderCuboids - fluid sprite/tint client extension API removed; using placeholder sprite+color.
-    // IClientFluidTypeExtensions clientFluid = IClientFluidTypeExtensions.of(fluid.getFluid());
-    // TextureAtlasSprite still = getBlockSprite(clientFluid.getStillTexture(fluid));
-    // TextureAtlasSprite flowing = getBlockSprite(clientFluid.getFlowingTexture(fluid));
-    // int color = clientFluid.getTintColor(fluid);
-    TextureAtlasSprite still = getBlockSprite(MissingTextureAtlasSprite.getLocation());
-    TextureAtlasSprite flowing = still;
-    int color = -1;
+    FluidTextures textures = getFluidTextures(fluid);
+    TextureAtlasSprite still = textures.still();
+    TextureAtlasSprite flowing = textures.flowing();
+    int color = textures.color();
     FluidType type = fluid.getFluid().getFluidType();
     boolean isGas = type.isLighterThanAir();
     light = withBlockLight(light, type.getLightLevel(fluid));

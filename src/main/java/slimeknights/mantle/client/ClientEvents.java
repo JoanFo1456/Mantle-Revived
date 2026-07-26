@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent.RegisterLoaders;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
@@ -39,6 +40,7 @@ import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import slimeknights.mantle.client.render.MantleRenderTypes;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.block.GaugeBlock;
 import slimeknights.mantle.client.book.BookLoader;
@@ -106,6 +108,11 @@ public class ClientEvents {
 
     BookLoader.registerBook(Mantle.getResource("test"), new FileRepository(Mantle.getResource("books/test")));
     MantleClientCommand.init();
+  }
+
+  @SubscribeEvent
+  static void registerRenderPipelines(RegisterRenderPipelinesEvent event) {
+    MantleRenderTypes.registerPipelines(event::registerPipeline);
   }
 
   @SubscribeEvent
