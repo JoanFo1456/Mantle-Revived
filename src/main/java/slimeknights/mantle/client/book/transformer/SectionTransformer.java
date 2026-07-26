@@ -1,6 +1,5 @@
 package slimeknights.mantle.client.book.transformer;
 
-import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.data.PageData;
@@ -8,10 +7,14 @@ import slimeknights.mantle.client.book.data.SectionData;
 import slimeknights.mantle.client.book.data.content.PageContent;
 
 /** Transformer that locates a specific section to transform */
-@RequiredArgsConstructor
 public abstract class SectionTransformer extends BookTransformer {
   /** Name of the section to transform */
   protected final String sectionName;
+
+  // explicit constructor: lombok @RequiredArgsConstructor was unreliable during the 26.1.2 port
+  protected SectionTransformer(String sectionName) {
+    this.sectionName = sectionName;
+  }
 
   @Override
   public final void transform(BookData book) {

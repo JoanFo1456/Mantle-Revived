@@ -29,6 +29,7 @@ import net.minecraft.world.level.gameevent.GameEvent.Context;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapId;
+import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Scoreboard;
@@ -50,31 +51,30 @@ public class TemplateLevel extends Level {
 
   private final Map<MapId, MapItemSavedData> maps = new HashMap<>();
   private final Scoreboard scoreboard = new Scoreboard();
-  private final RecipeManager recipeManager;
   private final TickRateManager tickRateManager = new TickRateManager();
   private final TemplateChunkSource chunkSource;
+  private LevelData.RespawnData respawnData = LevelData.RespawnData.DEFAULT;
   private float dayTimeFraction;
   private float dayTimePerTick = 1;
 
   public TemplateLevel(List<StructureBlockInfo> blocks, Predicate<BlockPos> shouldShow) {
     super(
       new FakeLevelData(), Level.OVERWORLD, Objects.requireNonNull(Minecraft.getInstance().level).registryAccess(),
-      Objects.requireNonNull(Minecraft.getInstance().level).registryAccess().registryOrThrow(Registries.DIMENSION_TYPE).getHolderOrThrow(BuiltinDimensionTypes.OVERWORLD),
-      () -> InactiveProfiler.INSTANCE, true, false, 0, 0
+      Objects.requireNonNull(Minecraft.getInstance().level).registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE).getOrThrow(BuiltinDimensionTypes.OVERWORLD),
+      true, false, 0, 0
     );
 
     this.chunkSource = new TemplateChunkSource(blocks, this, shouldShow);
-    this.recipeManager = new RecipeManager(registryAccess());
   }
 
   @Override
   public void sendBlockUpdated(@Nonnull BlockPos pos, @Nonnull BlockState oldState, @Nonnull BlockState newState, int flags) {}
 
   @Override
-  public void playSeededSound(@Nullable Player pPlayer, double pX, double pY, double pZ, Holder<SoundEvent> pSound, SoundSource pSource, float pVolume, float pPitch, long pSeed) {}
+  public void playSeededSound(@Nullable Entity pPlayer, double pX, double pY, double pZ, Holder<SoundEvent> pSound, SoundSource pSource, float pVolume, float pPitch, long pSeed) {}
 
   @Override
-  public void playSeededSound(@Nullable Player pPlayer, Entity pEntity, Holder<SoundEvent> pSound, SoundSource pCategory, float pVolume, float pPitch, long pSeed) {}
+  public void playSeededSound(@Nullable Entity pPlayer, Entity pEntity, Holder<SoundEvent> pSound, SoundSource pCategory, float pVolume, float pPitch, long pSeed) {}
 
   @Override
   public String gatherChunkSourceStats() {
@@ -94,16 +94,6 @@ public class TemplateLevel extends Level {
   }
 
   @Override
-  public void setMapData(MapId mapId, MapItemSavedData mapDataIn) {
-    this.maps.put(mapId, mapDataIn);
-  }
-
-  @Override
-  public MapId getFreeMapId() {
-    return new MapId(this.maps.size());
-  }
-
-  @Override
   public void destroyBlockProgress(int breakerId, @Nonnull BlockPos pos, int progress) {}
 
   @Nonnull
@@ -112,10 +102,55 @@ public class TemplateLevel extends Level {
     return this.scoreboard;
   }
 
-  @Nonnull
   @Override
-  public RecipeManager getRecipeManager() {
-    return this.recipeManager;
+  public net.minecraft.world.item.crafting.RecipeAccess recipeAccess() {
+    // the structure-preview level never resolves recipes, so an empty access is correct
+    return new net.minecraft.world.item.crafting.RecipeAccess() {
+      @Override
+      public net.minecraft.world.item.crafting.RecipePropertySet propertySet(net.minecraft.resources.ResourceKey<net.minecraft.world.item.crafting.RecipePropertySet> key) {
+        return net.minecraft.world.item.crafting.RecipePropertySet.EMPTY;
+      }
+
+      @Override
+      public net.minecraft.world.item.crafting.SelectableRecipe.SingleInputSet<net.minecraft.world.item.crafting.StonecutterRecipe> stonecutterRecipes() {
+        return net.minecraft.world.item.crafting.SelectableRecipe.SingleInputSet.empty();
+      }
+    };
+  }
+
+  @Override
+  public net.minecraft.world.clock.ClockManager clockManager() {
+    // the preview level does not advance time, so every clock reads zero total ticks
+    return clock -> 0L;
+  }
+
+  @Override
+  public net.minecraft.world.attribute.EnvironmentAttributeSystem environmentAttributes() {
+    // an attribute system with no layers yields vanilla defaults, which is what a static preview needs
+    return net.minecraft.world.attribute.EnvironmentAttributeSystem.builder().build();
+  }
+
+  @Override
+  public net.minecraft.world.level.block.entity.FuelValues fuelValues() {
+    return net.minecraft.world.level.block.entity.FuelValues.vanillaBurnTimes(registryAccess(), enabledFeatures());
+  }
+
+  @Override
+  public void explode(@Nullable Entity source, net.minecraft.world.damagesource.DamageSource damageSource, @Nullable net.minecraft.world.level.ExplosionDamageCalculator calculator, double x, double y, double z, float radius, boolean fire, Level.ExplosionInteraction interaction, net.minecraft.core.particles.ParticleOptions smallParticle, net.minecraft.core.particles.ParticleOptions largeParticle, net.minecraft.util.random.WeightedList<net.minecraft.core.particles.ExplosionParticleInfo> particles, Holder<SoundEvent> sound) {}
+
+  @Override
+  public void setRespawnData(LevelData.RespawnData respawnData) {
+    this.respawnData = respawnData;
+  }
+
+  @Override
+  public LevelData.RespawnData getRespawnData() {
+    return this.respawnData;
+  }
+
+  @Override
+  public java.util.Collection<? extends net.neoforged.neoforge.entity.PartEntity<?>> dragonParts() {
+    return List.of();
   }
 
   @Override
@@ -152,7 +187,7 @@ public class TemplateLevel extends Level {
   }
 
   @Override
-  public void levelEvent(@Nullable Player player, int type, @Nonnull BlockPos pos, int data) {}
+  public void levelEvent(@Nullable Entity player, int type, @Nonnull BlockPos pos, int data) {}
 
   @Override
   public void gameEvent(Holder<GameEvent> pEvent, Vec3 pPosition, Context pContext) {}
@@ -163,28 +198,13 @@ public class TemplateLevel extends Level {
   }
 
   @Override
-  public void setDayTimeFraction(float dayTimeFraction) {
-    this.dayTimeFraction = dayTimeFraction;
+  public int getSeaLevel() {
+    return 63;
   }
 
   @Override
-  public float getDayTimeFraction() {
-    return this.dayTimeFraction;
-  }
-
-  @Override
-  public float getDayTimePerTick() {
-    return this.dayTimePerTick;
-  }
-
-  @Override
-  public void setDayTimePerTick(float dayTimePerTick) {
-    this.dayTimePerTick = dayTimePerTick;
-  }
-
-  @Override
-  public float getShade(@Nonnull Direction p_230487_1_, boolean p_230487_2_) {
-    return 1;
+  public net.minecraft.world.level.border.WorldBorder getWorldBorder() {
+    return new net.minecraft.world.level.border.WorldBorder();
   }
 
   @Nonnull
@@ -196,6 +216,6 @@ public class TemplateLevel extends Level {
   @Nonnull
   @Override
   public Holder<Biome> getUncachedNoiseBiome(int x, int y, int z) {
-    return registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(Biomes.PLAINS);
+    return registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(Biomes.PLAINS);
   }
 }

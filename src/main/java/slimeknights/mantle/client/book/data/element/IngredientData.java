@@ -107,7 +107,7 @@ public class IngredientData implements IDataElement {
           try {
             data.ingredients[i] = readIngredient(array.get(i));
           } catch (Exception e) {
-            data.ingredients[i] = SizedIngredient.of(Ingredient.of(data.getMissingItem(e.getMessage())));
+            data.ingredients[i] = SizedIngredient.fromItems(data.getMissingItem(e.getMessage()).getItem());
           }
         }
 
@@ -142,7 +142,7 @@ public class IngredientData implements IDataElement {
         JsonPrimitive primitive = json.getAsJsonPrimitive();
 
         if(primitive.isString()) {
-          Item item = BuiltInRegistries.ITEM.get(Identifier.parse(primitive.getAsString()));
+          Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(primitive.getAsString()));
           return SizedIngredient.fromItems(item);
         }
       }

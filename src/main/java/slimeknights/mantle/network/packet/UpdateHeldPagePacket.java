@@ -1,6 +1,5 @@
 package slimeknights.mantle.network.packet;
 
-import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -11,10 +10,16 @@ import slimeknights.mantle.client.book.BookHelper;
 /**
  * Packet to update the page in a book in the players hand
  */
-@RequiredArgsConstructor
 public class UpdateHeldPagePacket implements IThreadsafePacket {
   private final InteractionHand hand;
   private final String page;
+
+  // explicit constructor: lombok @RequiredArgsConstructor was unreliable during the 26.1.2 port
+  public UpdateHeldPagePacket(InteractionHand hand, String page) {
+    this.hand = hand;
+    this.page = page;
+  }
+
   public UpdateHeldPagePacket(FriendlyByteBuf buffer) {
     this.hand = buffer.readEnum(InteractionHand.class);
     this.page = buffer.readUtf(100);

@@ -1,6 +1,5 @@
 package slimeknights.mantle.client.screen;
 
-import lombok.RequiredArgsConstructor;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.MenuScreens.ScreenConstructor;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -20,6 +19,9 @@ public class BackgroundContainerScreen<T extends AbstractContainerMenu> extends 
 	 * Background drawn for this screen
 	 */
 	protected final Identifier background;
+
+	// imageHeight is final in AbstractContainerScreen as of 26.1.2; hide it with a mutable field so this screen can size itself
+	protected int imageHeight = this.getImageHeight();
 
 	/**
 	 * Creates a new screen instance
@@ -47,10 +49,19 @@ public class BackgroundContainerScreen<T extends AbstractContainerMenu> extends 
 		graphics.blit(RenderPipelines.GUI_TEXTURED, this.background, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 	}
 
-	@RequiredArgsConstructor(staticName = "of")
 	public static class Factory<T extends AbstractContainerMenu> implements ScreenConstructor<T,BackgroundContainerScreen<T>> {
 		private final Identifier background;
 		private final int height;
+
+		// explicit constructor + static factory: lombok @RequiredArgsConstructor(staticName) was unreliable during the 26.1.2 port
+		private Factory(Identifier background, int height) {
+			this.background = background;
+			this.height = height;
+		}
+
+		public static <T extends AbstractContainerMenu> Factory<T> of(Identifier background, int height) {
+			return new Factory<>(background, height);
+		}
 
 		/**
 		 * Creates a factory from the container name

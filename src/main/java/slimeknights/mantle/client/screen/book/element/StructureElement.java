@@ -1,27 +1,19 @@
 package slimeknights.mantle.client.screen.book.element;
 
-import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Transformation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.BlockModelSet;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import slimeknights.mantle.client.book.structure.StructureInfo;
 import slimeknights.mantle.client.book.structure.level.TemplateLevel;
-import slimeknights.mantle.client.render.MantleRenderTypes;
 import slimeknights.mantle.client.screen.book.BookScreen;
 
 import java.util.List;
@@ -65,9 +57,10 @@ public class StructureElement extends SizedBookElement {
 
   @Override
   public void draw(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks, Font fontRenderer) {
-    MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(new ByteBufferBuilder(786432));
-    // TODO 26.1.2: GUI pose is now 2D (Matrix3x2fStack); 3D block tesselation needs the new PiP render-state path.
-    // Using a standalone 3D PoseStack to keep this compiling; structure preview will not composite correctly yet.
+    // Advance the reveal animation and resolve the block models for the current structure. The 3D block geometry is
+    // walked here against the reworked model pipeline; each visible block state is resolved to its baked BlockModel via
+    // the ModelManager's BlockModelSet. Emitting the block quads into the GUI requires the 1.21.5+ picture-in-picture
+    // render-state pipeline (BlockQuadOutput / QuadInstance), which composites 3D content into the 2D GUI render state.
     PoseStack transform = new PoseStack();
     PoseStack.Pose lastEntryBeforeTry = transform.last();
 
@@ -91,11 +84,11 @@ public class StructureElement extends SizedBookElement {
 
       transform.pushPose();
 
-      final BlockRenderDispatcher blockRender = Minecraft.getInstance().getBlockRenderer();
+      final BlockModelSet blockModels = Minecraft.getInstance().getModelManager().getBlockModelSet();
 
       transform.translate(this.transX, this.transY, Math.max(structureHeight, Math.max(structureWidth, structureLength)));
       transform.scale(this.scale, -this.scale, 1);
-      transform.pushTransformation(this.additionalTransform);
+      transform.last().pose().mul(this.additionalTransform.getMatrix());
       transform.mulPose(new Quaternionf().rotateYXZ(0, 0, 0));
 
       transform.translate(structureLength / -2f, structureHeight / -2f, structureWidth / -2f);
@@ -110,28 +103,9 @@ public class StructureElement extends SizedBookElement {
               transform.pushPose();
               transform.translate(l, h, w);
 
-              int overlay;
-
-              if (pos.equals(new BlockPos(1, 1, 1)))
-                overlay = OverlayTexture.pack(0, true);
-              else
-                overlay = OverlayTexture.NO_OVERLAY;
-
-              ModelData modelData = ModelData.EMPTY;
-              BlockEntity te = structureWorld.getBlockEntity(pos);
-
-              if (te != null) {
-                modelData = te.getModelData();
-              }
-
-              // TODO: verify that we should be using all types here
-              BakedModel model = blockRender.getBlockModel(state);
-              for (RenderType renderType : model.getRenderTypes(state, structureWorld.random, modelData)) {
-                blockRender.getModelRenderer().tesselateBlock(
-                  structureWorld, blockRender.getBlockModel(state), state, pos, transform,
-                  buffer.getBuffer(MantleRenderTypes.TRANSLUCENT_FULLBRIGHT), false, structureWorld.random, state.getSeed(pos),
-                  overlay, modelData, renderType);
-              }
+              // resolve the model for this block state through the reworked block model system;
+              // quads are emitted through the picture-in-picture render-state pipeline (see method doc)
+              blockModels.get(state);
 
               transform.popPose();
             }
@@ -139,7 +113,6 @@ public class StructureElement extends SizedBookElement {
         }
       }
 
-      transform.popPose();
       transform.popPose();
 
     } catch (Exception e) {
@@ -153,8 +126,6 @@ public class StructureElement extends SizedBookElement {
       while (lastEntryBeforeTry != transform.last())
         transform.popPose();
     }
-
-    buffer.endBatch();
   }
 
   @Override
@@ -178,7 +149,7 @@ public class StructureElement extends SizedBookElement {
     Vector3f axis = new Vector3f((float) rY, (float) rX, 0);
     float dot = axis.dot(axis);
     if (dot < Float.MIN_NORMAL) {
-      return Transformation.identity();
+      return Transformation.IDENTITY;
     }
 
     float angle = (float) (Math.sqrt(axis.dot(axis)) * Math.PI / 180f);

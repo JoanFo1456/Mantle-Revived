@@ -1,7 +1,5 @@
 package slimeknights.mantle.client.book.data.element;
 
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
 import slimeknights.mantle.client.book.HTMLUtils;
 import slimeknights.mantle.client.book.IHTML;
@@ -15,8 +13,6 @@ import javax.annotation.Nullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Accessors(fluent = true)
-@Setter
 public class TextData implements IHTML {
   /** @deprecated use {@link #linebreak} */
   @Deprecated(forRemoval = true)
@@ -53,6 +49,12 @@ public class TextData implements IHTML {
 
   public TextData() {
     this("");
+  }
+
+  // explicit fluent setter: lombok @Setter/@Accessors was unreliable during the 26.1.2 port
+  public TextData linebreak(boolean linebreak) {
+    this.linebreak = linebreak;
+    return this;
   }
 
   /** Null safe method to get text, as its possible its null due to book parsing. */

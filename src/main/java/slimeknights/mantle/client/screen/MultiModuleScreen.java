@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import org.joml.Matrix3x2fStack;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,12 @@ import java.util.List;
 public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> extends AbstractContainerScreen<CONTAINER> {
 
   protected List<ModuleScreen<?,?>> modules = Lists.newArrayList();
+
+  // imageWidth/imageHeight are final in AbstractContainerScreen as of 26.1.2; hide them with mutable fields so the
+  // multi-module layout can still resize itself. Note: the base container render path still reads the final
+  // base dimensions, so sizing during super.* calls falls back to the vanilla default (176x166).
+  protected int imageWidth = this.getImageWidth();
+  protected int imageHeight = this.getImageHeight();
 
   public int cornerX;
   public int cornerY;
@@ -69,7 +76,8 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
     }
     // TODO: this is a small ordering change, does it need another hook?
     for (ModuleScreen<?,?> module : this.modules) {
-      module.init(this.minecraft, width, height);
+      // Note: Screen.init(Minecraft, w, h) was removed; minecraft/font are now always the singleton via the base constructor
+      module.init(width, height);
       this.updateSubmodule(module);
     }
   }
@@ -131,11 +139,11 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
   }
 
   @Override
-  public void resize(Minecraft mc, int width, int height) {
-    super.resize(mc, width, height);
+  public void resize(int width, int height) {
+    super.resize(width, height);
 
     for (ModuleScreen<?,?> module : this.modules) {
-      module.resize(mc, width, height);
+      module.resize(width, height);
       this.updateSubmodule(module);
     }
   }
@@ -235,29 +243,30 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
   }
 
   @Override
-  public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-    ModuleScreen<?,?> module = this.getModuleForPoint(mouseX, mouseY);
+  public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    ModuleScreen<?,?> module = this.getModuleForPoint(event.x(), event.y());
 
     if (module != null) {
-      if (module.handleMouseClicked(mouseX, mouseY, mouseButton)) {
+      if (module.handleMouseClicked(event.x(), event.y(), event.button())) {
         return false;
       }
     }
 
-    return super.mouseClicked(mouseX, mouseY, mouseButton);
+    return super.mouseClicked(event, doubleClick);
   }
 
   @Override
-  public boolean mouseDragged(double mouseX, double mouseY, int clickedMouseButton, double timeSinceLastClick, double unkowwn) {
-    ModuleScreen<?,?> module = this.getModuleForPoint(mouseX, mouseY);
+  public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+    ModuleScreen<?,?> module = this.getModuleForPoint(event.x(), event.y());
 
     if (module != null) {
-      if (module.handleMouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)) {
+      // Note: timeSinceLastClick is no longer provided by the drag event; passing 0
+      if (module.handleMouseClickMove(event.x(), event.y(), event.button(), 0)) {
         return false;
       }
     }
 
-    return super.mouseDragged(mouseX, mouseY, clickedMouseButton, timeSinceLastClick, unkowwn);
+    return super.mouseDragged(event, dragX, dragY);
   }
 
   @Override
@@ -282,16 +291,16 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
   }
 
   @Override
-  public boolean mouseReleased(double mouseX, double mouseY, int state) {
-    ModuleScreen<?,?> module = this.getModuleForPoint(mouseX, mouseY);
+  public boolean mouseReleased(MouseButtonEvent event) {
+    ModuleScreen<?,?> module = this.getModuleForPoint(event.x(), event.y());
 
     if (module != null) {
-      if (module.handleMouseReleased(mouseX, mouseY, state)) {
+      if (module.handleMouseReleased(event.x(), event.y(), event.button())) {
         return false;
       }
     }
 
-    return super.mouseReleased(mouseX, mouseY, state);
+    return super.mouseReleased(event);
   }
 
   @Nullable

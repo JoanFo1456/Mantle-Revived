@@ -1,45 +1,47 @@
 package slimeknights.mantle.fluid.texture;
 
-import com.mojang.blaze3d.shaders.FogShape;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogRenderer.FogMode;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.fog.FogData;
+import net.minecraft.client.renderer.fog.environment.FogEnvironment;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import slimeknights.mantle.client.render.FluidRenderer;
 
 import javax.annotation.Nullable;
 
 /** Implementation of {@link IClientFluidTypeExtensions} using {@link FluidTexture} */
-@RequiredArgsConstructor
 public class ClientTextureFluidType implements IClientFluidTypeExtensions {
   protected final FluidType type;
   private Vector3f fogColor;
 
-  @Override
+  public ClientTextureFluidType(FluidType type) {
+    this.type = type;
+  }
+
+  /* Note: the still/flowing/overlay/tint texture hooks were removed from IClientFluidTypeExtensions.
+   * Fluid textures are now supplied through the FluidStateModelSet/model system. These accessors are kept for
+   * internal use (and for other Mantle code) but no longer participate in fluid rendering. */
   public int getTintColor() {
     return FluidTextureManager.getColor(type);
   }
 
-  @Override
   public Identifier getStillTexture() {
     return FluidTextureManager.getStillTexture(type);
   }
 
-  @Override
   public Identifier getFlowingTexture() {
     return FluidTextureManager.getFlowingTexture(type);
   }
 
   @Nullable
-  @Override
   public Identifier getOverlayTexture() {
     return FluidTextureManager.getOverlayTexture(type);
   }
@@ -51,7 +53,7 @@ public class ClientTextureFluidType implements IClientFluidTypeExtensions {
   }
 
   @Override
-  public void renderOverlay(Minecraft mc, PoseStack poseStack) {
+  public void renderOverlay(Minecraft mc, PoseStack poseStack, MultiBufferSource buffer) {
     FluidTexture data = FluidTextureManager.getData(type);
     Identifier camera = data.camera();
     if (camera != null) {
@@ -60,7 +62,7 @@ public class ClientTextureFluidType implements IClientFluidTypeExtensions {
   }
 
   @Override
-  public Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
+  public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
     // nothing to do if fog color is white
     int fluidColor = FluidTextureManager.getData(type).fogColor();
     if (fluidColor != -1) {
@@ -72,24 +74,20 @@ public class ClientTextureFluidType implements IClientFluidTypeExtensions {
       fluidFogColor.y *= fogColor.y;
       fluidFogColor.z *= fogColor.z;
     }
-    return fluidFogColor;
   }
 
   @Override
-  public void modifyFogRender(Camera camera, FogMode mode, float renderDistance, float partialTick, float nearDistance, float farDistance, FogShape shape) {
+  public void modifyFogRender(Camera camera, FogEnvironment environment, float renderDistance, float partialTick, FogData fogData) {
     FluidTexture data = FluidTextureManager.getData(type);
-    FogShape overrideShape = data.fogShape();
-    if (overrideShape != null) {
-      if (overrideShape != shape) {
-        RenderSystem.setShaderFogShape(overrideShape);
-      }
+    // Note: fog shape was removed; we now only clamp the environmental fog start/end when a custom range is set
+    if (data.customFog()) {
       float start = data.fogStart();
-      if (start < nearDistance) {
-        RenderSystem.setShaderFogStart(start);
+      if (start < fogData.environmentalStart) {
+        fogData.environmentalStart = start;
       }
       float end = data.fogEnd();
-      if (end < farDistance) {
-        RenderSystem.setShaderFogEnd(end);
+      if (end < fogData.environmentalEnd) {
+        fogData.environmentalEnd = end;
       }
     }
   }

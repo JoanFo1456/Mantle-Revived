@@ -2,15 +2,24 @@ package slimeknights.mantle.client.book.data.content;
 
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
+import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.minecraft.world.level.Level;
+
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.client.book.data.BookData;
@@ -144,10 +153,22 @@ public class ContentCrafting extends PageContent {
       return;
     }
 
-    Recipe<?> foundRecipe = level.getRecipeManager().byKey(recipeId).map(RecipeHolder::value).orElse(null);
+    // As of 26.1.2 the client no longer syncs full recipes by id (RecipeAccess exposes only property sets); the
+    // integrated server's recipe manager is the only place a recipe can be resolved from its id, so book recipe
+    // auto-population is available in singleplayer only.
+    IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
+    if (server == null) {
+      if (!recipeMissingLogged) {
+        Mantle.logger.warn("Book crafting recipe {} cannot be auto-populated: recipes are only available on the integrated server (singleplayer).", recipeId);
+        recipeMissingLogged = true;
+      }
+      return;
+    }
+
+    Recipe<?> foundRecipe = server.getRecipeManager().byKey(ResourceKey.create(Registries.RECIPE, recipeId)).map(RecipeHolder::value).orElse(null);
     if (foundRecipe == null) {
       if (!recipeMissingLogged) {
-        Mantle.logger.warn("Book crafting recipe {} was not found in the client recipe manager; will retry when the page is opened.", recipeId);
+        Mantle.logger.warn("Book crafting recipe {} was not found in the recipe manager; will retry when the page is opened.", recipeId);
         recipeMissingLogged = true;
       }
       return;
@@ -160,46 +181,74 @@ public class ContentCrafting extends PageContent {
       return;
     }
 
-    int w = 0, h = 0;
-    if(grid_size.equalsIgnoreCase("auto")) {
-      if(craftingRecipe.canCraftInDimensions(2, 2)) {
-        grid_size = "small";
-      } else {
-        grid_size = "large";
+    // recipes now expose their contents through the display system rather than direct ingredient/result getters
+    List<RecipeDisplay> displays = craftingRecipe.display();
+    if (displays.isEmpty()) {
+      return;
+    }
+    RecipeDisplay display = displays.get(0);
+    ContextMap context = SlotDisplayContext.fromLevel(level);
+
+    // resolve the result
+    result = IngredientData.getItemStackData(resolveFirst(display.result(), context));
+
+    if (display instanceof ShapedCraftingRecipeDisplay shaped) {
+      int rw = shaped.width();
+      int rh = shaped.height();
+      if (grid_size.equalsIgnoreCase("auto")) {
+        grid_size = (rw <= 2 && rh <= 2) ? "small" : "large";
       }
-    }
-
-    switch (grid_size.toLowerCase()) {
-      case "large" -> w = h = 3;
-      case "small" -> w = h = 2;
-    }
-
-    if (!craftingRecipe.canCraftInDimensions(w, h)) {
-      throw new BookLoadException("Recipe " + this.recipe + " cannot fit in a " + w + "x" + h + " crafting grid");
-    }
-
-    result = IngredientData.getItemStackData(craftingRecipe.getResultItem(level.registryAccess()));
-
-    NonNullList<Ingredient> ingredients = craftingRecipe.getIngredients();
-
-    if (craftingRecipe instanceof ShapedRecipe shaped) {
-      grid = new IngredientData[shaped.getHeight()][shaped.getWidth()];
-
-      for (int y = 0; y < grid.length; y++) {
-        for (int x = 0; x < grid[y].length; x++) {
-          grid[y][x] = IngredientData.getItemStackData(NonNullList.of(ItemStack.EMPTY, ingredients.get(x + y * grid[y].length).getItems()));
+      int w = gridDimension();
+      if (rw > w || rh > w) {
+        throw new BookLoadException("Recipe " + this.recipe + " cannot fit in a " + w + "x" + w + " crafting grid");
+      }
+      List<SlotDisplay> ingredients = shaped.ingredients();
+      grid = new IngredientData[rh][rw];
+      for (int y = 0; y < rh; y++) {
+        for (int x = 0; x < rw; x++) {
+          grid[y][x] = IngredientData.getItemStackData(resolveStacks(ingredients.get(x + y * rw), context));
         }
       }
-
       recipeLoaded = true;
       return;
     }
 
-    grid = new IngredientData[h][w];
-    for (int i = 0; i < ingredients.size(); i++) {
-      grid[i / w][i % w] = IngredientData.getItemStackData(NonNullList.of(ItemStack.EMPTY, ingredients.get(i).getItems()));
+    if (display instanceof ShapelessCraftingRecipeDisplay shapeless) {
+      if (grid_size.equalsIgnoreCase("auto")) {
+        grid_size = "large";
+      }
+      int w = gridDimension();
+      List<SlotDisplay> ingredients = shapeless.ingredients();
+      if (ingredients.size() > w * w) {
+        throw new BookLoadException("Recipe " + this.recipe + " cannot fit in a " + w + "x" + w + " crafting grid");
+      }
+      grid = new IngredientData[w][w];
+      for (int i = 0; i < ingredients.size(); i++) {
+        grid[i / w][i % w] = IngredientData.getItemStackData(resolveStacks(ingredients.get(i), context));
+      }
+      recipeLoaded = true;
     }
-    recipeLoaded = true;
+  }
+
+  /** Gets the crafting grid dimension (2 or 3) from the configured size */
+  private int gridDimension() {
+    return switch (grid_size.toLowerCase()) {
+      case "small" -> 2;
+      default -> 3;
+    };
+  }
+
+  /** Resolves a slot display to a rotating list of matching stacks */
+  private static NonNullList<ItemStack> resolveStacks(SlotDisplay slot, ContextMap context) {
+    NonNullList<ItemStack> stacks = NonNullList.create();
+    stacks.addAll(slot.resolveForStacks(context));
+    return stacks;
+  }
+
+  /** Resolves the first stack of a slot display, or empty if none is available */
+  private static ItemStack resolveFirst(SlotDisplay slot, ContextMap context) {
+    List<ItemStack> stacks = slot.resolveForStacks(context);
+    return stacks.isEmpty() ? ItemStack.EMPTY : stacks.get(0);
   }
 
   @Override

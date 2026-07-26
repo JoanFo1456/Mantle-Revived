@@ -1,7 +1,6 @@
 package slimeknights.mantle.client.book.transformer;
 
 import com.google.common.collect.Lists;
-import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.resources.Identifier;
 import slimeknights.mantle.Mantle;
@@ -107,8 +106,12 @@ public class ContentGroupingSectionTransformer extends SectionTransformer {
     /** Listing that is currently being built */
     private ContentListing currentListing = new ContentListing();
     /** All listings to include in the book */
-    @Getter
     private final List<ContentListing> finishedListings = Lists.newArrayList(currentListing);
+
+    // explicit getter: lombok @Getter was unreliable during the 26.1.2 port
+    public List<ContentListing> getFinishedListings() {
+      return finishedListings;
+    }
 
     public GroupingBuilder(SectionData section, @Nullable String title, @Nullable String subText, @Nullable Boolean largeTitle, @Nullable Boolean centerTitle) {
       this.section = section;

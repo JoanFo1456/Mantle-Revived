@@ -1,6 +1,5 @@
 package slimeknights.mantle.client.screen.book.element;
 
-import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -24,7 +23,6 @@ import java.util.stream.Stream;
 public abstract class BookElement {
 
   /** TODO 1.21: make this field protected instead of public to ensure setter is used. */
-  @Setter
   public BookScreen parent;
 
   protected Minecraft mc = Minecraft.getInstance();
@@ -35,6 +33,11 @@ public abstract class BookElement {
   public BookElement(int x, int y) {
     this.x = x;
     this.y = y;
+  }
+
+  // explicit setter: lombok @Setter was unreliable during the 26.1.2 port
+  public void setParent(BookScreen parent) {
+    this.parent = parent;
   }
 
   public abstract void draw(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks, Font fontRenderer);

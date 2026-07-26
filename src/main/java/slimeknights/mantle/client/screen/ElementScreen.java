@@ -1,6 +1,5 @@
 package slimeknights.mantle.client.screen;
 
-import lombok.AllArgsConstructor;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
@@ -9,7 +8,6 @@ import net.minecraft.resources.Identifier;
  * Represents a GUI element INSIDE the graphics file.
  * The coordinates all refer to the coordinates inside the graphics!
  */
-@AllArgsConstructor
 public class ElementScreen {
   // TODO: can this be final?
   public Identifier texture;
@@ -20,6 +18,17 @@ public class ElementScreen {
 
   public final int texW;
   public final int texH;
+
+  // explicit constructor: lombok @AllArgsConstructor was unreliable during the 26.1.2 port
+  public ElementScreen(Identifier texture, int x, int y, int w, int h, int texW, int texH) {
+    this.texture = texture;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.texW = texW;
+    this.texH = texH;
+  }
 
   /** Creates a new element from this texture with the X, Y, width, and height */
   public ElementScreen move(int x, int y, int width, int height) {

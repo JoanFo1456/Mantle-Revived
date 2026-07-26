@@ -1,5 +1,6 @@
 package slimeknights.mantle.client.screen.book.element;
 
+import net.minecraft.client.input.KeyEvent;
 import slimeknights.mantle.client.screen.book.ArrowButton;
 
 public class AnimationToggleElement extends ArrowElement {
@@ -21,7 +22,8 @@ public class AnimationToggleElement extends ArrowElement {
   @Override
   public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
     if (this.button != null && this.isHovered(mouseX, mouseY)) {
-      this.button.onPress();
+      // Note: Button.onPress() now requires an InputWithModifiers; pass a synthetic event to trigger the action
+      this.button.onPress(new KeyEvent(0, 0, 0));
       this.toggled = !this.toggled;
       this.updateColor();
     }

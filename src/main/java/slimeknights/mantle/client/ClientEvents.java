@@ -1,17 +1,16 @@
 package slimeknights.mantle.client;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
-import net.minecraft.client.renderer.blockentity.SignRenderer;
+import net.minecraft.client.renderer.blockentity.StandingSignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,8 +25,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent.RegisterGeometryLoaders;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent.RegisterLoaders;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
@@ -38,7 +37,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import slimeknights.mantle.Mantle;
@@ -68,7 +66,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@EventBusSubscriber(modid = Mantle.modId, value = Dist.CLIENT, bus = Bus.MOD)
+@EventBusSubscriber(modid = Mantle.modId, value = Dist.CLIENT)
 public class ClientEvents {
   private static final Identifier CROSSHAIR_ATTACK_INDICATOR_BACKGROUND = Identifier.withDefaultNamespace("hud/crosshair_attack_indicator_background");
   private static final Identifier CROSSHAIR_ATTACK_INDICATOR_PROGRESS = Identifier.withDefaultNamespace("hud/crosshair_attack_indicator_progress");
@@ -82,25 +80,24 @@ public class ClientEvents {
   @SubscribeEvent
   static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
     if (MantleRegistrations.SIGN != null) {
-      event.registerBlockEntityRenderer(MantleRegistrations.SIGN, SignRenderer::new);
+      event.registerBlockEntityRenderer(MantleRegistrations.SIGN, StandingSignRenderer::new);
     }
     if (MantleRegistrations.HANGING_SIGN != null) {
       event.registerBlockEntityRenderer(MantleRegistrations.HANGING_SIGN, HangingSignRenderer::new);
     }
   }
 
-  @SuppressWarnings("removal")
   @SubscribeEvent
-  static void registerListeners(RegisterClientReloadListenersEvent event) {
-    event.registerReloadListener(ModelHelper.LISTENER);
-    event.registerReloadListener(new BookLoader());
+  static void registerListeners(AddClientReloadListenersEvent event) {
+    event.addListener(Mantle.getResource("model_helper"), ModelHelper.LISTENER);
+    event.addListener(Mantle.getResource("book_loader"), new BookLoader());
     ResourceColorManager.init(event);
     FluidTooltipHandler.init(event);
     FluidTextureManager.init(event);
-    event.registerReloadListener(FluidCuboid.REGISTRY);
-    event.registerReloadListener(RenderItem.REGISTRY);
-    event.registerReloadListener(RenderItem.STATE_REGISTRY);
-    event.registerReloadListener(TextureColorHelper.RELOAD_LISTENER);
+    event.addListener(Mantle.getResource("fluid_cuboid"), FluidCuboid.REGISTRY);
+    event.addListener(Mantle.getResource("render_item"), RenderItem.REGISTRY);
+    event.addListener(Mantle.getResource("render_item_state"), RenderItem.STATE_REGISTRY);
+    event.addListener(Mantle.getResource("texture_color"), TextureColorHelper.RELOAD_LISTENER);
   }
 
   @SubscribeEvent
@@ -112,7 +109,7 @@ public class ClientEvents {
   }
 
   @SubscribeEvent
-  static void registerModelLoaders(RegisterGeometryLoaders event) {
+  static void registerModelLoaders(RegisterLoaders event) {
     // standard models - useful in resource packs for any model
     event.register(Mantle.getResource("connected"), ConnectedModel.LOADER);
     event.register(Mantle.getResource("item_layer"), MantleItemLayerModel.LOADER);
@@ -159,27 +156,26 @@ public class ClientEvents {
     }
 
     // show attack indicator
-    GuiGraphics graphics = event.getGuiGraphics();
+    GuiGraphicsExtractor graphics = event.getGuiGraphics();
     switch (indicator) {
       case CROSSHAIR:
         if (!isHotbar && minecraft.options.getCameraType().isFirstPerson()) {
           if (!minecraft.getDebugOverlay().showDebugScreen() || settings.hideGui || minecraft.player.isReducedDebugInfo() || settings.reducedDebugInfo().get()) {
             // mostly cloned from vanilla attack indicator
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            // Note: the special ONE_MINUS_DST_COLOR blend used by the vanilla crosshair indicator is no longer
+            // expressible through RenderSystem; the GUI render pipeline now owns blending. Draw with the standard GUI pipeline.
             int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
             // integer division makes this a pain to line up, there might be a simplier version of this formula but I cannot think of one
             int y = (scaledHeight / 2) - 14 + (2 * (scaledHeight % 2));
             int x = minecraft.getWindow().getGuiScaledWidth() / 2 - 8;
             int width = (int)(cooldown * 17.0F);
-            graphics.blitSprite(CROSSHAIR_ATTACK_INDICATOR_BACKGROUND, x, y, 16, 4);
-            graphics.blitSprite(CROSSHAIR_ATTACK_INDICATOR_PROGRESS, 16, 4, 0, 0, x, y, width, 4);
-            RenderSystem.defaultBlendFunc();
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CROSSHAIR_ATTACK_INDICATOR_BACKGROUND, x, y, 16, 4);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CROSSHAIR_ATTACK_INDICATOR_PROGRESS, 16, 4, 0, 0, x, y, width, 4);
           }
         }
         break;
       case HOTBAR:
-        if (isHotbar && minecraft.cameraEntity == minecraft.player) {
+        if (isHotbar && minecraft.getCameraEntity() == minecraft.player) {
           int centerWidth = minecraft.getWindow().getGuiScaledWidth() / 2;
           int y = minecraft.getWindow().getGuiScaledHeight() - 20;
           int x;
@@ -189,11 +185,9 @@ public class ClientEvents {
           } else {
             x = centerWidth + 91 + 6 + 32;
           }
-//          RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
           int l1 = (int)(cooldown * 19.0F);
-          RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-          graphics.blitSprite(HOTBAR_ATTACK_INDICATOR_BACKGROUND, x, y, 18, 18);
-          graphics.blitSprite(HOTBAR_ATTACK_INDICATOR_PROGRESS, 18, 18, 0, 18 - l1, x, y + 18 - l1, 18, l1);
+          graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_ATTACK_INDICATOR_BACKGROUND, x, y, 18, 18);
+          graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_ATTACK_INDICATOR_PROGRESS, 18, 18, 0, 18 - l1, x, y + 18 - l1, 18, l1);
         }
         break;
     }
@@ -253,7 +247,7 @@ public class ClientEvents {
       // in the tag, don't show capacity
       Identifier id = BuiltInRegistries.FLUID.getKey(fluid.getFluid());
       tooltip = new ArrayList<>(3);
-      tooltip.add(fluid.getDisplayName());
+      tooltip.add(fluid.getHoverName());
       FluidTooltipHandler.appendAdvanced(id, tooltip);
       tooltip.add(GaugeBlock.formatCapacity(handler.getTankCapacity(0)).withStyle(ChatFormatting.GRAY));
       tooltip.add(FluidTooltipHandler.formatModName(id));
@@ -264,6 +258,6 @@ public class ClientEvents {
 
     int x = minecraft.getWindow().getGuiScaledWidth() / 2;
     int y = minecraft.getWindow().getGuiScaledHeight() / 2;
-    event.getGuiGraphics().renderTooltip(minecraft.font, tooltip, Optional.empty(), x, y);
+    event.getGuiGraphics().setTooltipForNextFrame(minecraft.font, tooltip, Optional.empty(), x, y);
   }
 }
