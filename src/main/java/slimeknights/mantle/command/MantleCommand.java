@@ -8,6 +8,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.server.permissions.PermissionCheck;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -54,9 +55,9 @@ public class MantleCommand {
 
     // register interesting sources
     SourcesCommand.register(Registries.elementsDirPath(Registries.LOOT_TABLE), (context, builder)
-      -> SharedSuggestionProvider.suggestResource(context.getSource().getServer().reloadableRegistries().getKeys(Registries.LOOT_TABLE), builder));
+      -> SharedSuggestionProvider.suggestResource(context.getSource().getServer().reloadableRegistries().lookup().lookupOrThrow(Registries.LOOT_TABLE).listElementIds().map(ResourceKey::identifier), builder));
     SourcesCommand.register("recipes", (context, builder)
-      -> SharedSuggestionProvider.suggestResource(context.getSource().getRecipeNames(), builder));
+      -> SharedSuggestionProvider.suggestResource(context.getSource().getServer().getRecipeManager().getRecipes().stream().map(holder -> holder.id().identifier()), builder));
 
     // add command listener
     NeoForge.EVENT_BUS.addListener(MantleCommand::registerCommand);

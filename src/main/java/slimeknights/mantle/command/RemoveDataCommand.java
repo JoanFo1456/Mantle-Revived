@@ -1,6 +1,5 @@
 package slimeknights.mantle.command;
 
-import com.google.gson.JsonObject;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -15,9 +14,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.world.BiomeModifier;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.util.JsonHelper;
 
@@ -93,15 +90,14 @@ public class RemoveDataCommand {
 
     // start by fetching the existing structure set JSON
     Identifier modifierLocation = JsonHelper.wrap(id.identifier(), BIOME_MODIFIERS.identifier().getNamespace() + '/' + BIOME_MODIFIERS.identifier().getPath() + '/', ".json");
-    JsonObject json = new JsonObject();
-    json.addProperty("type", NeoForgeRegistries.BIOME_MODIFIER_SERIALIZERS.getKey(NeoForgeMod.NONE_BIOME_MODIFIER_TYPE.get()).toString());
 
     // determine the path for the resulting datapack
     Path pack = GeneratePackHelper.getDatapackPath(context.getSource().getServer());
     GeneratePackHelper.saveMcmeta(pack);
 
+    // 26.1.2 removed the neoforge:none biome modifier type. Instead, override the entry with a never-true condition so it is dropped entirely (NeoForge conditions apply to all datapack registries).
     Path path = pack.resolve(PackType.SERVER_DATA.getDirectory()).resolve(modifierLocation.getNamespace() + '/' + modifierLocation.getPath());
-    if (!GeneratePackHelper.saveJson(json, path)) {
+    if (!GeneratePackHelper.saveConditionRemove(path)) {
       throw GeneratePackHelper.FAILED_SAVE.create(id.identifier());
     }
 

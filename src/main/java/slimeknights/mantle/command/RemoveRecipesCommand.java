@@ -25,14 +25,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.Container;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.neoforged.neoforge.common.conditions.NeverCondition;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import slimeknights.mantle.Mantle;
@@ -78,7 +78,7 @@ public class RemoveRecipesCommand {
 
   /** Suggestion builder for recipe IDs */
   private static final SuggestionProvider<CommandSourceStack> SUGGESTS_RECIPES = (context, builder)
-    -> SharedSuggestionProvider.suggestResource(context.getSource().getRecipeManager().getRecipeIds(), builder);
+    -> SharedSuggestionProvider.suggestResource(context.getSource().getServer().getRecipeManager().getRecipes().stream().map(holder -> holder.id().identifier()), builder);
   /** Suggests presets for the command */
   private static final SuggestionProvider<CommandSourceStack> SUGGEST_PRESETS = SourcesCommand.suggestFolder(PRESETS);
 
@@ -173,31 +173,33 @@ public class RemoveRecipesCommand {
   }
 
   /** Runs the command */
-  @SuppressWarnings({"unchecked", "rawtypes"})  // not like we are using the generics at all
   private static int run(CommandContext<CommandSourceStack> context, List<RecipeType<?>> recipeTypes, @Nullable Predicate<Item> removeResult, @Nullable Predicate<Item> removeInput, long startTime) {
     // iterate all recipes for the type storing recipes that craft the tag
     ServerLevel level = context.getSource().getLevel();
-    RegistryAccess access = level.registryAccess();
+    RecipeManager manager = level.getServer().getRecipeManager();
+    // context used to resolve recipe result displays into concrete stacks
+    ContextMap displayContext = SlotDisplayContext.fromLevel(level);
     List<Identifier> recipes = new ArrayList<>();
     for (RecipeType<?> recipeType : recipeTypes) {
-      for (Object rawHolder : context.getSource().getLevel().getRecipeManager().getAllRecipesFor((RecipeType) recipeType)) {
-        RecipeHolder<? extends Recipe<? extends RecipeInput>> holder = (RecipeHolder<? extends Recipe<? extends RecipeInput>>) rawHolder;
+      for (RecipeHolder<?> holder : manager.getRecipes()) {
         Recipe<?> recipe = holder.value();
+        if (recipe.getType() != recipeType) {
+          continue;
+        }
         // result must match or not be requested
-        if (removeResult == null || removeResult.test(recipe.getResultItem(access).getItem())) {
+        if (removeResult == null || recipe.display().stream()
+                                          .flatMap(display -> display.result().resolveForStacks(displayContext).stream())
+                                          .anyMatch(stack -> removeResult.test(stack.getItem()))) {
           // no input predicate? we are done
           if (removeInput == null) {
-            recipes.add(holder.id());
+            recipes.add(holder.id().identifier());
           } else {
             // at least one ingredient must match the ingredient predicate
-            ingredientLoop:
-            for (Ingredient ingredient : recipe.getIngredients()) {
-              for (ItemStack stack : ingredient.getItems()) {
-                if (removeInput.test(stack.getItem())) {
-                  recipes.add(holder.id());
-                  break ingredientLoop;
-                }
-              }
+            boolean matches = recipe.placementInfo().ingredients().stream()
+                                    .flatMap(Ingredient::items)
+                                    .anyMatch(item -> removeInput.test(item.value()));
+            if (matches) {
+              recipes.add(holder.id().identifier());
             }
           }
         }

@@ -45,7 +45,7 @@ public class RegistryArgument {
     // TODO 1.21: rename to "registry_tags"
     TAG = register(getResource("valid_tags"), (context, builder) -> {
       Registry<?> result = get(context);
-      return SharedSuggestionProvider.suggestResource(result.getTagNames().map(TagKey::location), builder);
+      return SharedSuggestionProvider.suggestResource(result.listTagIds().map(TagKey::location), builder);
     });
     VALUE = register(getResource("registry_values"), (context, builder) -> {
       Registry<?> result = get(context);
@@ -70,7 +70,7 @@ public class RegistryArgument {
   public static Registry<?> getResult(CommandContext<? extends SharedSuggestionProvider> context, String name) throws CommandSyntaxException {
     Identifier id = context.getArgument(name, Identifier.class);
     return context.getSource().registryAccess()
-                   .registry(ResourceKey.createRegistryKey(id))
+                   .lookup(ResourceKey.createRegistryKey(id))
                    .orElseThrow(() -> NOT_FOUND.create(id));
   }
 

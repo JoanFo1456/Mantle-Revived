@@ -40,9 +40,9 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import slimeknights.mantle.command.argument.RegistryTagSource;
 import slimeknights.mantle.command.argument.TagSource;
 import slimeknights.mantle.command.argument.TagSourceArgument;
@@ -175,13 +175,13 @@ public class TagsForCommand {
   private static int heldFluid(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
     CommandSourceStack source = context.getSource();
     ItemStack stack = source.getPlayerOrException().getMainHandItem();
-    IFluidHandlerItem capability = stack.getCapability(Capabilities.FluidHandler.ITEM);
-    if (capability != null) {
-      IFluidHandler handler = capability;
-      if (handler.getTanks() > 0) {
-        FluidStack fluidStack = handler.getFluidInTank(0);
-        if (!fluidStack.isEmpty()) {
-          Fluid fluid = fluidStack.getFluid();
+    ItemAccess itemAccess = ItemAccess.forStack(stack.copyWithCount(1));
+    ResourceHandler<FluidResource> handler = itemAccess.getCapability(Capabilities.Fluid.ITEM);
+    if (handler != null) {
+      for (int i = 0; i < handler.size(); i++) {
+        FluidResource resource = handler.getResource(i);
+        if (!resource.isEmpty()) {
+          Fluid fluid = resource.getFluid();
           return printOwningTags(context, BuiltInRegistries.FLUID, fluid);
         }
       }
@@ -211,7 +211,7 @@ public class TagsForCommand {
       int totalTags = 0;
       // print tags for each contained enchantment
       for (Holder<Enchantment> enchantment : enchantments.keySet()) {
-        totalTags += printOwningTags(context, context.getSource().registryAccess().registryOrThrow(Registries.ENCHANTMENT), enchantment.value());
+        totalTags += printOwningTags(context, context.getSource().registryAccess().lookupOrThrow(Registries.ENCHANTMENT), enchantment.value());
       }
       return totalTags;
     }
@@ -312,7 +312,7 @@ public class TagsForCommand {
     double range = player.entityInteractionRange();
     Vec3 direction = start.add(look.x * range, look.y * range, look.z * range);
     AABB bb = player.getBoundingBox().expandTowards(look.x * range, look.y * range, look.z * range).expandTowards(1, 1, 1);
-    EntityHitResult entityTrace = ProjectileUtil.getEntityHitResult(source.getLevel(), player, start, direction, bb, e -> true);
+    EntityHitResult entityTrace = ProjectileUtil.getEntityHitResult(source.getLevel(), player, start, direction, bb, e -> true, 0.0F);
     if (entityTrace != null) {
       EntityType<?> target = entityTrace.getEntity().getType();
       return printOwningTags(context, BuiltInRegistries.ENTITY_TYPE, target);

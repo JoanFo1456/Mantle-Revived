@@ -51,7 +51,7 @@ public class BookCommand {
    * @param subCommand  Command builder
    */
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand) {
-    subCommand.requires(source -> source.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS) && source.getEntity() instanceof AbstractClientPlayer)
+    subCommand.requires(source -> MantleCommand.hasPermission(source, MantleCommand.PERMISSION_GAME_COMMANDS) && source.getEntity() instanceof AbstractClientPlayer)
       .then(Commands.literal("open")
         .then(Commands.argument("id", IdentifierArgument.id()).suggests(MantleClientCommand.REGISTERED_BOOKS)
           .executes(BookCommand::openBook)))
@@ -92,7 +92,7 @@ public class BookCommand {
     BookData bookData = BookLoader.getBook(book);
     if(bookData != null) {
       // Delay execution to ensure chat window is closed
-      Minecraft.getInstance().tell(() ->
+      Minecraft.getInstance().execute(() ->
         bookData.openGui(Component.literal("Book"), "", null, null)
       );
     } else {
@@ -196,9 +196,9 @@ public class BookCommand {
     if (player != null) {
       Component fileComponent = GeneratePackHelper.getOutputComponent(screenshotDir);
       if (htmlDir != null) {
-        player.displayClientMessage(Component.translatable(EXPORT_SUCCESS_HTML, fileComponent, GeneratePackHelper.getOutputComponent(htmlDir)), false);
+        player.sendSystemMessage(Component.translatable(EXPORT_SUCCESS_HTML, fileComponent, GeneratePackHelper.getOutputComponent(htmlDir)));
       } else {
-        player.displayClientMessage(Component.translatable(EXPORT_SUCCESS, fileComponent), false);
+        player.sendSystemMessage(Component.translatable(EXPORT_SUCCESS, fileComponent));
       }
     }
   }
@@ -207,7 +207,7 @@ public class BookCommand {
   public static void bookNotFound(Identifier book) {
     Player player = Minecraft.getInstance().player;
     if (player != null) {
-      player.displayClientMessage(Component.translatable(BOOK_NOT_FOUND, book).withStyle(ChatFormatting.RED), false);
+      player.sendSystemMessage(Component.translatable(BOOK_NOT_FOUND, book).withStyle(ChatFormatting.RED));
     }
   }
 }

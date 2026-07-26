@@ -3,13 +3,15 @@ package slimeknights.mantle.command;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.ClickEvent.Action;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.metadata.MetadataSectionType;
+import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.neoforge.common.conditions.NeverCondition;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -83,11 +85,10 @@ public class GeneratePackHelper {
   /** Creates a mcmeta to make a valid pack */
   public static void saveMcmeta(Path folder, PackType packType, String description) {
     Path path = folder.resolve("pack.mcmeta");
+    MetadataSectionType<PackMetadataSection> type = PackMetadataSection.forPackType(packType);
+    PackMetadataSection section = new PackMetadataSection(Component.literal(description), SharedConstants.getCurrentVersion().packVersion(packType).minorRange());
     JsonObject meta = new JsonObject();
-    JsonObject pack = new JsonObject();
-    pack.addProperty("description", description);
-    pack.addProperty("pack_format", SharedConstants.getCurrentVersion().getPackVersion(packType));
-    meta.add("pack", pack);
+    meta.add(type.name(), type.codec().encodeStart(JsonOps.INSTANCE, section).getOrThrow().getAsJsonObject());
     saveJson(meta, path);
   }
 
@@ -130,6 +131,6 @@ public class GeneratePackHelper {
    * @return  Clickable text component
    */
   public static MutableComponent getPathComponent(MutableComponent text, String path) {
-    return text.withStyle(style -> style.withUnderlined(true).withClickEvent(new ClickEvent(Action.OPEN_FILE, path)));
+    return text.withStyle(style -> style.withUnderlined(true).withClickEvent(new ClickEvent.OpenFile(path)));
   }
 }
