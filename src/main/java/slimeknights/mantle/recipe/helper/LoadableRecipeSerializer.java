@@ -54,6 +54,21 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
     }, buffer -> fromNetworkSafe(buffer.readIdentifier(), buffer));
   }
 
+  /**
+   * Memoized serializer record. In 26.1 {@link RecipeSerializer} is a final record, so the instance registered into
+   * the registry and the one returned by {@link Recipe#getSerializer()} must be the SAME object for serialization
+   * identity to hold. The interface default builds a fresh record per call, so we cache it here.
+   */
+  private RecipeSerializer<T> serializer;
+
+  @Override
+  public RecipeSerializer<T> serializer() {
+    if (this.serializer == null) {
+      this.serializer = new RecipeSerializer<>(codec(), streamCodec());
+    }
+    return this.serializer;
+  }
+
   /** Creates a standard serializer from a loadable */
   public static <T extends Recipe<?>> RecipeSerializer<T> of(RecordLoadable<T> loadable) {
     return new LoadableRecipeSerializer<>(loadable).serializer();
