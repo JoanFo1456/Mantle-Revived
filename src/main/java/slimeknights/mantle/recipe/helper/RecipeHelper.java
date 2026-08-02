@@ -8,7 +8,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
 import slimeknights.mantle.recipe.IMultiRecipe;
 
 import java.util.Comparator;
@@ -135,5 +138,90 @@ public class RecipeHelper {
    */
   public static <C> List<C> getJEIRecipes(RegistryAccess access, RecipeManager manager, RecipeType<? extends Recipe<?>> type, Class<C> clazz) {
     return getJEIRecipes(access, getRecipeStream(manager, type), clazz);
+  }
+
+
+  /* RecipeMap utils (client-side source, e.g. slimeknights.mantle.recipe.sync.ClientRecipeCache) */
+
+  /**
+   * Gets all recipes of a given type from a {@link RecipeMap}. The map already indexes by type, so no
+   * extra type filter is needed (unlike the {@link RecipeManager} overload).
+   * <p>The raw cast bridges {@code RecipeMap.byType(RecipeType<T extends Recipe<I>>)}, which a
+   * {@code RecipeType<? extends Recipe<?>>} cannot satisfy through wildcard capture; the results are
+   * only ever read as {@code Recipe<?>}, so the cast is safe.
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private static Stream<Recipe<?>> getRecipeStream(RecipeMap map, RecipeType<? extends Recipe<?>> type) {
+    return ((java.util.Collection<RecipeHolder<?>>) (java.util.Collection<?>) map.byType((RecipeType) type))
+             .stream().<Recipe<?>>map(RecipeHolder::value);
+  }
+
+  /**
+   * Gets a recipe of a specific class type by name from the client recipe map
+   * @param map    Client recipe map
+   * @param name   Recipe name
+   * @param clazz  Output class
+   * @param <C>    Return type
+   * @return  Optional of the recipe, or empty if the recipe is missing or the wrong type
+   */
+  public static <C extends Recipe<?>> Optional<C> getRecipe(RecipeMap map, Identifier name, Class<C> clazz) {
+    RecipeHolder<?> holder = map.byKey(ResourceKey.create(Registries.RECIPE, name));
+    return Optional.ofNullable(holder).map(RecipeHolder::value).filter(clazz::isInstance).map(clazz::cast);
+  }
+
+  /**
+   * Gets a list of all recipes of a type from the client recipe map. Multi Recipes are kept as a single recipe instance
+   * @param map   Client recipe map
+   * @param type  Recipe type
+   * @return  List of recipes from the map
+   */
+  public static List<Recipe<?>> getRecipes(RecipeMap map, RecipeType<? extends Recipe<?>> type) {
+    return getRecipeStream(map, type).collect(Collectors.toList());
+  }
+
+  /**
+   * Gets a list of all recipes of a type from the client recipe map, safely casting to the specified type. Multi Recipes are kept as a single recipe instance
+   * @param map    Client recipe map
+   * @param type   Recipe type
+   * @param clazz  Preferred recipe class type
+   * @param <C>    Return type
+   * @return  List of recipes from the map
+   */
+  public static <C> List<C> getRecipes(RecipeMap map, RecipeType<? extends Recipe<?>> type, Class<C> clazz) {
+    return getRecipeStream(map, type)
+                  .filter(clazz::isInstance)
+                  .map(clazz::cast)
+                  .collect(Collectors.toList());
+  }
+
+  /**
+   * Gets a list of recipes for display in a UI list from the client recipe map. Sorted to keep the order the same on both sides, and filtered based on the given predicate and class
+   * @param map     Client recipe map
+   * @param type    Recipe type
+   * @param clazz   Preferred recipe class type
+   * @param filter  Filter for which recipes to add to the list
+   * @param <C>     Return type
+   * @return  Recipe list
+   */
+  public static <C extends Recipe<?>> List<C> getUIRecipes(RecipeMap map, RecipeType<? extends Recipe<?>> type, Class<C> clazz, Predicate<? super C> filter) {
+    return getRecipeStream(map, type)
+                  .filter(clazz::isInstance)
+                  .map(clazz::cast)
+                  .filter(filter)
+                  .sorted(Comparator.comparing(recipe -> BuiltInRegistries.RECIPE_SERIALIZER.getKey(recipe.getSerializer()).toString()))
+                  .collect(Collectors.toList());
+  }
+
+  /**
+   * Gets a list of all recipes of a type from the client recipe map, expanding multi recipes. Intended for use in recipe display such as JEI
+   * @param access  Registry access instance
+   * @param map     Client recipe map
+   * @param type    Recipe type
+   * @param clazz   Preferred recipe class type
+   * @param <C>     Return type
+   * @return  List of flattened recipes from the map
+   */
+  public static <C> List<C> getJEIRecipes(RegistryAccess access, RecipeMap map, RecipeType<? extends Recipe<?>> type, Class<C> clazz) {
+    return getJEIRecipes(access, getRecipeStream(map, type), clazz);
   }
 }

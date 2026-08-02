@@ -11,6 +11,7 @@ import slimeknights.mantle.network.packet.UpdateHeldPagePacket;
 import slimeknights.mantle.network.packet.UpdateInventoryPagePacket;
 import slimeknights.mantle.network.packet.UpdateLecternPagePacket;
 import slimeknights.mantle.network.NetworkWrapper.PacketDirection;
+import slimeknights.mantle.recipe.sync.RecipeSyncPacket;
 
 public class MantleNetwork {
   /**
@@ -37,6 +38,8 @@ public class MantleNetwork {
     INSTANCE.registerPacket(SwingArmPacket.class, SwingArmPacket::new, PacketDirection.PLAY_TO_CLIENT);
     INSTANCE.registerPacket(OpenNamedBookPacket.class, OpenNamedBookPacket::new, PacketDirection.PLAY_TO_CLIENT);
     INSTANCE.registerPacket(FluidContainerTransferPacket.class, FluidContainerTransferPacket::new, PacketDirection.PLAY_TO_CLIENT);
+    // appended at the end so existing packet ids are unchanged (see NetworkWrapper auto-increment ids)
+    INSTANCE.registerPacket(RecipeSyncPacket.class, RecipeSyncPacket::new, PacketDirection.PLAY_TO_CLIENT);
   }
 
   /** Registers packets with NeoForge's payload system. */

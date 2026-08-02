@@ -28,6 +28,7 @@ import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent.RegisterLoaders;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
@@ -77,6 +78,12 @@ public class ClientEvents {
 
   /** Called on construct to initiatlize things that need early entry */
   public static void onConstruct() {}
+
+  /** Clears the synced client recipe cache on disconnect so a later world/server join starts fresh */
+  @SubscribeEvent
+  static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+    slimeknights.mantle.recipe.sync.ClientRecipeCache.clear();
+  }
 
   @SuppressWarnings("ConstantConditions")
   @SubscribeEvent

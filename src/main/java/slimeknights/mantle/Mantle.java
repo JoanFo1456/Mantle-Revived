@@ -17,6 +17,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -66,6 +67,7 @@ import slimeknights.mantle.loot.LootTableInjector;
 import slimeknights.mantle.loot.MantleLoot;
 import slimeknights.mantle.network.MantleNetwork;
 import slimeknights.mantle.recipe.MantleRecipes;
+import slimeknights.mantle.recipe.sync.RecipeSyncHandler;
 import slimeknights.mantle.recipe.helper.TagPreference;
 import slimeknights.mantle.registration.RegistrationHelper;
 import slimeknights.mantle.registration.MantleRegistrations;
@@ -112,6 +114,8 @@ public class Mantle {
     MantleNetwork.init();
     MantleRecipes.init(bus);
     NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, PlayerInteractEvent.RightClickBlock.class, LecternBookItem::interactWithBlock);
+    // server-side recipe sync: OnDatapackSyncEvent is a game-bus event, fired on join and /reload
+    NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, OnDatapackSyncEvent.class, RecipeSyncHandler::onDatapackSync);
 
     if (FMLEnvironment.getDist() == Dist.CLIENT) {
       ClientEvents.onConstruct();
