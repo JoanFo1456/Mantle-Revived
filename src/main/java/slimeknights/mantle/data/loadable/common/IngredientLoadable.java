@@ -4,9 +4,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -22,6 +25,19 @@ import slimeknights.mantle.util.typed.TypedMap;
 public enum IngredientLoadable implements Loadable<Ingredient> {
   ALLOW_EMPTY,
   DISALLOW_EMPTY;
+
+  /**
+   * Registry-aware JSON ops, built lazily. Serializing a tag {@link Ingredient} needs a {@link RegistryOps} so
+   * {@code HolderSetCodec} writes the tag by name (via {@code unwrapKey}); plain {@link JsonOps} instead iterates the
+   * holder set contents, which throws "Missing tag" at datagen time (tags are not bound then).
+   */
+  private static DynamicOps<JsonElement> jsonOps;
+  private static DynamicOps<JsonElement> jsonOps() {
+    if (jsonOps == null) {
+      jsonOps = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY));
+    }
+    return jsonOps;
+  }
 
   @Override
   public Ingredient convert(JsonElement element, String key, TypedMap context) {
@@ -111,7 +127,7 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
     if (namedItem != null) {
       return namedItem;
     }
-    return Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, object).getOrThrow(JsonParseException::new);
+    return Ingredient.CODEC.encodeStart(jsonOps(), object).getOrThrow(JsonParseException::new);
   }
 
   @Override
