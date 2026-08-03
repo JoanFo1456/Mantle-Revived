@@ -64,6 +64,23 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
         return legacy;
       }
     }
+    // an array is a union of ingredients (e.g. ["#tag_a","#tag_b"]); convert each child recursively so nested tags and
+    // bare item strings build lazily, then combine. Routing an array through Ingredient.CODEC with plain JsonOps instead
+    // parses each element as a raw item id and rejects the "#" tag prefix ("Not a valid resource location").
+    if (element.isJsonArray()) {
+      JsonArray array = element.getAsJsonArray();
+      if (array.isEmpty()) {
+        throw new JsonParseException("Ingredient array cannot be empty");
+      }
+      Ingredient[] children = new Ingredient[array.size()];
+      for (int i = 0; i < array.size(); i++) {
+        children[i] = convert(array.get(i), key, context);
+      }
+      if (children.length == 1) {
+        return children[0];
+      }
+      return net.neoforged.neoforge.common.crafting.CompoundIngredient.of(children);
+    }
     element = normalizeNestedIngredients(element, true);
     return Ingredient.CODEC.parse(JsonOps.INSTANCE, element).getOrThrow(JsonParseException::new);
   }
