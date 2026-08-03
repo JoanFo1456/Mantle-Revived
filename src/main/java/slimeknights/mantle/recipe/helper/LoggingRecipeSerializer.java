@@ -54,9 +54,23 @@ public interface LoggingRecipeSerializer<T extends Recipe<?>> {
     return StreamCodec.of((buffer, recipe) -> toNetworkSafe(buffer, recipe), buffer -> fromNetworkSafe(UNKNOWN_ID, buffer));
   }
 
+  /**
+   * Registry-aware JSON ops, built lazily. Vanilla's ingredient codec decodes a {@code "#tag"} reference through a
+   * registry-backed {@code HolderSetCodec}, which needs a {@link net.minecraft.core.HolderGetter} from a
+   * {@link net.minecraft.resources.RegistryOps}. Parsing a recipe with plain {@link JsonOps} makes tag ingredients fail
+   * structurally ("Not a json array; Not a JSON object"), so a registry-aware ops is required here.
+   */
+  com.mojang.serialization.DynamicOps<com.google.gson.JsonElement>[] REGISTRY_OPS_HOLDER = new com.mojang.serialization.DynamicOps[1];
+  static com.mojang.serialization.DynamicOps<com.google.gson.JsonElement> registryJsonOps() {
+    if (REGISTRY_OPS_HOLDER[0] == null) {
+      REGISTRY_OPS_HOLDER[0] = net.minecraft.resources.RegistryOps.create(JsonOps.INSTANCE, net.minecraft.core.RegistryAccess.fromRegistryOfRegistries(net.minecraft.core.registries.BuiltInRegistries.REGISTRY));
+    }
+    return REGISTRY_OPS_HOLDER[0];
+  }
+
   record LegacySerializer<R extends Recipe<?>>(RecipeSerializer<R> serializer) {
     public R fromJson(Identifier recipeId, JsonObject json) {
-      return serializer.codec().codec().parse(JsonOps.INSTANCE, upgradeLegacyItemStacks(json)).getOrThrow(IllegalArgumentException::new);
+      return serializer.codec().codec().parse(registryJsonOps(), upgradeLegacyItemStacks(json)).getOrThrow(IllegalArgumentException::new);
     }
 
     @Nullable
