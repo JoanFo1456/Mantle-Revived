@@ -62,6 +62,9 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
   /** Gets the size of the output without resolving the stack */
   public abstract int getCount();
 
+  /** Gets the result item without building the result stack (safe before item components are bound) */
+  public abstract Item getItem();
+
   /** Checks if the contents are empty without resolving the stack */
   public boolean isEmpty() {
     return getCount() <= 0;
@@ -178,6 +181,11 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
     }
 
     @Override
+    public Item getItem() {
+      return item;
+    }
+
+    @Override
     public ItemStack get() {
       // built lazily: as of 26.1 an ItemStack cannot be constructed until item data components are bound, which is
       // not the case while recipes/loot are decoded during the datapack reload prepare phase.
@@ -228,6 +236,11 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
     }
 
     @Override
+    public Item getItem() {
+      return stack.getItem();
+    }
+
+    @Override
     public JsonElement serialize(boolean writeCount) {
       if (writeCount) {
         return ItemStackLoadable.OPTIONAL_STACK_NBT.serialize(stack);
@@ -258,6 +271,11 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
     @Override
     public int getCount() {
       return count;
+    }
+
+    @Override
+    public Item getItem() {
+      return get().getItem();
     }
 
     @Override

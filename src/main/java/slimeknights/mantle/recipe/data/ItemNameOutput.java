@@ -31,6 +31,11 @@ public class ItemNameOutput extends ItemOutput {
     return count;
   }
 
+  @Override
+  public net.minecraft.world.item.Item getItem() {
+    return get().getItem();
+  }
+
   /**
    * Creates an output for the given item
    * @param name   Item name
