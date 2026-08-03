@@ -206,7 +206,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
     // planks
     ShapelessRecipeBuilder.shapeless(items(), RecipeCategory.BUILDING_BLOCKS, wood, 4).requires(slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(wood.getLogItemTag()))
                           .group("planks")
-                          .unlockedBy("has_log", inventoryTrigger(ItemPredicate.Builder.item().of(items(), wood.getLogItemTag()).build()))
+                          .unlockedBy("has_log", has(wood.getLogItemTag()))
                           .save(VanillaFinishedRecipe.output(consumer), key(location(folder + "planks")));
     // slab
     ItemLike slab = wood.getSlab();
@@ -300,7 +300,12 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
 
   /** Creates an unlock criterion for having an item tag. */
   static Criterion<InventoryChangeTrigger.TriggerInstance> has(TagKey<Item> tag) {
-    return inventoryTrigger(ItemPredicate.Builder.item().of(items(), tag).build());
+    // build the predicate with a lazy tag holder set: ItemPredicate.Builder.of(lookup, tag) resolves the tag eagerly
+    // via getOrThrow, which throws "Missing tag" at datagen time (tags not yet bound).
+    return inventoryTrigger(new ItemPredicate(
+      java.util.Optional.of(slimeknights.mantle.data.loadable.common.LazyTagIngredient.holderSet(tag)),
+      net.minecraft.advancements.criterion.MinMaxBounds.Ints.ANY,
+      net.minecraft.advancements.criterion.DataComponentMatchers.ANY));
   }
 
   /** Creates an inventory criterion. */
