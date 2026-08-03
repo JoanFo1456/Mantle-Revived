@@ -101,7 +101,10 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
 
   @Override
   public JsonElement serialize(Ingredient object) {
-    if (object.isEmpty() && this == DISALLOW_EMPTY) {
+    // Skip the empty check for custom ingredients: isEmpty() resolves a custom ingredient's contents (e.g. a
+    // DifferenceIngredient iterating a lazy tag), which throws "Missing tag" at datagen time. Custom ingredients are
+    // presumed non-empty.
+    if (this == DISALLOW_EMPTY && !object.isCustom() && object.isEmpty()) {
       throw new IllegalArgumentException("Ingredient cannot be empty");
     }
     JsonElement namedItem = ItemNameIngredient.serialize(object);
