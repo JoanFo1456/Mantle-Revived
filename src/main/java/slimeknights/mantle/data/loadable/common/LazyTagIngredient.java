@@ -108,7 +108,9 @@ public final class LazyTagIngredient {
 
     @Override
     public boolean canSerializeIn(HolderOwner<Item> owner) {
-      return resolve().canSerializeIn(owner);
+      // a tag serializes as a name reference (via unwrapKey), so do NOT resolve contents here -- resolving during
+      // serialization throws "Missing tag" at datagen time (tags not yet bound). Serialization is always valid.
+      return true;
     }
 
     @Override
