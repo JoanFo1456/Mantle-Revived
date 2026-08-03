@@ -4,10 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.data.loadable.Loadable;
@@ -21,49 +25,41 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
 
   @Override
   public Ingredient convert(JsonElement element, String key, TypedMap context) {
-    element = normalizeLegacyIngredient(element);
-    element = normalizeNestedIngredients(element, true);
     if (element.isJsonObject()) {
       JsonObject object = element.getAsJsonObject();
       if (object.has("type") && "forge:nbt".equals(object.get("type").getAsString())) {
         ItemStack stack = ItemStackLoadable.REQUIRED_STACK_NBT.deserialize(object, context);
         return Ingredient.of(stack.getItem());
       }
+      // pre-1.21.2 single item/tag object forms ({"item": id} / {"tag": id}) are no longer accepted by the vanilla
+      // ingredient codec, so build the ingredient directly rather than routing through Ingredient.CODEC.
+      Ingredient legacy = legacyObjectIngredient(object);
+      if (legacy != null) {
+        return legacy;
+      }
     }
+    element = normalizeNestedIngredients(element, true);
     return Ingredient.CODEC.parse(JsonOps.INSTANCE, element).getOrThrow(JsonParseException::new);
   }
 
   /**
-   * Converts the pre-1.21.2 object ingredient forms to the 1.21.2+ representation the vanilla codec accepts:
-   * {@code {"item": "id"}} becomes the string {@code "id"} and {@code {"tag": "id"}} becomes {@code "#id"}. Recurses
-   * through arrays and custom-ingredient children so nested legacy entries are converted too. Objects carrying a
-   * {@code type}/{@code neoforge:ingredient_type} key are custom ingredients and are left as-is (only their values recurse).
+   * Builds an ingredient from the pre-1.21.2 object forms {@code {"item": id}} / {@code {"tag": id}}, or returns null
+   * if the object is not one of those legacy forms (e.g. a custom ingredient carrying a {@code type} key).
    */
-  private static JsonElement normalizeLegacyIngredient(JsonElement element) {
-    if (element.isJsonArray()) {
-      JsonArray normalized = new JsonArray();
-      for (JsonElement child : element.getAsJsonArray()) {
-        normalized.add(normalizeLegacyIngredient(child));
-      }
-      return normalized;
+  @javax.annotation.Nullable
+  private static Ingredient legacyObjectIngredient(JsonObject object) {
+    if (object.has("type") || object.has("neoforge:ingredient_type")) {
+      return null;
     }
-    if (element.isJsonObject()) {
-      JsonObject object = element.getAsJsonObject();
-      if (!object.has("type") && !object.has("neoforge:ingredient_type")) {
-        if (object.has("item")) {
-          return object.get("item");
-        }
-        if (object.has("tag")) {
-          return new JsonPrimitive("#" + object.get("tag").getAsString());
-        }
-      }
-      JsonObject normalized = new JsonObject();
-      for (var entry : object.entrySet()) {
-        normalized.add(entry.getKey(), normalizeLegacyIngredient(entry.getValue()));
-      }
-      return normalized;
+    if (object.has("item")) {
+      Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(object.get("item").getAsString()));
+      return Ingredient.of(item);
     }
-    return element;
+    if (object.has("tag")) {
+      TagKey<Item> tag = TagKey.create(Registries.ITEM, Identifier.parse(object.get("tag").getAsString()));
+      return Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tag));
+    }
+    return null;
   }
 
   /** NeoForge's ingredient map codec no longer accepts array ingredients nested inside custom ingredient children. */
