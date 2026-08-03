@@ -50,9 +50,12 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
       @SuppressWarnings("unchecked")
       com.mojang.serialization.DynamicOps<com.google.gson.JsonElement> ops = (com.mojang.serialization.DynamicOps<com.google.gson.JsonElement>) dynamic.getOps();
       JsonObject json = dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
+      // the recipe id is written into the JSON by our serializer (1.21 recipes no longer receive it from the manager at
+      // decode time), so read it here to satisfy loadables that require ContextKey.ID.
+      Identifier id = json.has("id") ? Identifier.parse(json.get("id").getAsString()) : UNKNOWN_ID;
       DECODE_OPS.set(ops);
       try {
-        return loadable.deserialize(json, buildContext(null).build());
+        return loadable.deserialize(json, buildContext(id).build());
       } finally {
         DECODE_OPS.remove();
       }
