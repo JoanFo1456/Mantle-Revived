@@ -155,13 +155,28 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
     return Ingredient.CODEC.encodeStart(jsonOps(), object).getOrThrow(JsonParseException::new);
   }
 
+  /**
+   * Network codec syncing an ingredient as its resolved list of items. {@link Ingredient#CONTENTS_STREAM_CODEC} instead
+   * writes the underlying {@link net.minecraft.core.HolderSet} (which for a tag or custom ingredient is a tag/holder
+   * reference) and the client fails to resolve it mid-play ("No value present"). The client-side recipe cache only needs
+   * the item list for display, so resolve to items here — self-contained, no tag or custom-ingredient lookup on decode.
+   */
+  private static final net.minecraft.network.codec.StreamCodec<RegistryFriendlyByteBuf,java.util.List<Item>> ITEMS_STREAM_CODEC =
+    net.minecraft.network.codec.ByteBufCodecs.registry(Registries.ITEM).apply(net.minecraft.network.codec.ByteBufCodecs.list());
+
   @Override
   public Ingredient decode(FriendlyByteBuf buffer, TypedMap context) {
-    return Ingredient.CONTENTS_STREAM_CODEC.decode((RegistryFriendlyByteBuf) buffer);
+    java.util.List<Item> items = ITEMS_STREAM_CODEC.decode((RegistryFriendlyByteBuf) buffer);
+    if (items.isEmpty()) {
+      // an ingredient can never be empty; a synced-empty ingredient means the server tag resolved to nothing, so match
+      // air as a harmless placeholder rather than throwing and dropping the whole recipe sync packet.
+      return Ingredient.of(net.minecraft.world.item.Items.AIR);
+    }
+    return Ingredient.of(items.stream());
   }
 
   @Override
   public void encode(FriendlyByteBuf buffer, Ingredient object) {
-    Ingredient.CONTENTS_STREAM_CODEC.encode((RegistryFriendlyByteBuf) buffer, object);
+    ITEMS_STREAM_CODEC.encode((RegistryFriendlyByteBuf) buffer, object.items().<Item>map(net.minecraft.core.Holder::value).toList());
   }
 }
