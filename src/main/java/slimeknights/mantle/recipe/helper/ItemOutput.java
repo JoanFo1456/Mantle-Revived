@@ -106,6 +106,19 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
   }
 
   /**
+   * Creates a new output for the given item with custom data NBT, deferring stack construction. As of 26.1 an ItemStack
+   * cannot be built until item data components are bound, which is not the case at datagen time; the NBT is applied as
+   * the CUSTOM_DATA component when the stack is first resolved via {@link #get()}.
+   * @param item  Item
+   * @param count Stack count
+   * @param nbt   Custom data NBT to attach, or null for none
+   * @return  Output
+   */
+  public static ItemOutput fromItem(ItemLike item, int count, @Nullable CompoundTag nbt) {
+    return new OfItem(item.asItem(), count, nbt);
+  }
+
+  /**
    * Creates a new output for the given item
    * @param item  Item
    * @return  Output
