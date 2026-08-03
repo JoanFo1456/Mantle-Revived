@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -20,6 +21,7 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
 
   @Override
   public Ingredient convert(JsonElement element, String key, TypedMap context) {
+    element = normalizeLegacyIngredient(element);
     element = normalizeNestedIngredients(element, true);
     if (element.isJsonObject()) {
       JsonObject object = element.getAsJsonObject();
@@ -29,6 +31,39 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
       }
     }
     return Ingredient.CODEC.parse(JsonOps.INSTANCE, element).getOrThrow(JsonParseException::new);
+  }
+
+  /**
+   * Converts the pre-1.21.2 object ingredient forms to the 1.21.2+ representation the vanilla codec accepts:
+   * {@code {"item": "id"}} becomes the string {@code "id"} and {@code {"tag": "id"}} becomes {@code "#id"}. Recurses
+   * through arrays and custom-ingredient children so nested legacy entries are converted too. Objects carrying a
+   * {@code type}/{@code neoforge:ingredient_type} key are custom ingredients and are left as-is (only their values recurse).
+   */
+  private static JsonElement normalizeLegacyIngredient(JsonElement element) {
+    if (element.isJsonArray()) {
+      JsonArray normalized = new JsonArray();
+      for (JsonElement child : element.getAsJsonArray()) {
+        normalized.add(normalizeLegacyIngredient(child));
+      }
+      return normalized;
+    }
+    if (element.isJsonObject()) {
+      JsonObject object = element.getAsJsonObject();
+      if (!object.has("type") && !object.has("neoforge:ingredient_type")) {
+        if (object.has("item")) {
+          return object.get("item");
+        }
+        if (object.has("tag")) {
+          return new JsonPrimitive("#" + object.get("tag").getAsString());
+        }
+      }
+      JsonObject normalized = new JsonObject();
+      for (var entry : object.entrySet()) {
+        normalized.add(entry.getKey(), normalizeLegacyIngredient(entry.getValue()));
+      }
+      return normalized;
+    }
+    return element;
   }
 
   /** NeoForge's ingredient map codec no longer accepts array ingredients nested inside custom ingredient children. */
