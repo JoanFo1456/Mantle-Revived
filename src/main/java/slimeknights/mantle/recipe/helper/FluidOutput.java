@@ -96,7 +96,7 @@ public abstract class FluidOutput implements Supplier<FluidStack> {
    * @return  Output
    */
   public static FluidOutput fromFluid(Fluid fluid, int amount) {
-    return new OfFluid(fluid, amount);
+    return new OfFluid(fluid, amount, null);
   }
 
   /**
@@ -141,11 +141,14 @@ public abstract class FluidOutput implements Supplier<FluidStack> {
   private static class OfFluid extends FluidOutput {
     private final Fluid fluid;
     private final int amount;
+    @Nullable
+    private final CompoundTag nbt;
     private FluidStack cachedStack;
 
-    OfFluid(Fluid fluid, int amount) {
+    OfFluid(Fluid fluid, int amount, @Nullable CompoundTag nbt) {
       this.fluid = fluid;
       this.amount = amount;
+      this.nbt = nbt;
     }
 
     @Override
@@ -155,8 +158,13 @@ public abstract class FluidOutput implements Supplier<FluidStack> {
 
     @Override
     public FluidStack get() {
+      // built lazily: as of 26.1 a FluidStack cannot be constructed until fluid data components are bound, which is
+      // not the case while recipes/loot are decoded during the datapack reload prepare phase.
       if (cachedStack == null) {
         cachedStack = new FluidStack(fluid, amount);
+        if (nbt != null) {
+          cachedStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt.copy()));
+        }
       }
       return cachedStack;
     }
@@ -167,6 +175,9 @@ public abstract class FluidOutput implements Supplier<FluidStack> {
         json.add("fluid", Loadables.FLUID.serialize(this.fluid));
       }
       json.addProperty("amount", amount);
+      if (nbt != null) {
+        json.add("nbt", NBTLoadable.ALLOW_STRING.serialize(nbt));
+      }
     }
   }
 
@@ -278,7 +289,19 @@ public abstract class FluidOutput implements Supplier<FluidStack> {
           IntLoadable.FROM_ONE.getIfPresent(json, "amount", context),
           NBTLoadable.ALLOW_STRING.getOrDefault(json, "nbt", null));
       }
-      return fromStack(stack.deserialize(json, context));
+      // parse fluid + amount + nbt without building a FluidStack here: as of 26.1 a FluidStack cannot be constructed
+      // until fluid data components are bound, which is not yet the case while recipes are decoded during the reload
+      // prepare phase. OfFluid builds the stack lazily in get() once components are available.
+      Fluid fluid = Loadables.FLUID.getOrDefault(json, "fluid", net.minecraft.world.level.material.Fluids.EMPTY, context);
+      int amount = IntLoadable.FROM_ONE.getOrDefault(json, "amount", 1, context);
+      CompoundTag nbt = NBTLoadable.ALLOW_STRING.getOrDefault(json, "nbt", null);
+      if (fluid == net.minecraft.world.level.material.Fluids.EMPTY || amount <= 0) {
+        if (nonEmpty) {
+          throw new com.google.gson.JsonSyntaxException("FluidOutput cannot be empty for this recipe");
+        }
+        return EMPTY;
+      }
+      return new OfFluid(fluid, amount, nbt);
     }
 
     @Override
