@@ -57,7 +57,9 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
     }
     if (object.has("tag")) {
       TagKey<Item> tag = TagKey.create(Registries.ITEM, Identifier.parse(object.get("tag").getAsString()));
-      return Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tag));
+      // resolve the tag lazily: loot/recipe data is decoded before the reload binds tags, so an eager
+      // getOrThrow(tag) would throw "Missing tag" here.
+      return LazyTagIngredient.of(tag);
     }
     return null;
   }
