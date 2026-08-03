@@ -2,6 +2,7 @@ package slimeknights.mantle.recipe.helper;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.item.component.CustomData;
 import slimeknights.mantle.data.loadable.LoadableCodec;
@@ -97,7 +99,7 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
    * @return  Output
    */
   public static ItemOutput fromItem(ItemLike item, int count) {
-    return new OfItem(item.asItem(), count);
+    return new OfItem(item.asItem(), count, null);
   }
 
   /**
@@ -160,11 +162,14 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
   private static class OfItem extends ItemOutput {
     private final Item item;
     private final int count;
+    @Nullable
+    private final CompoundTag nbt;
     private ItemStack cachedStack;
 
-    OfItem(Item item, int count) {
+    OfItem(Item item, int count, @Nullable CompoundTag nbt) {
       this.item = item;
       this.count = count;
+      this.nbt = nbt;
     }
 
     @Override
@@ -174,22 +179,32 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
 
     @Override
     public ItemStack get() {
+      // built lazily: as of 26.1 an ItemStack cannot be constructed until item data components are bound, which is
+      // not the case while recipes/loot are decoded during the datapack reload prepare phase.
       if (cachedStack == null) {
         cachedStack = new ItemStack(item, count);
+        if (nbt != null) {
+          cachedStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt.copy()));
+        }
       }
       return cachedStack;
     }
 
     @Override
     public JsonElement serialize(boolean writeCount) {
-      JsonElement item = Loadables.ITEM.serialize(this.item);
-      if (writeCount && count > 1) {
+      JsonElement itemElement = Loadables.ITEM.serialize(this.item);
+      if ((writeCount && count > 1) || nbt != null) {
         JsonObject json = new JsonObject();
-        json.add("item", item);
-        json.addProperty("count", count);
+        json.add("item", itemElement);
+        if (writeCount && count > 1) {
+          json.addProperty("count", count);
+        }
+        if (nbt != null) {
+          json.add("nbt", NBTLoadable.ALLOW_STRING.serialize(nbt));
+        }
         return json;
       } else {
-        return item;
+        return itemElement;
       }
     }
   }
@@ -318,15 +333,35 @@ public abstract class ItemOutput implements Supplier<ItemStack> {
         }
         return fromTag(tag, count, NBTLoadable.ALLOW_STRING.getOrDefault(json, "nbt", null));
       }
-      return fromStack(stack.deserialize(json, context));
+      // parse item + count + nbt without building an ItemStack here: as of 26.1 an ItemStack cannot be constructed
+      // until item data components are bound, which is not yet the case while recipes are decoded during the reload
+      // prepare phase. OfItem builds the stack lazily in get() once components are available.
+      Item item = Loadables.ITEM.getOrDefault(json, "item", Items.AIR, context);
+      int count = 1;
+      if (readCount) {
+        count = IntLoadable.FROM_ONE.getOrDefault(json, "count", 1, context);
+      }
+      if (item == Items.AIR || count == 0) {
+        if (nonEmpty) {
+          throw new JsonSyntaxException("ItemOutput cannot be empty for this recipe");
+        }
+        return EMPTY;
+      }
+      return new OfItem(item, count, NBTLoadable.ALLOW_STRING.getOrDefault(json, "nbt", null));
     }
 
     @Override
     public ItemOutput convert(JsonElement element, String key, TypedMap context) {
-      // if it's a primitive, parse it directly with the stack logic
-      // that handles single items and ensures both count and non-empty
+      // if it's a primitive, it is a single item id; parse it lazily (see deserialize for why we avoid ItemStack here)
       if (element.isJsonPrimitive()) {
-        return fromStack(stack.convert(element, key, context));
+        Item item = Loadables.ITEM.convert(element, key, context);
+        if (item == Items.AIR) {
+          if (nonEmpty) {
+            throw new JsonSyntaxException("ItemOutput cannot be empty for this recipe");
+          }
+          return EMPTY;
+        }
+        return new OfItem(item, 1, null);
       }
       return deserialize(GsonHelper.convertToJsonObject(element, key), context);
     }
