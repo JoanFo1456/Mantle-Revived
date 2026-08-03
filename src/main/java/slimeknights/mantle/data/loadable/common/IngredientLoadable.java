@@ -41,6 +41,16 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
 
   @Override
   public Ingredient convert(JsonElement element, String key, TypedMap context) {
+    // a single item or tag serializes as a bare string ("minecraft:flint" or "#c:ingots/steel"); the vanilla ingredient
+    // codec here is HolderSet-based and rejects a bare item id, so build the ingredient directly to stay symmetric with
+    // serialize(). Tags resolve lazily (loot/recipe data is decoded before the reload binds tags).
+    if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+      String str = element.getAsString();
+      if (str.startsWith("#")) {
+        return LazyTagIngredient.of(TagKey.create(Registries.ITEM, Identifier.parse(str.substring(1))));
+      }
+      return Ingredient.of(BuiltInRegistries.ITEM.getValue(Identifier.parse(str)));
+    }
     if (element.isJsonObject()) {
       JsonObject object = element.getAsJsonObject();
       if (object.has("type") && "forge:nbt".equals(object.get("type").getAsString())) {
