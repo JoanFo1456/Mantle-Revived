@@ -20,7 +20,7 @@ import slimeknights.mantle.registration.RegistrationIdContext;
 @Mixin(BlockBehaviour.class)
 public class BlockBehaviourMixin {
   @Inject(method = "<init>", at = @At("HEAD"))
-  private void mantle$assignRegistrationId(BlockBehaviour.Properties properties, CallbackInfo ci) {
+  private static void mantle$assignRegistrationId(BlockBehaviour.Properties properties, CallbackInfo ci) {
     Identifier id = RegistrationIdContext.current();
     if (id != null) {
       properties.setId(ResourceKey.create(Registries.BLOCK, id));

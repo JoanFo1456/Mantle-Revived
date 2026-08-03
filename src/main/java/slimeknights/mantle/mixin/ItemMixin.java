@@ -20,7 +20,7 @@ import slimeknights.mantle.registration.RegistrationIdContext;
 @Mixin(Item.class)
 public class ItemMixin {
   @Inject(method = "<init>", at = @At("HEAD"))
-  private void mantle$assignRegistrationId(Item.Properties properties, CallbackInfo ci) {
+  private static void mantle$assignRegistrationId(Item.Properties properties, CallbackInfo ci) {
     Identifier id = RegistrationIdContext.current();
     if (id != null) {
       properties.setId(ResourceKey.create(Registries.ITEM, id));
