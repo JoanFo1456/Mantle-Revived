@@ -94,7 +94,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
     // note our item is in the center, any mod allowed around the edges
     Identifier largeId = id(largeItem);
     ShapedRecipeBuilder.shaped(items(), category, largeItem)
-                       .define('#', smallTag)
+                       .define('#', slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(smallTag))
                        .define('*', smallItem)
                        .pattern("###")
                        .pattern("#*#")
@@ -204,7 +204,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
     Criterion<?> hasPlanks = has(wood);
 
     // planks
-    ShapelessRecipeBuilder.shapeless(items(), RecipeCategory.BUILDING_BLOCKS, wood, 4).requires(wood.getLogItemTag())
+    ShapelessRecipeBuilder.shapeless(items(), RecipeCategory.BUILDING_BLOCKS, wood, 4).requires(slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(wood.getLogItemTag()))
                           .group("planks")
                           .unlockedBy("has_log", inventoryTrigger(ItemPredicate.Builder.item().of(items(), wood.getLogItemTag()).build()))
                           .save(VanillaFinishedRecipe.output(consumer), key(location(folder + "planks")));
@@ -242,7 +242,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
                        .save(VanillaFinishedRecipe.output(consumer), key(location(folder + "stripped_log_to_wood")));
     // doors
     ShapedRecipeBuilder.shaped(items(), RecipeCategory.DECORATIONS, wood.getFence(), 3)
-                       .define('#', Tags.Items.RODS_WOODEN).define('W', wood)
+                       .define('#', slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(Tags.Items.RODS_WOODEN)).define('W', wood)
                        .pattern("W#W").pattern("W#W")
                        .group("wooden_fence")
                        .unlockedBy("has_planks", hasPlanks)
@@ -280,7 +280,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
     // signs
     ShapedRecipeBuilder.shaped(items(), RecipeCategory.DECORATIONS, wood.getSign(), 3)
                        .group("sign")
-                       .define('#', wood).define('X', Tags.Items.RODS_WOODEN)
+                       .define('#', wood).define('X', slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(Tags.Items.RODS_WOODEN))
                        .pattern("###").pattern("###").pattern(" X ")
                        .unlockedBy("has_planks", has(wood))
                        .save(VanillaFinishedRecipe.output(consumer), key(location(folder + "sign")));
