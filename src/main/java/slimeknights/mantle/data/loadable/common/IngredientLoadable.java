@@ -166,26 +166,14 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
 
   @Override
   public Ingredient decode(FriendlyByteBuf buffer, TypedMap context) {
-    java.util.List<Item> items = ITEMS_STREAM_CODEC.decode((RegistryFriendlyByteBuf) buffer);
-    if (items.isEmpty()) {
-      // an ingredient can never be empty; a synced-empty ingredient means the server tag resolved to nothing, so match
-      // air as a harmless placeholder rather than throwing and dropping the whole recipe sync packet.
-      return Ingredient.of(net.minecraft.world.item.Items.AIR);
-    }
-    return Ingredient.of(items.stream());
+    return Ingredient.of(ITEMS_STREAM_CODEC.decode((RegistryFriendlyByteBuf) buffer).stream());
   }
 
   @Override
   public void encode(FriendlyByteBuf buffer, Ingredient object) {
-    java.util.List<Item> items;
-    try {
-      items = object.items().<Item>map(net.minecraft.core.Holder::value).toList();
-    } catch (RuntimeException e) {
-      // resolving a tag ingredient that references a missing/unbound item tag throws; sync it as empty rather than
-      // aborting the whole recipe sync packet, which would disconnect the joining client over a single bad recipe.
-      slimeknights.mantle.Mantle.logger.warn("Skipping unresolvable ingredient during recipe sync: {}", e.getMessage());
-      items = java.util.List.of();
-    }
-    ITEMS_STREAM_CODEC.encode((RegistryFriendlyByteBuf) buffer, items);
+    // resolves the ingredient's items; throws for a tag ingredient over a missing/unbound tag. Callers syncing a whole
+    // recipe (see RecipeSyncHandler) trial-encode and drop any recipe that throws, so one bad recipe cannot corrupt the
+    // packet -- keep this strict rather than writing an empty (and thus illegal) ingredient.
+    ITEMS_STREAM_CODEC.encode((RegistryFriendlyByteBuf) buffer, object.items().<Item>map(net.minecraft.core.Holder::value).toList());
   }
 }

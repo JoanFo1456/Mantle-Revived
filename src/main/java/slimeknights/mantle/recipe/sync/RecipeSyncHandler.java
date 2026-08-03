@@ -34,10 +34,17 @@ public final class RecipeSyncHandler {
     RecipeManager manager = server.getRecipeManager();
     RecipeMap recipeMap = manager.recipeMap();
 
-    // build the filtered holder list once and reuse it for every relevant player
+    // build the filtered holder list once and reuse it for every relevant player. Trial-encode each recipe and drop any
+    // that throws (e.g. an ingredient over a missing/unbound item tag): a single un-encodable recipe would otherwise
+    // corrupt the whole sync packet and disconnect the joining client. Skipped recipes simply do not appear client-side.
+    net.minecraft.core.RegistryAccess access = server.registryAccess();
     List<RecipeHolder<?>> holders = new ArrayList<>();
     for (RecipeType<?> type : types) {
-      holders.addAll(byType(recipeMap, type));
+      for (RecipeHolder<?> holder : byType(recipeMap, type)) {
+        if (canEncode(holder, access)) {
+          holders.add(holder);
+        }
+      }
     }
 
     RecipeSyncPacket packet = new RecipeSyncPacket(holders);
@@ -53,5 +60,23 @@ public final class RecipeSyncHandler {
   @SuppressWarnings({"unchecked", "rawtypes"})
   private static Collection<RecipeHolder<?>> byType(RecipeMap map, RecipeType<?> type) {
     return (Collection<RecipeHolder<?>>) (Collection<? extends RecipeHolder<? extends Recipe<?>>>) map.byType((RecipeType) type);
+  }
+
+  /**
+   * Checks a recipe holder round-trips through {@link RecipeHolder#STREAM_CODEC} into a throwaway buffer. Returns false
+   * (and logs) if encoding throws -- typically an ingredient resolving a missing/unbound item tag -- so the recipe is
+   * dropped from the sync rather than corrupting the packet for the whole player.
+   */
+  private static boolean canEncode(RecipeHolder<?> holder, net.minecraft.core.RegistryAccess access) {
+    net.minecraft.network.RegistryFriendlyByteBuf buffer = new net.minecraft.network.RegistryFriendlyByteBuf(io.netty.buffer.Unpooled.buffer(), access);
+    try {
+      RecipeHolder.STREAM_CODEC.encode(buffer, holder);
+      return true;
+    } catch (RuntimeException e) {
+      slimeknights.mantle.Mantle.logger.warn("Skipping recipe {} from client sync (unresolvable): {}", holder.id(), e.getMessage());
+      return false;
+    } finally {
+      buffer.release();
+    }
   }
 }
