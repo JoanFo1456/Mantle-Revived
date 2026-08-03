@@ -1,5 +1,6 @@
 package slimeknights.mantle.recipe.crafting;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
@@ -131,8 +132,20 @@ public class ShapedFallbackRecipe implements CraftingRecipe {
 
   /* Serialization */
 
+  @SuppressWarnings("unchecked")
   private static final Codec<ShapedFallbackRecipe> JSON_CODEC = Codec.PASSTHROUGH.xmap(
-    dynamic -> fromJson(dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject()),
+    dynamic -> {
+      // capture the reload's registry-aware ops so tag ingredients in the key map resolve lazily (see
+      // LoggingRecipeSerializer#registryJsonOps); re-parsing with plain JsonOps makes tag ingredients fail structurally
+      com.mojang.serialization.DynamicOps<JsonElement> ops = (com.mojang.serialization.DynamicOps<JsonElement>) dynamic.getOps();
+      JsonObject json = dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
+      slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.set(ops);
+      try {
+        return fromJson(json);
+      } finally {
+        slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.remove();
+      }
+    },
     recipe -> new Dynamic<>(JsonOps.INSTANCE, toJson(recipe)));
   public static final MapCodec<ShapedFallbackRecipe> CODEC = MapCodec.assumeMapUnsafe(JSON_CODEC);
   public static final StreamCodec<RegistryFriendlyByteBuf,ShapedFallbackRecipe> STREAM_CODEC = StreamCodec.of(ShapedFallbackRecipe::toNetwork, ShapedFallbackRecipe::fromNetwork);
@@ -140,7 +153,7 @@ public class ShapedFallbackRecipe implements CraftingRecipe {
   public static final RecipeSerializer<ShapedFallbackRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 
   private static ShapedFallbackRecipe fromJson(JsonObject json) {
-    ShapedRecipe base = ShapedRecipe.MAP_CODEC.codec().parse(JsonOps.INSTANCE, json).getOrThrow(JsonSyntaxException::new);
+    ShapedRecipe base = ShapedRecipe.MAP_CODEC.codec().parse(slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), json).getOrThrow(JsonSyntaxException::new);
     List<Identifier> alternatives = JsonHelper.parseList(json, "alternatives", Loadables.RESOURCE_LOCATION);
     return new ShapedFallbackRecipe(base, alternatives);
   }
