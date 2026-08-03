@@ -39,7 +39,7 @@ import static slimeknights.mantle.client.screen.book.Textures.TEX_SMELTING;
 public class ContentSmelting extends PageContent {
   public static final Identifier ID = Mantle.getResource("smelting");
 
-  private static final NonNullList<ItemStack> FUELS;
+  private static NonNullList<ItemStack> FUELS;
 
   public static final transient int TEX_SIZE = 128;
   public static final transient ImageData IMG_SMELTING = new ImageData(TEX_SMELTING, 0, 0, 110, 114, TEX_SIZE, TEX_SIZE);
@@ -103,7 +103,7 @@ public class ContentSmelting extends PageContent {
       return this.fuel.getItems();
     }
 
-    return FUELS;
+    return getDefaultFuels();
   }
 
   @Override
@@ -178,8 +178,14 @@ public class ContentSmelting extends PageContent {
     return ItemStack.EMPTY;
   }
 
-  static {
-    FUELS = NonNullList.of(ItemStack.EMPTY,
+  /**
+   * Lazily builds the default fuel display list. As of 26.1 an {@link ItemStack} cannot be constructed until item data
+   * components are bound (after bootstrap), so this must not run in a static initializer (it did previously, crashing
+   * client init with "Components not bound yet").
+   */
+  private static NonNullList<ItemStack> getDefaultFuels() {
+    if (FUELS == null) {
+      FUELS = NonNullList.of(ItemStack.EMPTY,
       new ItemStack(Blocks.OAK_SLAB),
       new ItemStack(Blocks.SPRUCE_SLAB),
       new ItemStack(Blocks.BIRCH_SLAB),
@@ -208,5 +214,7 @@ public class ContentSmelting extends PageContent {
       new ItemStack(Items.BLAZE_ROD),
       new ItemStack(Items.WOODEN_SHOVEL),
       new ItemStack(Items.WOODEN_AXE));
+    }
+    return FUELS;
   }
 }
