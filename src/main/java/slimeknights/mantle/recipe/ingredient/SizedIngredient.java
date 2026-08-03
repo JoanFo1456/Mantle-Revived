@@ -93,7 +93,9 @@ public class SizedIngredient implements Predicate<ItemStack> {
    * @return  Sized ingredient matching any size
    */
   public static SizedIngredient fromTag(TagKey<Item> tag, int amountNeeded) {
-    return of(Ingredient.of(net.minecraft.core.registries.BuiltInRegistries.ITEM.getOrThrow(tag)), amountNeeded);
+    // resolve the tag lazily: at datagen time (and during pre-reload decode) item tags are not bound yet, so an eager
+    // getOrThrow(tag) throws "Missing tag". LazyTagIngredient defers the lookup until the ingredient is actually used.
+    return of(slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(tag), amountNeeded);
   }
 
   /**
