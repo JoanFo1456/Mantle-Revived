@@ -43,10 +43,21 @@ public interface LoggingRecipeSerializer<T extends Recipe<?>> {
     return new RecipeSerializer<>(codec(), streamCodec());
   }
 
+  @SuppressWarnings("unchecked")
   default MapCodec<T> codec() {
     return MapCodec.assumeMapUnsafe(Codec.PASSTHROUGH.xmap(dynamic -> {
+      // capture the registry-aware ops the game decodes recipes with: vanilla ingredient tags ("#c:leathers") decode
+      // through a registry-backed HolderSetCodec that needs the reload's HolderGetter, which resolves tags lazily.
+      // Re-parsing with a synthetic ops instead either fails structurally (plain JsonOps) or resolves tags eagerly
+      // ("Missing tag") before they are bound. fromJson() and other decoders read this via registryJsonOps().
+      com.mojang.serialization.DynamicOps<com.google.gson.JsonElement> ops = (com.mojang.serialization.DynamicOps<com.google.gson.JsonElement>) dynamic.getOps();
       JsonObject json = dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
-      return fromJson(UNKNOWN_ID, json);
+      DECODE_OPS.set(ops);
+      try {
+        return fromJson(UNKNOWN_ID, json);
+      } finally {
+        DECODE_OPS.remove();
+      }
     }, recipe -> new Dynamic<>(JsonOps.INSTANCE, new JsonObject())));
   }
 
@@ -54,18 +65,26 @@ public interface LoggingRecipeSerializer<T extends Recipe<?>> {
     return StreamCodec.of((buffer, recipe) -> toNetworkSafe(buffer, recipe), buffer -> fromNetworkSafe(UNKNOWN_ID, buffer));
   }
 
+  /** Holds the registry-aware ops the game is currently decoding a recipe with, so nested manual parses can reuse it. */
+  ThreadLocal<com.mojang.serialization.DynamicOps<com.google.gson.JsonElement>> DECODE_OPS = new ThreadLocal<>();
+  /** Lazily-built fallback ops for contexts with no active decode (e.g. datagen); resolves tags eagerly, so decode paths must set DECODE_OPS. */
+  com.mojang.serialization.DynamicOps<com.google.gson.JsonElement>[] FALLBACK_OPS = new com.mojang.serialization.DynamicOps[1];
+
   /**
-   * Registry-aware JSON ops, built lazily. Vanilla's ingredient codec decodes a {@code "#tag"} reference through a
-   * registry-backed {@code HolderSetCodec}, which needs a {@link net.minecraft.core.HolderGetter} from a
-   * {@link net.minecraft.resources.RegistryOps}. Parsing a recipe with plain {@link JsonOps} makes tag ingredients fail
-   * structurally ("Not a json array; Not a JSON object"), so a registry-aware ops is required here.
+   * Registry-aware JSON ops for manually parsing recipe sub-structures. Vanilla's ingredient codec decodes a
+   * {@code "#tag"} reference through a registry-backed {@code HolderSetCodec} that needs a
+   * {@link net.minecraft.core.HolderGetter}; the reload ops (captured in {@link #codec()}) resolves those tags lazily.
+   * Falls back to a synthetic {@link net.minecraft.resources.RegistryOps} outside an active decode.
    */
-  com.mojang.serialization.DynamicOps<com.google.gson.JsonElement>[] REGISTRY_OPS_HOLDER = new com.mojang.serialization.DynamicOps[1];
   static com.mojang.serialization.DynamicOps<com.google.gson.JsonElement> registryJsonOps() {
-    if (REGISTRY_OPS_HOLDER[0] == null) {
-      REGISTRY_OPS_HOLDER[0] = net.minecraft.resources.RegistryOps.create(JsonOps.INSTANCE, net.minecraft.core.RegistryAccess.fromRegistryOfRegistries(net.minecraft.core.registries.BuiltInRegistries.REGISTRY));
+    com.mojang.serialization.DynamicOps<com.google.gson.JsonElement> ops = DECODE_OPS.get();
+    if (ops != null) {
+      return ops;
     }
-    return REGISTRY_OPS_HOLDER[0];
+    if (FALLBACK_OPS[0] == null) {
+      FALLBACK_OPS[0] = net.minecraft.resources.RegistryOps.create(JsonOps.INSTANCE, net.minecraft.core.RegistryAccess.fromRegistryOfRegistries(net.minecraft.core.registries.BuiltInRegistries.REGISTRY));
+    }
+    return FALLBACK_OPS[0];
   }
 
   record LegacySerializer<R extends Recipe<?>>(RecipeSerializer<R> serializer) {
