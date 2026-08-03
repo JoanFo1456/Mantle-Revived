@@ -4,6 +4,9 @@ issueTrackerURL="https://github.com/SlimeKnights/Mantle/issues"
 logoFile="Mantle.png"
 license="MIT"
 
+[[mixins]]
+    config="mantle.mixins.json"
+
 [[mods]]
     modId="mantle"
     version="${version}"

@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import slimeknights.mantle.registration.RegistrationIdContext;
 
 import java.util.function.Supplier;
 
@@ -19,10 +20,24 @@ public class SynchronizedDeferredRegister<T> {
     return create(DeferredRegister.create(key, modid));
   }
 
-  /** Registers the given object, synchronized over the internal register */
+  /**
+   * Registers the given object, synchronized over the internal register.
+   * <p>
+   * Registers through the key aware form so the registration id is exposed via {@link RegistrationIdContext} while the
+   * supplier runs. As of Minecraft 26.1, block and item constructors eagerly require the id on their properties, which
+   * the supplier bakes in and thus cannot be set from here; the block/item constructor mixins read the context back to
+   * assign the id before that eager access.
+   */
   public <I extends T> DeferredHolder<T,I> register(final String name, final Supplier<? extends I> sup) {
     synchronized (internal) {
-      return internal.register(name, sup);
+      return internal.register(name, id -> {
+        RegistrationIdContext.push(id);
+        try {
+          return sup.get();
+        } finally {
+          RegistrationIdContext.pop();
+        }
+      });
     }
   }
 
