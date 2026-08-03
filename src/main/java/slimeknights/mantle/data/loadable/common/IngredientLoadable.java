@@ -82,7 +82,9 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
       return net.neoforged.neoforge.common.crafting.CompoundIngredient.of(children);
     }
     element = normalizeNestedIngredients(element, true);
-    return Ingredient.CODEC.parse(JsonOps.INSTANCE, element).getOrThrow(JsonParseException::new);
+    // use the reload's registry-aware ops so custom ingredients with nested "#tag" children (neoforge:intersection,
+    // neoforge:compound, ...) resolve their tags lazily; plain JsonOps parses the children as raw item ids and rejects "#".
+    return Ingredient.CODEC.parse(slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), element).getOrThrow(JsonParseException::new);
   }
 
   /**

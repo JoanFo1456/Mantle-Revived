@@ -45,8 +45,17 @@ public class LoadableRecipeSerializer<T extends Recipe<?>> implements LoggingRec
   protected LoadableRecipeSerializer(RecordLoadable<T> loadable) {
     this.loadable = loadable;
     this.codec = MapCodec.assumeMapUnsafe(Codec.PASSTHROUGH.xmap(dynamic -> {
+      // capture the reload's registry-aware ops so ingredient tags nested in this recipe (e.g. array/intersection
+      // ingredients with "#tag" children) resolve lazily; see LoggingRecipeSerializer#registryJsonOps.
+      @SuppressWarnings("unchecked")
+      com.mojang.serialization.DynamicOps<com.google.gson.JsonElement> ops = (com.mojang.serialization.DynamicOps<com.google.gson.JsonElement>) dynamic.getOps();
       JsonObject json = dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
-      return loadable.deserialize(json, buildContext(null).build());
+      DECODE_OPS.set(ops);
+      try {
+        return loadable.deserialize(json, buildContext(null).build());
+      } finally {
+        DECODE_OPS.remove();
+      }
     }, object -> new Dynamic<>(JsonOps.INSTANCE, loadable.serialize(object))));
     this.streamCodec = StreamCodec.of((buffer, recipe) -> {
       buffer.writeIdentifier(getRecipeId(recipe));
