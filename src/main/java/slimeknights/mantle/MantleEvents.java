@@ -40,7 +40,11 @@ public class MantleEvents {
   static void onLivingDeath(LivingDeathEvent event) {
     // this is the latest we can add slot markers to the items so we can return them to slots
     LivingEntity entity = event.getEntity();
-    if (!((ServerLevel) entity.level()).getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
+    // LivingDeathEvent also fires client-side (where level() is a ClientLevel); the soulbound slot marking is server-only
+    if (!(entity.level() instanceof ServerLevel serverLevel)) {
+      return;
+    }
+    if (!serverLevel.getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
       Inventory inventory = player.getInventory();
 
       // just iterate the whole inventory, no slot specific behavior
