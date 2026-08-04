@@ -65,6 +65,12 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
 
     super.init();
 
+    // AbstractContainerScreen#init centered leftPos/topPos using its FINAL base dimensions, which are the vanilla default
+    // (176x166) because the mutable imageWidth/imageHeight above are not visible to the base constructor. Recompute the
+    // position from the real (mutable) dimensions so a taller/wider multi-module GUI (e.g. the 220-tall smeltery) is not
+    // drawn off-centre / deformed.
+    this.leftPos = (this.width - this.imageWidth) / 2;
+    this.topPos = (this.height - this.imageHeight) / 2;
     this.cornerX = this.leftPos;
     this.cornerY = this.topPos;
     this.realWidth = this.imageWidth;
