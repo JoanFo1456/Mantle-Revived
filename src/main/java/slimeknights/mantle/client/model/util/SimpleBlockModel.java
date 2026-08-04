@@ -91,9 +91,13 @@ public class SimpleBlockModel extends AbstractUnbakedModel {
     return parts;
   }
 
+  @Nullable
   @Override
   public UnbakedGeometry geometry() {
-    return new UnbakedCuboidGeometry(parts);
+    // return null when this model defines no elements of its own, so the 26.1 baker inherits geometry from the parent
+    // chain (it walks parents until a non-null geometry is found, matching vanilla). Returning an empty geometry instead
+    // makes a parent-only model (e.g. the tables, which keep their elements in block/table/table) render nothing.
+    return parts.isEmpty() ? null : new UnbakedCuboidGeometry(parts);
   }
 
 
