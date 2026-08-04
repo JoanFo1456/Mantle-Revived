@@ -218,14 +218,14 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
           else if (building) {
             if (!canDraw || translucent) {
               int off = facing == Direction.DOWN ? 1 : 0;
-              builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, sprite, uStart, v + off, uEnd - uStart, emissivity));
+              builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, material, tint, uStart, v + off, uEnd - uStart, emissivity));
               building = false;
             }
           }
         }
         if (building) {
           int off = facing == Direction.DOWN ? 1 : 0;
-          builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, sprite, uStart, v+off, uEnd-uStart, emissivity));
+          builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, material, tint, uStart, v+off, uEnd-uStart, emissivity));
         }
       }
     }
@@ -248,26 +248,26 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
           else if (building) {
             if (!canDraw || translucent) {
               int off = facing == Direction.EAST ? 1 : 0;
-              builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, sprite, u + off, vStart, vEnd - vStart, emissivity));
+              builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, material, tint, u + off, vStart, vEnd - vStart, emissivity));
               building = false;
             }
           }
         }
         if (building) {
           int off = facing == Direction.EAST ? 1 : 0;
-          builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, sprite, u+off, vStart, vEnd-vStart, emissivity));
+          builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, material, tint, u+off, vStart, vEnd-vStart, emissivity));
         }
       }
     }
 
     // back
-    builder.add(buildQuad(quadBuilder, quadConsumer, Direction.NORTH, color, emissivity,
+    builder.add(buildQuad(quadBuilder, quadConsumer, material, tint, Direction.NORTH, color, emissivity,
               0, 0, 7.5f / 16f, sprite.getU0(), sprite.getV1(),
               0, 1, 7.5f / 16f, sprite.getU0(), sprite.getV0(),
               1, 1, 7.5f / 16f, sprite.getU1(), sprite.getV0(),
               1, 0, 7.5f / 16f, sprite.getU1(), sprite.getV1()));
     // front
-    builder.add(buildQuad(quadBuilder, quadConsumer, Direction.SOUTH, color, emissivity,
+    builder.add(buildQuad(quadBuilder, quadConsumer, material, tint, Direction.SOUTH, color, emissivity,
               0, 0, 8.5f / 16f, sprite.getU0(), sprite.getV1(),
               1, 0, 8.5f / 16f, sprite.getU1(), sprite.getV1(),
               1, 1, 8.5f / 16f, sprite.getU1(), sprite.getV0(),
@@ -305,7 +305,7 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
     if (!transform.isIdentity()) {
       quadConsumer = new TransformingVertexPipeline(quadBuilder, transform);
     }
-    return buildQuad(quadBuilder, quadConsumer, Direction.SOUTH, color, emissivity,
+    return buildQuad(quadBuilder, quadConsumer, material, tint, Direction.SOUTH, color, emissivity,
               0, 0, 8.5f / 16f, sprite.getU0(), sprite.getV1(),
               1, 0, 8.5f / 16f, sprite.getU1(), sprite.getV1(),
               1, 1, 8.5f / 16f, sprite.getU1(), sprite.getV0(),
@@ -313,8 +313,9 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
   }
 
   /** Builds a single quad on the side of the sprite */
-  private static BakedQuad buildSideQuad(QuadBakingVertexConsumer builder, VertexConsumer consumer, Direction side, int color, TextureAtlasSprite sprite, int u, int v, int size, int luminosity) {
+  private static BakedQuad buildSideQuad(QuadBakingVertexConsumer builder, VertexConsumer consumer, Direction side, int color, Material.Baked material, int tint, int u, int v, int size, int luminosity) {
     final float eps = 1e-2f;
+    TextureAtlasSprite sprite = material.sprite();
     SpriteContents contents = sprite.contents();
     int width = contents.width();
     int height = contents.height();
@@ -347,7 +348,7 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
     float u1 = 16f * (x1 - dx);
     float v0 = 16f * (1f - y0 - dy);
     float v1 = 16f * (1f - y1 - dy);
-    return buildQuad(builder, consumer, (side.getAxis() == Axis.Y ? side.getOpposite() : side),
+    return buildQuad(builder, consumer, material, tint, (side.getAxis() == Axis.Y ? side.getOpposite() : side),
       color, luminosity,
       x0, y0, z0, sprite.getU(u0), sprite.getV(v0),
       x1, y1, z0, sprite.getU(u1), sprite.getV(v1),
@@ -356,11 +357,18 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
   }
 
   /** Builds a single quad in the model with color and luminosity */
-  public static BakedQuad buildQuad(QuadBakingVertexConsumer builder, VertexConsumer consumer, Direction side, int color, int luminosity,
+  public static BakedQuad buildQuad(QuadBakingVertexConsumer builder, VertexConsumer consumer, Material.Baked material, int tint, Direction side, int color, int luminosity,
                                      float x0, float y0, float z0, float u0, float v0,
                                      float x1, float y1, float z1, float u1, float v1,
                                      float x2, float y2, float z2, float u2, float v2,
                                      float x3, float y3, float z3, float u3, float v3) {
+    // in 26.1 QuadBakingVertexConsumer.bakeQuad() clears its state (sprite, tint, shade, ambient occlusion) after every
+    // quad, so the once-per-model setup no longer sticks. Re-apply the per-quad state before each bake or the second and
+    // later quads throw "No sprite set" (and would drop the tint/shade otherwise).
+    builder.setSprite(material);
+    builder.setTintIndex(tint);
+    builder.setShade(false);
+    builder.setAmbientOcclusion(true);
     builder.setDirection(side);
     builder.setLightEmission(luminosity);
     putVertex(consumer, side, x0, y0, z0, u0, v0, color);
