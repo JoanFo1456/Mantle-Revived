@@ -40,7 +40,12 @@ public class FluidTextureManager implements IEarlySafeManagerReloadListener {
    * Initializes this manager, registering it with the resource manager
    */
   public static void init(AddClientReloadListenersEvent event) {
-    event.addListener(Mantle.getResource("fluid_texture"), INSTANCE);
+    Identifier key = Mantle.getResource("fluid_texture");
+    event.addListener(key, INSTANCE);
+    // must load before the model manager: the 26.1 RegisterFluidModelsEvent fires during the MODELS reload and reads this
+    // manager's data (see MantleFluidClientExtensions). Without the ordering the data is empty at that point, so every
+    // fluid registers the water FALLBACK sprites and renders wrong/blank.
+    event.addDependency(key, net.neoforged.neoforge.client.resources.VanillaClientListeners.MODELS);
   }
 
   @Override
