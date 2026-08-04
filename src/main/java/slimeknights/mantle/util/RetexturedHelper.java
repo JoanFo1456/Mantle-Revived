@@ -201,7 +201,8 @@ public final class RetexturedHelper {
       tooltip.add(block.getName().withStyle(ChatFormatting.GRAY));
       // advanced includes the ID of the texture
       if (flag.isAdvanced()) {
-        tooltip.add(Component.translatable(KEY_ID, BuiltInRegistries.BLOCK.getKey(block)).withStyle(ChatFormatting.DARK_GRAY));
+        // 26.1 TranslatableContents rejects non-(Component/Number/Boolean/String) args, so pass the id as a String
+        tooltip.add(Component.translatable(KEY_ID, BuiltInRegistries.BLOCK.getKey(block).toString()).withStyle(ChatFormatting.DARK_GRAY));
       }
     }
   }
