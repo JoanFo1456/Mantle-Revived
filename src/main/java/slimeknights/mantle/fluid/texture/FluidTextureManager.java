@@ -30,6 +30,8 @@ public class FluidTextureManager implements IEarlySafeManagerReloadListener {
   private static final FluidTextureManager INSTANCE = new FluidTextureManager();
   /** Map of fluid type to texture */
   private Map<FluidType,FluidTexture> textures = Collections.emptyMap();
+  /** True once the data has been loaded at least once (via the reload listener or the on-demand fallback) */
+  private volatile boolean loaded = false;
   /** Fallback texture instance */
   private static final FluidTexture FALLBACK = new FluidTexture(Identifier.withDefaultNamespace("block/water_still"), Identifier.withDefaultNamespace("block/water_flow"), null, null, 0, -1, -1, false, false, 0, 0);
 
@@ -72,11 +74,32 @@ public class FluidTextureManager implements IEarlySafeManagerReloadListener {
       }
     }
     this.textures = map;
+    this.loaded = true;
     Mantle.logger.info("Loaded {} fluid textures in {} ms", map.size(), (System.nanoTime() - time) / 1000000f);
+  }
+
+  /**
+   * Loads the data on demand if the reload listener has not populated it yet. In 26.1 the fluid models bake (and fire
+   * RegisterFluidModelsEvent, which reads this data) inside the model manager's ASYNC prepare phase, which can run before
+   * this reload listener finishes — reload-listener ordering does not help there. Reading the (static) fluid_texture
+   * resources here yields the correct sprites regardless of order.
+   */
+  private synchronized void ensureLoaded() {
+    if (!loaded) {
+      net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+      if (mc != null && mc.getResourceManager() != null) {
+        try {
+          onReloadSafe(mc.getResourceManager());
+        } catch (Exception e) {
+          Mantle.logger.error("Failed to load fluid textures on demand", e);
+        }
+      }
+    }
   }
 
   /** Gets the texture for the given fluid */
   public static FluidTexture getData(FluidType fluid) {
+    INSTANCE.ensureLoaded();
     return INSTANCE.textures.getOrDefault(fluid, FALLBACK);
   }
 
