@@ -1,8 +1,13 @@
 package slimeknights.mantle.fluid.texture;
 
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -28,6 +33,26 @@ public class MantleFluidClientExtensions {
         event.registerFluidType(new ClientInvertedFluidType(type), type);
       } else if (type instanceof TextureFluidType) {
         event.registerFluidType(new ClientTextureFluidType(type), type);
+      }
+    }
+  }
+
+  /**
+   * Registers a {@link FluidModel} for every texture-driven fluid. 26.1 renders fluids via the fluid model
+   * ({@link net.minecraft.client.renderer.block.FluidStateModelSet}) rather than {@code IClientFluidTypeExtensions}
+   * textures, so a fluid without a registered model renders as the missing (black/magenta) sprite. Still/flowing/overlay
+   * sprites and the tint come from the fluid's {@code mantle/fluid_texture} data ({@link FluidTextureManager}).
+   */
+  @SubscribeEvent
+  static void registerFluidModels(RegisterFluidModelsEvent event) {
+    for (Fluid fluid : BuiltInRegistries.FLUID) {
+      FluidType type = fluid.getFluidType();
+      if (type instanceof TextureFluidType || type instanceof InvertedFluidType) {
+        FluidTexture data = FluidTextureManager.getData(type);
+        Material still = new Material(data.still());
+        Material flowing = new Material(data.flowing());
+        Material overlay = data.overlay() == null ? null : new Material(data.overlay());
+        event.register(new FluidModel.Unbaked(still, flowing, overlay, new ConstantFluidTintSource(data.color())), fluid);
       }
     }
   }
