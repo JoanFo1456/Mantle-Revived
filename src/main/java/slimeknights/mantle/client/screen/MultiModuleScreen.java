@@ -88,6 +88,30 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
     }
   }
 
+  // Report the MAIN panel geometry (cornerX/cornerY + realWidth/realHeight) rather than the vanilla final imageWidth/
+  // imageHeight (fixed at 176x166) or the leftPos/imageWidth that updateSubmodule expands to include side modules. External
+  // background drawing (GuiUtil#drawBackground) uses these getters; without the override the smeltery's 220-tall main
+  // background is drawn 166 tall and shifted, i.e. deformed.
+  @Override
+  public int getGuiLeft() {
+    return this.realWidth > -1 ? this.cornerX : super.getGuiLeft();
+  }
+
+  @Override
+  public int getGuiTop() {
+    return this.realHeight > -1 ? this.cornerY : super.getGuiTop();
+  }
+
+  @Override
+  public int getXSize() {
+    return this.realWidth > -1 ? this.realWidth : super.getXSize();
+  }
+
+  @Override
+  public int getYSize() {
+    return this.realHeight > -1 ? this.realHeight : super.getYSize();
+  }
+
 //  @Override
 //  public void init(Minecraft mc, int width, int height) {
 //    super.init(mc, width, height);
