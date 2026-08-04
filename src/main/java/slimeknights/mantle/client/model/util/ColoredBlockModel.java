@@ -100,8 +100,15 @@ public class ColoredBlockModel extends SimpleBlockModel {
     return QuadTransformer.applyingColor(color);
   }
 
+  @Nullable
   @Override
   public UnbakedGeometry geometry() {
+    // return null when this model has no elements of its own so the 26.1 baker inherits geometry from the parent chain
+    // (same as SimpleBlockModel#geometry). Tinkers' tables/anvils keep their elements in a parent model and only override
+    // textures via mantle:retextured, which wraps a ColoredBlockModel; without this they render nothing (invisible).
+    if (getElements().isEmpty()) {
+      return null;
+    }
     return (textureSlots, baker, state, name) -> bakeColored(getElements(), colorData, textureSlots, baker, state, name);
   }
 
