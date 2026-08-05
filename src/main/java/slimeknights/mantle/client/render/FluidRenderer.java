@@ -329,6 +329,15 @@ public class FluidRenderer {
    * @param flipGas   If true, flips gas cubes
    */
   public static void renderScaledCuboid(PoseStack matrices, MultiBufferSource buffer, FluidCuboid cube, FluidStack fluid, float offset, int capacity, int light, boolean flipGas) {
+    renderScaledCuboid(matrices, buffer.getBuffer(MantleRenderTypes.FLUID), cube, fluid, offset, capacity, light, flipGas);
+  }
+
+  /**
+   * Renders a fluid cuboid with partial height based on capacity, drawing directly to a {@link VertexConsumer}. Used by
+   * 26.1 block entity renderers that submit fluid geometry via {@code SubmitNodeCollector.submitCustomGeometry}, which
+   * hands back a single buffer for the {@link MantleRenderTypes#FLUID} render type rather than a {@link MultiBufferSource}.
+   */
+  public static void renderScaledCuboid(PoseStack matrices, VertexConsumer buffer, FluidCuboid cube, FluidStack fluid, float offset, int capacity, int light, boolean flipGas) {
     // nothing to render
     if (fluid.isEmpty() || capacity <= 0) {
       return;
@@ -359,7 +368,7 @@ public class FluidRenderer {
     }
 
     // draw cuboid
-    renderCuboid(matrices, buffer.getBuffer(MantleRenderTypes.FLUID), cube, still, flowing, from, to, color, light, isGas);
+    renderCuboid(matrices, buffer, cube, still, flowing, from, to, color, light, isGas);
   }
 
   /**
