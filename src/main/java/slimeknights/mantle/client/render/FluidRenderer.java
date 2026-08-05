@@ -62,8 +62,10 @@ public class FluidRenderer {
     return (combinedLight & 0xFFFF0000) | Math.max(blockLight << 4, combinedLight & 0xFFFF);
   }
 
-  private static void putVertex(VertexConsumer renderer, Matrix4f matrix, float x, float y, float z, int r, int g, int b, int a, float u, float v, int light1, int light2) {
-    renderer.addVertex(matrix, x, y, z).setColor(r, g, b, a).setUv(u, v).setUv2(light1, light2);
+  private static void putVertex(VertexConsumer renderer, Matrix4f matrix, Direction face, float x, float y, float z, int r, int g, int b, int a, float u, float v, int light1, int light2) {
+    // the block render pipeline (MantleRenderTypes.FLUID uses the BLOCK vertex format) needs a normal for lighting; without
+    // it the quads light as fully dark. The face direction is the quad's normal.
+    renderer.addVertex(matrix, x, y, z).setColor(r, g, b, a).setUv(u, v).setUv2(light1, light2).setNormal(face.getStepX(), face.getStepY(), face.getStepZ());
   }
 
   /* Fluid cuboids */
@@ -202,40 +204,40 @@ public class FluidRenderer {
     int b = color & 0xFF;
     switch (face) {
       case DOWN -> {
-        putVertex(renderer, matrix, x1, y1, z2, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, x1, y1, z1, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, x2, y1, z1, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, x2, y1, z2, r, g, b, a, u4, v4, light1, light2);
+        putVertex(renderer, matrix, face, x1, y1, z2, r, g, b, a, u1, v1, light1, light2);
+        putVertex(renderer, matrix, face, x1, y1, z1, r, g, b, a, u2, v2, light1, light2);
+        putVertex(renderer, matrix, face, x2, y1, z1, r, g, b, a, u3, v3, light1, light2);
+        putVertex(renderer, matrix, face, x2, y1, z2, r, g, b, a, u4, v4, light1, light2);
       }
       case UP -> {
-        putVertex(renderer, matrix, x1, y2, z1, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, x1, y2, z2, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, x2, y2, z2, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, x2, y2, z1, r, g, b, a, u4, v4, light1, light2);
+        putVertex(renderer, matrix, face, x1, y2, z1, r, g, b, a, u1, v1, light1, light2);
+        putVertex(renderer, matrix, face, x1, y2, z2, r, g, b, a, u2, v2, light1, light2);
+        putVertex(renderer, matrix, face, x2, y2, z2, r, g, b, a, u3, v3, light1, light2);
+        putVertex(renderer, matrix, face, x2, y2, z1, r, g, b, a, u4, v4, light1, light2);
       }
       case NORTH -> {
-        putVertex(renderer, matrix, x1, y1, z1, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, x1, y2, z1, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, x2, y2, z1, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, x2, y1, z1, r, g, b, a, u4, v4, light1, light2);
+        putVertex(renderer, matrix, face, x1, y1, z1, r, g, b, a, u1, v1, light1, light2);
+        putVertex(renderer, matrix, face, x1, y2, z1, r, g, b, a, u2, v2, light1, light2);
+        putVertex(renderer, matrix, face, x2, y2, z1, r, g, b, a, u3, v3, light1, light2);
+        putVertex(renderer, matrix, face, x2, y1, z1, r, g, b, a, u4, v4, light1, light2);
       }
       case SOUTH -> {
-        putVertex(renderer, matrix, x2, y1, z2, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, x2, y2, z2, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, x1, y2, z2, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, x1, y1, z2, r, g, b, a, u4, v4, light1, light2);
+        putVertex(renderer, matrix, face, x2, y1, z2, r, g, b, a, u1, v1, light1, light2);
+        putVertex(renderer, matrix, face, x2, y2, z2, r, g, b, a, u2, v2, light1, light2);
+        putVertex(renderer, matrix, face, x1, y2, z2, r, g, b, a, u3, v3, light1, light2);
+        putVertex(renderer, matrix, face, x1, y1, z2, r, g, b, a, u4, v4, light1, light2);
       }
       case WEST -> {
-        putVertex(renderer, matrix, x1, y1, z2, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, x1, y2, z2, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, x1, y2, z1, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, x1, y1, z1, r, g, b, a, u4, v4, light1, light2);
+        putVertex(renderer, matrix, face, x1, y1, z2, r, g, b, a, u1, v1, light1, light2);
+        putVertex(renderer, matrix, face, x1, y2, z2, r, g, b, a, u2, v2, light1, light2);
+        putVertex(renderer, matrix, face, x1, y2, z1, r, g, b, a, u3, v3, light1, light2);
+        putVertex(renderer, matrix, face, x1, y1, z1, r, g, b, a, u4, v4, light1, light2);
       }
       case EAST -> {
-        putVertex(renderer, matrix, x2, y1, z1, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, x2, y2, z1, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, x2, y2, z2, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, x2, y1, z2, r, g, b, a, u4, v4, light1, light2);
+        putVertex(renderer, matrix, face, x2, y1, z1, r, g, b, a, u1, v1, light1, light2);
+        putVertex(renderer, matrix, face, x2, y2, z1, r, g, b, a, u2, v2, light1, light2);
+        putVertex(renderer, matrix, face, x2, y2, z2, r, g, b, a, u3, v3, light1, light2);
+        putVertex(renderer, matrix, face, x2, y1, z2, r, g, b, a, u4, v4, light1, light2);
       }
     }
   }
