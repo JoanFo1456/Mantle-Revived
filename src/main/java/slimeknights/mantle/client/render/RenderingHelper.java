@@ -61,7 +61,7 @@ public class RenderingHelper {
    * @param renderItem  Render item for render information
    * @param light       Model light
    */
-  public static void renderItem(PoseStack matrices, MultiBufferSource buffer, ItemStack item, RenderItem renderItem, int light) {
+  public static void renderItem(PoseStack matrices, net.minecraft.client.renderer.SubmitNodeCollector collector, ItemStack item, RenderItem renderItem, int light) {
     // if the item says skip, skip
     if (renderItem.isHidden()) return;
     // if no stack, skip
@@ -86,11 +86,12 @@ public class RenderingHelper {
       matrices.mulPose(Axis.YP.rotationDegrees(y));
     }
 
-    // render the actual item
-    // Minecraft#getItemRenderer() and ItemRenderer#renderStatic were removed in the 1.21.4+ item
-    // model/render rewrite. In-world item rendering now goes through the ItemModelResolver / ItemStackRenderState
-    // + SubmitNodeCollector pipeline. Reimplement this immediate-mode item draw against that system.
-    // Minecraft.getInstance().getItemRenderer().renderStatic(item, renderItem.getTransform(), light, OverlayTexture.NO_OVERLAY, matrices, buffer, Minecraft.getInstance().level, 0);
+    // 26.1: ItemRenderer#renderStatic was removed; resolve the item model into a render state and submit it against the
+    // SubmitNodeCollector (in-world item rendering pipeline)
+    Minecraft mc = Minecraft.getInstance();
+    net.minecraft.client.renderer.item.ItemStackRenderState renderState = new net.minecraft.client.renderer.item.ItemStackRenderState();
+    mc.getItemModelResolver().updateForTopItem(renderState, item, renderItem.getTransform(), mc.level, null, 0);
+    renderState.submit(matrices, collector, light, OverlayTexture.NO_OVERLAY, 0);
     matrices.popPose();
   }
 
