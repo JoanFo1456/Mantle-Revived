@@ -42,7 +42,10 @@ public class MantleRenderTypes {
     .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS)
     .affectsCrumbling()
     .sortOnUpload()
-    .setOutputTarget(OutputTarget.ITEM_ENTITY_TARGET)
+    // MAIN_TARGET: the fluid renderer runs in block entity renderers (tanks, smeltery), which draw to the world's main
+    // framebuffer. ITEM_ENTITY_TARGET (used before) is the dropped-item pass, so the fluid quads were composited there and
+    // never appeared in the tank/smeltery.
+    .setOutputTarget(OutputTarget.MAIN_TARGET)
     .createRenderSetup());
 
   /**
