@@ -330,6 +330,10 @@ public class FluidTransferHelper {
   public static FluidInteractionResult interactWithContainer(Level world, BlockPos pos, ResourceHandler<FluidResource> teHandler, Player player, InteractionHand hand) {
     // fallback to JSON based transfer
     ItemStack stack = player.getItemInHand(hand);
+    // an empty hand can never transfer fluid; bail before ItemAccess.forStack below, which rejects empty stacks in 26.1
+    if (stack.isEmpty()) {
+      return FluidInteractionResult.MISSING;
+    }
     if (FluidContainerTransferManager.INSTANCE.mayHaveTransfer(stack)) {
       // only actually transfer on the serverside, client just has items
       if (!world.isClientSide()) {
