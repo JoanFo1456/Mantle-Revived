@@ -425,8 +425,11 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
         } else if (!opaque && uStart >= 0) {
           float x0 = (float) uStart / uMax, x1 = (float) u / uMax;
           float y0 = (float) v / vMax, y1 = (float) (v + 1) / vMax;
-          float uL = tex.getU(uStart), uR = tex.getU(u);
-          float vB = tex.getV(vMax - v), vT = tex.getV(vMax - v - 1);
+          // map the fluid sprite by its own atlas bounds (not per-pixel getU/getV): animated fluid stills span several
+          // stacked frames, so per-pixel coords would fall outside a single frame and render invisible.
+          float su0 = tex.getU0(), su1 = tex.getU1(), sv0 = tex.getV0(), sv1 = tex.getV1();
+          float uL = su0 + (su1 - su0) * ((float) uStart / uMax), uR = su0 + (su1 - su0) * ((float) u / uMax);
+          float vB = sv1 + (sv0 - sv1) * ((float) v / vMax), vT = sv1 + (sv0 - sv1) * ((float) (v + 1) / vMax);
           // back (NORTH)
           builder.add(buildQuad(quadBuilder, quadConsumer, texture, tint, Direction.NORTH, color, emissivity,
             x0, y0, 7.5f / 16f, uL, vB,
