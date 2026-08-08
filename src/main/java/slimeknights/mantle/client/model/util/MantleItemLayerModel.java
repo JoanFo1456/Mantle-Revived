@@ -291,6 +291,163 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
   }
 
   /**
+   * Gets quads shaped by a mask sprite but textured with a separate sprite. The mask's alpha defines which pixels are
+   * drawn (and where the extruded side faces sit); every drawn face samples {@code texture} at the same pixel position.
+   * Used to render a fluid clipped to a container's fluid window (e.g. a bucket), where the fluid's own sprite is a solid
+   * square and cannot self-clip. Mask and texture are assumed to share the mask's pixel dimensions.
+   * @param color       Color for the texture in AARRGGBB format
+   * @param tint        Tint index for block/item colors. Generally unused
+   * @param texture     Baked material sampled for the visible faces (the fluid)
+   * @param mask        Baked material whose alpha defines the drawn shape (the container's fluid window)
+   * @param transform   Transforms to apply
+   * @param emissivity  Extra light to add to the quad from 0-15
+   * @return  List of baked quads
+   */
+  public static List<BakedQuad> getMaskedQuadsForSprite(int color, int tint, Material.Baked texture, Material.Baked mask, Transformation transform, int emissivity) {
+    List<BakedQuad> builder = new ArrayList<>();
+
+    TextureAtlasSprite maskSprite = mask.sprite();
+    SpriteContents maskContents = maskSprite.contents();
+    int uMax = maskContents.width();
+    int vMax = maskContents.height();
+    FaceData faceData = new FaceData(uMax, vMax);
+    boolean translucent = false;
+
+    // scan the mask's alpha for the extruded-edge boundaries (identical to getQuadsForSprite, but reading the mask)
+    PrimitiveIterator.OfInt iterator = maskContents.getUniqueFrames().iterator();
+    while (iterator.hasNext()) {
+      int f = iterator.nextInt();
+      boolean ptu;
+      boolean[] ptv = new boolean[uMax];
+      Arrays.fill(ptv, true);
+      for (int v = 0; v < vMax; v++) {
+        ptu = true;
+        for (int u = 0; u < uMax; u++) {
+          int alpha = maskSprite.getPixelRGBA(f, u, vMax - v - 1) >> 24 & 0xFF;
+          boolean t = alpha / 255f <= 0.1f;
+          if (!t && alpha < 255) {
+            translucent = true;
+          }
+          if (ptu && !t) {
+            faceData.set(Direction.WEST, u, v);
+          }
+          if (!ptu && t) {
+            faceData.set(Direction.EAST, u - 1, v);
+          }
+          if (ptv[u] && !t) {
+            faceData.set(Direction.UP, u, v);
+          }
+          if (!ptv[u] && t) {
+            faceData.set(Direction.DOWN, u, v - 1);
+          }
+          ptu = t;
+          ptv[u] = t;
+        }
+        if (!ptu) {
+          faceData.set(Direction.EAST, uMax - 1, v);
+        }
+      }
+      for (int u = 0; u < uMax; u++) {
+        if (!ptv[u]) {
+          faceData.set(Direction.DOWN, u, vMax - 1);
+        }
+      }
+    }
+
+    QuadBakingVertexConsumer quadBuilder = new QuadBakingVertexConsumer();
+    quadBuilder.setSprite(texture);
+    quadBuilder.setTintIndex(tint);
+    quadBuilder.setShade(false);
+    quadBuilder.setAmbientOcclusion(true);
+    VertexConsumer quadConsumer = quadBuilder;
+    if (!transform.isIdentity()) {
+      quadConsumer = new TransformingVertexPipeline(quadBuilder, transform);
+    }
+
+    // extruded side faces, driven by the mask geometry but textured with the fluid sprite
+    for (Direction facing : HORIZONTALS) {
+      for (int v = 0; v < vMax; v++) {
+        int uStart = 0, uEnd = uMax;
+        boolean building = false;
+        for (int u = 0; u < uMax; u++) {
+          if (faceData.get(facing, u, v)) {
+            uEnd = u + 1;
+            if (!building) {
+              building = true;
+              uStart = u;
+            }
+          } else if (building && translucent) {
+            int off = facing == Direction.DOWN ? 1 : 0;
+            builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, texture, tint, uStart, v + off, uEnd - uStart, emissivity));
+            building = false;
+          }
+        }
+        if (building) {
+          int off = facing == Direction.DOWN ? 1 : 0;
+          builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, texture, tint, uStart, v + off, uEnd - uStart, emissivity));
+        }
+      }
+    }
+    for (Direction facing : VERTICALS) {
+      for (int u = 0; u < uMax; u++) {
+        int vStart = 0, vEnd = vMax;
+        boolean building = false;
+        for (int v = 0; v < vMax; v++) {
+          if (faceData.get(facing, u, v)) {
+            vEnd = v + 1;
+            if (!building) {
+              building = true;
+              vStart = v;
+            }
+          } else if (building && translucent) {
+            int off = facing == Direction.EAST ? 1 : 0;
+            builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, texture, tint, u + off, vStart, vEnd - vStart, emissivity));
+            building = false;
+          }
+        }
+        if (building) {
+          int off = facing == Direction.EAST ? 1 : 0;
+          builder.add(buildSideQuad(quadBuilder, quadConsumer, facing, color, texture, tint, u + off, vStart, vEnd - vStart, emissivity));
+        }
+      }
+    }
+
+    // front/back faces: greedy per-row runs of the mask's opaque pixels, each textured with the fluid sprite so the
+    // fluid shows only inside the window. UV/winding conventions match the full-quad front/back in getQuadsForSprite.
+    TextureAtlasSprite tex = texture.sprite();
+    int frame = maskContents.getUniqueFrames().iterator().hasNext() ? maskContents.getUniqueFrames().iterator().nextInt() : 0;
+    for (int v = 0; v < vMax; v++) {
+      int uStart = -1;
+      for (int u = 0; u <= uMax; u++) {
+        boolean opaque = u < uMax && (maskSprite.getPixelRGBA(frame, u, vMax - v - 1) >> 24 & 0xFF) / 255f > 0.1f;
+        if (opaque && uStart < 0) {
+          uStart = u;
+        } else if (!opaque && uStart >= 0) {
+          float x0 = (float) uStart / uMax, x1 = (float) u / uMax;
+          float y0 = (float) v / vMax, y1 = (float) (v + 1) / vMax;
+          float uL = tex.getU(uStart), uR = tex.getU(u);
+          float vB = tex.getV(vMax - v), vT = tex.getV(vMax - v - 1);
+          // back (NORTH)
+          builder.add(buildQuad(quadBuilder, quadConsumer, texture, tint, Direction.NORTH, color, emissivity,
+            x0, y0, 7.5f / 16f, uL, vB,
+            x0, y1, 7.5f / 16f, uL, vT,
+            x1, y1, 7.5f / 16f, uR, vT,
+            x1, y0, 7.5f / 16f, uR, vB));
+          // front (SOUTH)
+          builder.add(buildQuad(quadBuilder, quadConsumer, texture, tint, Direction.SOUTH, color, emissivity,
+            x0, y0, 8.5f / 16f, uL, vB,
+            x1, y0, 8.5f / 16f, uR, vB,
+            x1, y1, 8.5f / 16f, uR, vT,
+            x0, y1, 8.5f / 16f, uL, vT));
+          uStart = -1;
+        }
+      }
+    }
+
+    return List.copyOf(builder);
+  }
+
+  /**
    * Gets the quad to display in GUIs for the given sprite.
    */
   @SuppressWarnings("unused")  // API
