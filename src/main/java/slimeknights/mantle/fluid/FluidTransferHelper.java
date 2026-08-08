@@ -418,8 +418,20 @@ public class FluidTransferHelper {
       if (te != null) {
         ResourceHandler<FluidResource> handler = world.getCapability(Capabilities.Fluid.BLOCK, pos, hit);
         if (handler != null) {
-          return interactWithContainer(world, pos, handler, player, hand).hasContainer()
-            || interactWithFilledBucket(world, pos, handler, player, hand, offset).hasContainer();
+          // Try the generic container path first; if it actually moved fluid we are done.
+          FluidInteractionResult container = interactWithContainer(world, pos, handler, player, hand);
+          if (container.didTransfer()) {
+            return true;
+          }
+          // The container path can report CONTAINER (an item fluid capability was present) without moving anything,
+          // e.g. vanilla buckets whose item handler refuses the simulated drain. Always give the deterministic bucket
+          // path a chance rather than letting '||' short-circuit on that non-transferring CONTAINER result.
+          FluidInteractionResult bucket = interactWithFilledBucket(world, pos, handler, player, hand, offset);
+          if (bucket.didTransfer()) {
+            return true;
+          }
+          // neither moved fluid; treat the click as handled only if a container was actually present
+          return container.hasContainer() || bucket.hasContainer();
         }
       }
     }
