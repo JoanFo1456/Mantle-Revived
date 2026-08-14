@@ -27,6 +27,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent.RegisterLoaders;
+import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
@@ -48,6 +49,7 @@ import slimeknights.mantle.client.book.BookLoader;
 import slimeknights.mantle.client.book.repository.FileRepository;
 import slimeknights.mantle.client.model.FallbackModelLoader;
 import slimeknights.mantle.client.model.NBTKeyModel;
+import slimeknights.mantle.client.model.RetexturedBlockStateModel;
 import slimeknights.mantle.client.model.RetexturedModel;
 import slimeknights.mantle.client.model.TextureColorHelper;
 import slimeknights.mantle.client.model.connected.ConnectedModel;
@@ -133,6 +135,13 @@ public class ClientEvents {
     // NBT dynamic models - require specific data defined in the block/item to use
     event.register(Mantle.getResource("nbt_key"), NBTKeyModel.LOADER);
     event.register(Mantle.getResource("retextured"), RetexturedModel.LOADER);
+  }
+
+  @SubscribeEvent
+  static void registerBlockStateModels(RegisterBlockStateModels event) {
+    // block-state half of mantle:retextured; selected by "type": "mantle:retextured" in a block's blockstate variant,
+    // it swaps the named texture slots to the stored block's texture using the block entity's ModelData
+    event.registerModel(RetexturedBlockStateModel.ID, RetexturedBlockStateModel.Unbaked.MAP_CODEC);
   }
 
   @SubscribeEvent
