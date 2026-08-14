@@ -28,6 +28,7 @@ import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent.RegisterLoaders;
 import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
+import net.neoforged.neoforge.client.event.RegisterItemModelsEvent;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
@@ -50,6 +51,7 @@ import slimeknights.mantle.client.book.repository.FileRepository;
 import slimeknights.mantle.client.model.FallbackModelLoader;
 import slimeknights.mantle.client.model.NBTKeyModel;
 import slimeknights.mantle.client.model.RetexturedBlockStateModel;
+import slimeknights.mantle.client.model.RetexturedItemModel;
 import slimeknights.mantle.client.model.RetexturedModel;
 import slimeknights.mantle.client.model.TextureColorHelper;
 import slimeknights.mantle.client.model.connected.ConnectedModel;
@@ -142,6 +144,13 @@ public class ClientEvents {
     // block-state half of mantle:retextured; selected by "type": "mantle:retextured" in a block's blockstate variant,
     // it swaps the named texture slots to the stored block's texture using the block entity's ModelData
     event.registerModel(RetexturedBlockStateModel.ID, RetexturedBlockStateModel.Unbaked.MAP_CODEC);
+  }
+
+  @SubscribeEvent
+  static void registerItemModels(RegisterItemModelsEvent event) {
+    // item-form half of mantle:retextured; selected by "type": "mantle:retextured" in an items/*.json model definition,
+    // it swaps the named texture slots to the block stored in the stack's NBT (so the inventory icon shows the texture)
+    event.register(RetexturedItemModel.ID, RetexturedItemModel.Unbaked.MAP_CODEC);
   }
 
   @SubscribeEvent

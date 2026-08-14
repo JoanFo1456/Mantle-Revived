@@ -77,16 +77,7 @@ public final class RetexturedBlockStateModel {
       boolean ambientOcclusion = model.getTopAmbientOcclusion();
       Material.Baked particle = model.resolveParticleMaterial(slots, baker);
       QuadCollection baseQuads = model.bakeTopGeometry(slots, baker, state);
-
-      // record the original sprite of each retextured slot so we can find and swap those quads later
-      List<TextureAtlasSprite> originals = new ArrayList<>(retextured.size());
-      for (String name : retextured) {
-        Material material = slots.getMaterial(name);
-        if (material != null) {
-          originals.add(baker.materials().get(material, model).sprite());
-        }
-      }
-      return new Baked(baseQuads, List.copyOf(originals), particle, ambientOcclusion);
+      return new Baked(baseQuads, resolveRetexturedSprites(slots, retextured, baker, model), particle, ambientOcclusion);
     }
 
     @Override
@@ -155,9 +146,7 @@ public final class RetexturedBlockStateModel {
     }
 
     private List<BlockStateModelPart> build(Block block) {
-      TextureAtlasSprite target = Minecraft.getInstance().getModelManager().getBlockStateModelSet()
-        .getParticleMaterial(block.defaultBlockState()).sprite();
-      return List.of(new Part(reskin(baseQuads, originalSprites, target), ambientOcclusion, particle));
+      return List.of(new Part(reskin(baseQuads, originalSprites, blockSprite(block)), ambientOcclusion, particle));
     }
 
     @Override
@@ -172,10 +161,27 @@ public final class RetexturedBlockStateModel {
   }
 
 
-  /* Re-texturing */
+  /* Re-texturing (shared with the item model half) */
+
+  /** Resolves the baked sprite of each named retextured slot, for later matching against the baked quads. */
+  public static List<TextureAtlasSprite> resolveRetexturedSprites(TextureSlots slots, List<String> retextured, ModelBaker baker, ResolvedModel model) {
+    List<TextureAtlasSprite> originals = new ArrayList<>(retextured.size());
+    for (String name : retextured) {
+      Material material = slots.getMaterial(name);
+      if (material != null) {
+        originals.add(baker.materials().get(material, model).sprite());
+      }
+    }
+    return List.copyOf(originals);
+  }
+
+  /** Gets the particle sprite of the given block, the texture retextured slots are swapped to. */
+  public static TextureAtlasSprite blockSprite(Block block) {
+    return Minecraft.getInstance().getModelManager().getBlockStateModelSet().getParticleMaterial(block.defaultBlockState()).sprite();
+  }
 
   /** Rewrites every quad in {@code base} whose sprite is one of {@code originals} to use {@code target}. */
-  private static QuadCollection reskin(QuadCollection base, List<TextureAtlasSprite> originals, TextureAtlasSprite target) {
+  public static QuadCollection reskin(QuadCollection base, List<TextureAtlasSprite> originals, TextureAtlasSprite target) {
     QuadCollection.Builder builder = new QuadCollection.Builder();
     appendReskinned(builder, base, null, originals, target);
     for (Direction direction : Direction.values()) {
