@@ -55,8 +55,6 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
 
   private static final Direction[] HORIZONTALS = {Direction.UP, Direction.DOWN};
   private static final Direction[] VERTICALS = {Direction.WEST, Direction.EAST};
-  /** [depth-diag] TEMP counter to bound diagnostic logging */
-  private static int DEPTH_DIAG = 0;
 
   /** Layers in the model */
   private final List<LayerData> layers;
@@ -279,12 +277,6 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
               1, 0, 8.5f / 16f, sprite.getU1(), sprite.getV1(),
               1, 1, 8.5f / 16f, sprite.getU1(), sprite.getV0(),
               0, 1, 8.5f / 16f, sprite.getU0(), sprite.getV0()));
-
-    // [depth-diag] TEMP: log the first bakes so we can tell geometry (side faces) from a render/transform issue
-    if (DEPTH_DIAG < 30) {
-      DEPTH_DIAG++;
-      slimeknights.mantle.Mantle.logger.info("[depth-diag] sprite={} animated={} totalQuads={} (2=front+back only=no sides; >2=has extruded sides)", sprite.contents().name(), contents.isAnimated(), builder.size());
-    }
 
     // fill in the pixel map with new pixels from the sprite
     if (pixels != null) {
