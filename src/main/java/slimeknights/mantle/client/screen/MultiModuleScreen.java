@@ -130,6 +130,15 @@ public class MultiModuleScreen<CONTAINER extends MultiModuleContainerMenu<?>> ex
     }
   }
 
+  // 26.1: subclasses draw their opaque GUI panel in extractBackground *before* calling super, so the vanilla background
+  // blur and in-world menu darkening would land on the already-drawn panel itself, giving a cloudy, dimmed GUI. The
+  // opaque panel is the intended backdrop, so skip both; the world simply shows undimmed around the panel.
+  @Override
+  protected void extractBlurredBackground(GuiGraphicsExtractor graphics) {}
+
+  @Override
+  protected void extractMenuBackground(GuiGraphicsExtractor graphics) {}
+
   @Override
   protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     this.drawContainerName(graphics);
