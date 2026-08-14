@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.world.level.material.FluidState;
@@ -29,7 +28,9 @@ public class FluidRenderer {
    * @return  Sprite location
    */
   public static TextureAtlasSprite getBlockSprite(Identifier sprite) {
-    return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(sprite);
+    // 26.1: AtlasManager keys atlases by their atlas id (AtlasIds.BLOCKS), not the texture location (LOCATION_BLOCKS);
+    // passing the texture location throws "Invalid atlas id" and crashes any screen rendering a fluid/block sprite.
+    return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(net.minecraft.data.AtlasIds.BLOCKS).getSprite(sprite);
   }
 
   /** Client-side visual attributes of a fluid: still/flowing sprites and tint color */
