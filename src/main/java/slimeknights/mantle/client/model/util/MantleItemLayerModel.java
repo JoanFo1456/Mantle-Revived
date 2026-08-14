@@ -37,6 +37,7 @@ import java.util.BitSet;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
+import it.unimi.dsi.fastutil.ints.IntList;
 import java.util.PrimitiveIterator;
 
 /**
@@ -142,7 +143,11 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
     FaceData faceData = new FaceData(uMax, vMax);
     boolean translucent = false;
 
-    PrimitiveIterator.OfInt iterator = sprite.contents().getUniqueFrames().iterator();
+    // 26.1: SpriteContents.getUniqueFrames() returns IntList.of(1) for non-animated sprites — frame index 1, which is out
+    // of bounds for a single-frame sprite and reads as fully transparent. That left faceData empty, so items baked with no
+    // extruded side faces and rendered flat (PNG-like). Scan frame 0 for non-animated sprites.
+    IntList uniqueFrames = contents.isAnimated() ? contents.getUniqueFrames() : IntList.of(0);
+    PrimitiveIterator.OfInt iterator = uniqueFrames.iterator();
     boolean hasFrames = iterator.hasNext();
     while (iterator.hasNext()) {
       int f = iterator.nextInt();
@@ -314,7 +319,8 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
     boolean translucent = false;
 
     // scan the mask's alpha for the extruded-edge boundaries (identical to getQuadsForSprite, but reading the mask)
-    PrimitiveIterator.OfInt iterator = maskContents.getUniqueFrames().iterator();
+    IntList maskFrames = maskContents.isAnimated() ? maskContents.getUniqueFrames() : IntList.of(0);
+    PrimitiveIterator.OfInt iterator = maskFrames.iterator();
     while (iterator.hasNext()) {
       int f = iterator.nextInt();
       boolean ptu;
