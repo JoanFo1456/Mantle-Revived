@@ -15,7 +15,6 @@ import net.minecraft.client.resources.model.geometry.UnbakedGeometry;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.Axis;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.AbstractUnbakedModel;
 import net.neoforged.neoforge.client.model.StandardModelParameters;
@@ -480,7 +479,9 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
 
   /** Builds a single quad on the side of the sprite */
   private static BakedQuad buildSideQuad(QuadBakingVertexConsumer builder, VertexConsumer consumer, Direction side, int color, Material.Baked material, int tint, int u, int v, int size, int luminosity) {
-    final float eps = 1e-2f;
+    // 26.1 TextureAtlasSprite UV offsets are normalized (0..1), and vanilla's item generator keeps side samples
+    // 0.1 pixels inside the source pixel to avoid sampling the transparent perimeter between atlas sprites.
+    final float eps = 0.1f;
     TextureAtlasSprite sprite = material.sprite();
     SpriteContents contents = sprite.contents();
     int width = contents.width();
@@ -508,18 +509,51 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
         throw new IllegalArgumentException("can't handle z-oriented side");
     }
 
-    float dx = side.getUnitVec3i().getX() * eps / width;
-    float dy = side.getUnitVec3i().getY() * eps / height;
-    float u0 = 16f * (x0 - dx);
-    float u1 = 16f * (x1 - dx);
-    float v0 = 16f * (1f - y0 - dy);
-    float v1 = 16f * (1f - y1 - dy);
-    return buildQuad(builder, consumer, material, tint, (side.getAxis() == Axis.Y ? side.getOpposite() : side),
-      color, luminosity,
-      x0, y0, z0, sprite.getU(u0), sprite.getV(v0),
-      x1, y1, z0, sprite.getU(u1), sprite.getV(v1),
-      x1, y1, z1, sprite.getU(u1), sprite.getV(v1),
-      x0, y0, z1, sprite.getU(u0), sprite.getV(v0));
+    float textureU0, textureU1, textureV0, textureV1;
+    switch (side) {
+      case WEST:
+        textureU0 = (u + eps) / width;
+        textureU1 = (u + 1f - eps) / width;
+        textureV0 = (height - v - size + eps) / height;
+        textureV1 = (height - v - eps) / height;
+        return buildQuad(builder, consumer, material, tint, Direction.WEST, color, luminosity,
+          x0, y0, z0, sprite.getU(textureU1), sprite.getV(textureV1),
+          x1, y1, z0, sprite.getU(textureU1), sprite.getV(textureV0),
+          x1, y1, z1, sprite.getU(textureU0), sprite.getV(textureV0),
+          x0, y0, z1, sprite.getU(textureU0), sprite.getV(textureV1));
+      case EAST:
+        textureU0 = (u - 1f + eps) / width;
+        textureU1 = (u - eps) / width;
+        textureV0 = (height - v - size + eps) / height;
+        textureV1 = (height - v - eps) / height;
+        return buildQuad(builder, consumer, material, tint, Direction.EAST, color, luminosity,
+          x0, y0, z0, sprite.getU(textureU0), sprite.getV(textureV1),
+          x1, y1, z0, sprite.getU(textureU0), sprite.getV(textureV0),
+          x1, y1, z1, sprite.getU(textureU1), sprite.getV(textureV0),
+          x0, y0, z1, sprite.getU(textureU1), sprite.getV(textureV1));
+      case UP:
+        textureU0 = (u + eps) / width;
+        textureU1 = (u + size - eps) / width;
+        textureV0 = (height - v - 1f + eps) / height;
+        textureV1 = (height - v - eps) / height;
+        return buildQuad(builder, consumer, material, tint, Direction.DOWN, color, luminosity,
+          x0, y0, z0, sprite.getU(textureU0), sprite.getV(textureV1),
+          x1, y1, z0, sprite.getU(textureU1), sprite.getV(textureV1),
+          x1, y1, z1, sprite.getU(textureU1), sprite.getV(textureV0),
+          x0, y0, z1, sprite.getU(textureU0), sprite.getV(textureV0));
+      case DOWN:
+        textureU0 = (u + eps) / width;
+        textureU1 = (u + size - eps) / width;
+        textureV0 = (height - v + eps) / height;
+        textureV1 = (height - v + 1f - eps) / height;
+        return buildQuad(builder, consumer, material, tint, Direction.UP, color, luminosity,
+          x0, y0, z0, sprite.getU(textureU0), sprite.getV(textureV0),
+          x1, y1, z0, sprite.getU(textureU1), sprite.getV(textureV0),
+          x1, y1, z1, sprite.getU(textureU1), sprite.getV(textureV1),
+          x0, y0, z1, sprite.getU(textureU0), sprite.getV(textureV1));
+      default:
+        throw new IllegalArgumentException("can't handle z-oriented side");
+    }
   }
 
   /** Builds a single quad in the model with color and luminosity */
@@ -555,9 +589,11 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
   /** Cloned FaceData subclass */
   private static class FaceData {
     private final EnumMap<Direction,BitSet> data = new EnumMap<>(Direction.class);
+    private final int uMax;
     private final int vMax;
 
     FaceData(int uMax, int vMax) {
+      this.uMax = uMax;
       this.vMax = vMax;
       data.put(Direction.WEST, new BitSet(uMax * vMax));
       data.put(Direction.EAST, new BitSet(uMax * vMax));
@@ -574,7 +610,7 @@ public class MantleItemLayerModel extends AbstractUnbakedModel {
     }
 
     private int getIndex(int u, int v) {
-      return v * vMax + u;
+      return v * uMax + u;
     }
   }
 
