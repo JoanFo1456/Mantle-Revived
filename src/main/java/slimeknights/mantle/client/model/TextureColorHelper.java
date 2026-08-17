@@ -5,8 +5,8 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.SpriteContents;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
@@ -77,7 +77,10 @@ public class TextureColorHelper {
   /** Getter mapping a block sprite texture to a single average color */
   private static final ToIntFunction<Identifier> COMPUTE_SPRITE_COLOR = key -> {
     Minecraft mc = Minecraft.getInstance();
-    TextureAtlasSprite sprite = mc.getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(key);
+    // 26.1: AtlasManager.getAtlasOrThrow keys by atlas id (AtlasIds.BLOCKS = "minecraft:blocks"), not the atlas texture
+    // path (TextureAtlas.LOCATION_BLOCKS). Passing the texture path threw "Invalid atlas id" and crashed fog rendering
+    // when submerged in a mod fluid.
+    TextureAtlasSprite sprite = mc.getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(key);
     //noinspection ConstantValue  eh, its better to be safe
     if (sprite == null || sprite.contents().name() == MissingTextureAtlasSprite.getLocation()) {
       return -1;
