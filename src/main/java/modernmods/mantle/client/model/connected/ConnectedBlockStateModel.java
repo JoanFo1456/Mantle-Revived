@@ -1,6 +1,5 @@
 package modernmods.mantle.client.model.connected;
 
-import com.mojang.math.Transformation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -130,7 +129,7 @@ public final class ConnectedBlockStateModel {
       }
 
       BiPredicate<BlockState,BlockState> predicate = ConnectedModelRegistry.getPredicate(connection.predicate());
-      return new Baked(baseQuads, connectedSprites, particle, ambientOcclusion, predicate, connection.sides(), modelState.transformation());
+      return new Baked(baseQuads, connectedSprites, particle, ambientOcclusion, predicate, connection.sides());
     }
 
     @Override
@@ -165,20 +164,18 @@ public final class ConnectedBlockStateModel {
     private final boolean ambientOcclusion;
     private final BiPredicate<BlockState,BlockState> predicate;
     private final Set<Direction> sides;
-    private final Transformation rotation;
     /** Parts by connection mask (0-63). 1.21.1 rebuilt on every getQuads call; here we cache the 64 possibilities. */
     private final List<BlockStateModelPart>[] cache;
 
     @SuppressWarnings("unchecked")
     public Baked(QuadCollection baseQuads, Map<TextureAtlasSprite,TextureAtlasSprite[]> connectedSprites, Material.Baked particle,
-                 boolean ambientOcclusion, BiPredicate<BlockState,BlockState> predicate, Set<Direction> sides, Transformation rotation) {
+                 boolean ambientOcclusion, BiPredicate<BlockState,BlockState> predicate, Set<Direction> sides) {
       this.baseQuads = baseQuads;
       this.connectedSprites = connectedSprites;
       this.particle = particle;
       this.ambientOcclusion = ambientOcclusion;
       this.predicate = predicate;
       this.sides = sides;
-      this.rotation = rotation;
       this.cache = new List[64];
     }
 
@@ -193,11 +190,16 @@ public final class ConnectedBlockStateModel {
       return getConnections(level, pos, state);
     }
 
-    /** Computes the six-bit connection mask for the block at the given position. */
+    /**
+     * Computes the six-bit connection mask for the block at the given position, in WORLD directions. The mask must be
+     * world-framed because {@link #faceKey} derives its texture up/right axes from the already-transformed (world-space)
+     * baked quad geometry; applying the model's rotation here too would double-count it and cross-wire the connections on
+     * rotated parts (e.g. the y-rotated pane arms connected in only two of four directions).
+     */
     private byte getConnections(BlockAndTintGetter level, BlockPos pos, BlockState state) {
       byte connections = 0;
       for (Direction dir : Direction.values()) {
-        if (sides.contains(dir) && predicate.test(state, level.getBlockState(pos.relative(rotation.rotateTransform(dir))))) {
+        if (sides.contains(dir) && predicate.test(state, level.getBlockState(pos.relative(dir)))) {
           connections |= 1 << dir.get3DDataValue();
         }
       }
