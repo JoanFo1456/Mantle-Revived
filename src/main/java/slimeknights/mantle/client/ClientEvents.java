@@ -54,6 +54,7 @@ import slimeknights.mantle.client.model.RetexturedBlockStateModel;
 import slimeknights.mantle.client.model.RetexturedItemModel;
 import slimeknights.mantle.client.model.RetexturedModel;
 import slimeknights.mantle.client.model.TextureColorHelper;
+import slimeknights.mantle.client.model.connected.ConnectedBlockStateModel;
 import slimeknights.mantle.client.model.connected.ConnectedModel;
 import slimeknights.mantle.client.model.util.ColoredBlockModel;
 import slimeknights.mantle.client.model.util.MantleItemLayerModel;
@@ -144,6 +145,9 @@ public class ClientEvents {
     // block-state half of mantle:retextured; selected by "type": "mantle:retextured" in a block's blockstate variant,
     // it swaps the named texture slots to the stored block's texture using the block entity's ModelData
     event.registerModel(RetexturedBlockStateModel.ID, RetexturedBlockStateModel.Unbaked.MAP_CODEC);
+    // block-state half of mantle:connected; selected by "type": "mantle:connected" in a block's blockstate variant,
+    // it swaps each face's sprite to the connected-texture suffix matching that face's neighbours (computed from the world)
+    event.registerModel(ConnectedBlockStateModel.ID, ConnectedBlockStateModel.Unbaked.MAP_CODEC);
   }
 
   @SubscribeEvent
