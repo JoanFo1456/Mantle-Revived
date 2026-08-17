@@ -80,14 +80,19 @@ public final class ConnectedBlockStateModel {
   }
 
   /**
-   * Unbaked connected block state model: a vanilla {@link Variant} plus the parsed {@link Connection} config.
+   * Unbaked connected block state model: a vanilla {@link Variant} plus the parsed {@link Connection} config and an
+   * optional static ARGB color modulator (replacing the model's {@code colors} block — in 26.1 a {@code ColoredBlockModel}
+   * that inherits its geometry from a vanilla parent such as {@code cube_all} can no longer apply that color during bake,
+   * so the connected block state applies it to the baked quads here, matching the coloured glass variants).
    * @param variant     Wrapped vanilla variant (model reference + rotation)
    * @param connection  Connection config (which textures connect, the connection predicate, the sides to check)
+   * @param color       ARGB color applied to every quad ({@code -1} = untinted)
    */
-  public record Unbaked(Variant variant, Connection connection) implements CustomUnbakedBlockStateModel {
+  public record Unbaked(Variant variant, Connection connection, int color) implements CustomUnbakedBlockStateModel {
     public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
       Variant.MAP_CODEC.forGetter(Unbaked::variant),
-      Connection.MAP_CODEC.fieldOf("connection").forGetter(Unbaked::connection)
+      Connection.MAP_CODEC.fieldOf("connection").forGetter(Unbaked::connection),
+      Codec.INT.optionalFieldOf("color", -1).forGetter(Unbaked::color)
     ).apply(inst, Unbaked::new));
 
     @Override
@@ -98,6 +103,9 @@ public final class ConnectedBlockStateModel {
       boolean ambientOcclusion = model.getTopAmbientOcclusion();
       Material.Baked particle = model.resolveParticleMaterial(slots, baker);
       QuadCollection baseQuads = model.bakeTopGeometry(slots, baker, modelState);
+      if (color != -1) {
+        baseQuads = slimeknights.mantle.client.model.util.ColoredBlockModel.applyColorQuadTransformer(color).process(baseQuads);
+      }
 
       // for each connected texture, resolve its base sprite and the sixteen suffix sprites (indexed by the 2D key)
       Map<TextureAtlasSprite,TextureAtlasSprite[]> connectedSprites = new HashMap<>();
