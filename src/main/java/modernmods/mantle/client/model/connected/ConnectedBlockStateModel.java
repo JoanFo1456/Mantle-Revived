@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model.connected;
+package modernmods.mantle.client.model.connected;
 
 import com.mojang.math.Transformation;
 import com.mojang.serialization.Codec;
@@ -59,7 +59,7 @@ import java.util.function.BiPredicate;
  */
 public final class ConnectedBlockStateModel {
   /** Registered id — the value of the {@code "type"} key in a connected block's blockstate variant. */
-  public static final Identifier ID = slimeknights.mantle.Mantle.getResource("connected");
+  public static final Identifier ID = modernmods.mantle.Mantle.getResource("connected");
 
   private ConnectedBlockStateModel() {}
 
@@ -104,7 +104,7 @@ public final class ConnectedBlockStateModel {
       Material.Baked particle = model.resolveParticleMaterial(slots, baker);
       QuadCollection baseQuads = model.bakeTopGeometry(slots, baker, modelState);
       if (color != -1) {
-        baseQuads = slimeknights.mantle.client.model.util.ColoredBlockModel.applyColorQuadTransformer(color).process(baseQuads);
+        baseQuads = modernmods.mantle.client.model.util.ColoredBlockModel.applyColorQuadTransformer(color).process(baseQuads);
       }
 
       // for each connected texture, resolve its base sprite and the sixteen suffix sprites (indexed by the 2D key)
@@ -241,7 +241,7 @@ public final class ConnectedBlockStateModel {
       if (sprites == null) {
         return quad;
       }
-      int key = faceKey(quad.direction(), connections);
+      int key = faceKey(quad, connections);
       TextureAtlasSprite target = sprites[key];
       if (target == quad.materialInfo().sprite()) {
         return quad;
@@ -250,20 +250,67 @@ public final class ConnectedBlockStateModel {
     }
 
     /**
-     * Computes the sixteen-value 2D connection key for a face, mapping the four in-plane horizontal directions of the
-     * face to world directions and testing the connection mask. Mirrors the 1.21.1 {@code getTextureSuffix} logic with
-     * the identity UV transform.
+     * Computes the sixteen-value 2D connection key for a quad by deriving the texture's up/right axes in world space from
+     * the quad geometry (vertex positions + UVs), then testing the connection mask in those world directions. Unlike a
+     * fixed cube-face transform this is correct for ANY face orientation, so rotated pane faces connect the same as cube
+     * faces. Suffix 2D bits follow the 1.21.1 convention: NORTH=texture-up, SOUTH=down, WEST=left, EAST=right.
+     * <p>
+     * v1 and v3 are the two corners adjacent to v0, so they span the face; solving the 2x2 UV system gives the world
+     * vectors for +U (texture right) and +V. Texture "up" is -V because sprite V grows downward.
      */
-    private static int faceKey(Direction face, byte connections) {
+    private static int faceKey(BakedQuad quad, byte connections) {
+      float p0x = quad.position0().x(), p0y = quad.position0().y(), p0z = quad.position0().z();
+      float dx1 = quad.position1().x() - p0x, dy1 = quad.position1().y() - p0y, dz1 = quad.position1().z() - p0z;
+      float dx3 = quad.position3().x() - p0x, dy3 = quad.position3().y() - p0y, dz3 = quad.position3().z() - p0z;
+      float u0 = UVPair.unpackU(quad.packedUV0()), v0 = UVPair.unpackV(quad.packedUV0());
+      float du1 = UVPair.unpackU(quad.packedUV1()) - u0, dv1 = UVPair.unpackV(quad.packedUV1()) - v0;
+      float du3 = UVPair.unpackU(quad.packedUV3()) - u0, dv3 = UVPair.unpackV(quad.packedUV3()) - v0;
+      float det = du1 * dv3 - du3 * dv1;
+      if (Math.abs(det) < 1.0e-9f) {
+        return faceKeyFallback(quad.direction(), connections);
+      }
+      // dPos/dU (texture right) and dPos/dV, per world component
+      float rx = (dv3 * dx1 - dv1 * dx3) / det, ry = (dv3 * dy1 - dv1 * dy3) / det, rz = (dv3 * dz1 - dv1 * dz3) / det;
+      float vx = (du1 * dx3 - du3 * dx1) / det, vy = (du1 * dy3 - du3 * dy1) / det, vz = (du1 * dz3 - du3 * dz1) / det;
+      Direction right = nearestDirection(rx, ry, rz);
+      Direction up = nearestDirection(-vx, -vy, -vz);
+      int key = 0;
+      if (connectedIn(connections, up))                key |= 1 << Direction.NORTH.get2DDataValue();
+      if (connectedIn(connections, up.getOpposite()))  key |= 1 << Direction.SOUTH.get2DDataValue();
+      if (connectedIn(connections, right.getOpposite())) key |= 1 << Direction.WEST.get2DDataValue();
+      if (connectedIn(connections, right))             key |= 1 << Direction.EAST.get2DDataValue();
+      return key;
+    }
+
+    /** Fallback for degenerate UVs: the fixed cube-face transform (identity-based), matching the pre-geometry behaviour. */
+    private static int faceKeyFallback(Direction face, byte connections) {
       int key = 0;
       for (Direction dir : Plane.HORIZONTAL) {
-        Direction world = ConnectedModel.rotateDirection(dir, face);
-        int flag = 1 << world.get3DDataValue();
-        if ((connections & flag) == flag) {
+        if (connectedIn(connections, ConnectedModel.rotateDirection(dir, face))) {
           key |= 1 << dir.get2DDataValue();
         }
       }
       return key;
+    }
+
+    /** True if the connection mask has the bit for the given world direction. */
+    private static boolean connectedIn(byte connections, Direction dir) {
+      int flag = 1 << dir.get3DDataValue();
+      return (connections & flag) == flag;
+    }
+
+    /** The world Direction whose unit vector best matches the given world-space vector. */
+    private static Direction nearestDirection(float x, float y, float z) {
+      Direction best = Direction.NORTH;
+      float bestDot = -Float.MAX_VALUE;
+      for (Direction dir : Direction.values()) {
+        float dot = x * dir.getStepX() + y * dir.getStepY() + z * dir.getStepZ();
+        if (dot > bestDot) {
+          bestDot = dot;
+          best = dir;
+        }
+      }
+      return best;
     }
 
     @Override
