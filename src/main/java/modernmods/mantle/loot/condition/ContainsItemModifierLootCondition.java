@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot.condition;
+package modernmods.mantle.loot.condition;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -11,8 +11,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.common.IngredientLoadable;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.common.IngredientLoadable;
 
 import java.lang.reflect.Type;
 import java.util.List;

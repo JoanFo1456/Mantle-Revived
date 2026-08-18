@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.data.element;
+package modernmods.mantle.client.book.data.element;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -19,8 +19,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringUtil;
-import slimeknights.mantle.client.book.repository.BookRepository;
-import slimeknights.mantle.recipe.ingredient.SizedIngredient;
+import modernmods.mantle.client.book.repository.BookRepository;
+import modernmods.mantle.recipe.ingredient.SizedIngredient;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

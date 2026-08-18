@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable.record;
+package modernmods.mantle.data.loadable.record;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,13 +17,13 @@ import com.mojang.datafixers.util.Function7;
 import com.mojang.datafixers.util.Function8;
 import com.mojang.datafixers.util.Function9;
 import net.minecraft.util.GsonHelper;
-import slimeknights.mantle.data.loadable.ErrorFactory;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.field.DirectField;
-import slimeknights.mantle.data.loadable.field.RecordField;
-import slimeknights.mantle.data.loadable.mapping.CompactLoadable;
-import slimeknights.mantle.data.loadable.mapping.MappedLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.ErrorFactory;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.field.DirectField;
+import modernmods.mantle.data.loadable.field.RecordField;
+import modernmods.mantle.data.loadable.mapping.CompactLoadable;
+import modernmods.mantle.data.loadable.mapping.MappedLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 
 /**
  * Base interface for record type loadables, and the home of their factory methods.
- * Record loaders directly serialize into JSON objects, meaning they are compatible with {@link slimeknights.mantle.data.registry.GenericLoaderRegistry}.
+ * Record loaders directly serialize into JSON objects, meaning they are compatible with {@link modernmods.mantle.data.registry.GenericLoaderRegistry}.
  * @param <T>  Type being loaded
  */
 @SuppressWarnings("unused")  // API

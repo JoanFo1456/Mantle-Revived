@@ -1,15 +1,15 @@
-package slimeknights.mantle.client.model.builder;
+package modernmods.mantle.client.model.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import java.util.EnumSet;
 import java.util.Set;
 
-/** Builder for {@link slimeknights.mantle.client.model.connected.ConnectedModel} */
+/** Builder for {@link modernmods.mantle.client.model.connected.ConnectedModel} */
 public class ConnectedModelBuilder extends ColoredModelBuilder {
   private final JsonObject connectedTextures = new JsonObject();
   private Set<Direction> sides = null;
@@ -22,7 +22,7 @@ public class ConnectedModelBuilder extends ColoredModelBuilder {
   /**
    * Makes the given texture connected using the given connection type.
    * @param name  Name of the texture from the textures list, not the full path.
-   * @param type  Connection type, see {@link slimeknights.mantle.client.model.connected.ConnectedModelRegistry}
+   * @param type  Connection type, see {@link modernmods.mantle.client.model.connected.ConnectedModelRegistry}
    */
   public ConnectedModelBuilder connected(String name, String type) {
     connectedTextures.addProperty(name, type);
@@ -35,7 +35,7 @@ public class ConnectedModelBuilder extends ColoredModelBuilder {
     return this;
   }
 
-  /** Sets the connection predicate, must be registered with the {@link slimeknights.mantle.client.model.connected.ConnectedModelRegistry} */
+  /** Sets the connection predicate, must be registered with the {@link modernmods.mantle.client.model.connected.ConnectedModelRegistry} */
   public ConnectedModelBuilder setPredicate(String predicate) {
     this.predicate = predicate;
     return this;

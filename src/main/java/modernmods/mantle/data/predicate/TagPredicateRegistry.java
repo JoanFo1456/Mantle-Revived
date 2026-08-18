@@ -1,10 +1,10 @@
-package slimeknights.mantle.data.predicate;
+package modernmods.mantle.data.predicate;
 
 import lombok.RequiredArgsConstructor;
 import net.minecraft.tags.TagKey;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
 
 import javax.annotation.Nullable;
 import java.util.function.BiPredicate;

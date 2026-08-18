@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.object;
+package modernmods.mantle.registration.object;
 
 import lombok.Getter;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static slimeknights.mantle.registration.RegistrationHelper.getCastedHolder;
-import static slimeknights.mantle.util.RegistryHelper.getHolder;
+import static modernmods.mantle.registration.RegistrationHelper.getCastedHolder;
+import static modernmods.mantle.util.RegistryHelper.getHolder;
 
 /** Extension of the fence object with all other wood blocks */
 public class WoodBlockObject extends FenceBuildingBlockObject {

@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -35,7 +35,7 @@ import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.entity.PartEntity;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

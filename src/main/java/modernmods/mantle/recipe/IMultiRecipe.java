@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe;
+package modernmods.mantle.recipe;
 
 import net.minecraft.core.RegistryAccess;
 

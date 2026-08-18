@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.data;
+package modernmods.mantle.client.book.data;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -8,16 +8,16 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.BookHelper;
-import slimeknights.mantle.client.book.BookLoader;
-import slimeknights.mantle.client.book.BookScreenOpener;
-import slimeknights.mantle.client.book.data.content.ContentError;
-import slimeknights.mantle.client.book.repository.BookRepository;
-import slimeknights.mantle.client.book.transformer.BookTransformer;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.network.MantleNetwork;
-import slimeknights.mantle.network.packet.DropLecternBookPacket;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.BookHelper;
+import modernmods.mantle.client.book.BookLoader;
+import modernmods.mantle.client.book.BookScreenOpener;
+import modernmods.mantle.client.book.data.content.ContentError;
+import modernmods.mantle.client.book.repository.BookRepository;
+import modernmods.mantle.client.book.transformer.BookTransformer;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.network.MantleNetwork;
+import modernmods.mantle.network.packet.DropLecternBookPacket;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;

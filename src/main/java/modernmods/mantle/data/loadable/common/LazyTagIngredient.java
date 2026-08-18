@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable.common;
+package modernmods.mantle.data.loadable.common;
 
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;

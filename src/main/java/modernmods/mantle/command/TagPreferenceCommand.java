@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -8,8 +8,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
-import slimeknights.mantle.command.argument.TagSourceArgument;
-import slimeknights.mantle.recipe.helper.TagPreference;
+import modernmods.mantle.command.argument.TagSourceArgument;
+import modernmods.mantle.recipe.helper.TagPreference;
 
 /** Command to test tag preference behavior */
 public class TagPreferenceCommand {

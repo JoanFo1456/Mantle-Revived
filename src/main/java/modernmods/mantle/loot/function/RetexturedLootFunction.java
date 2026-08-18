@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot.function;
+package modernmods.mantle.loot.function;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -10,10 +10,10 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.block.entity.IRetexturedBlockEntity;
-import slimeknights.mantle.loot.MantleLoot;
-import slimeknights.mantle.util.RetexturedHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.block.entity.IRetexturedBlockEntity;
+import modernmods.mantle.loot.MantleLoot;
+import modernmods.mantle.util.RetexturedHelper;
 
 import java.util.List;
 import java.util.Set;

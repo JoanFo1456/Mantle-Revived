@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.registry;
+package modernmods.mantle.data.registry;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

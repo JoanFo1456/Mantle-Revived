@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.datamap;
+package modernmods.mantle.data.datamap;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -13,12 +13,12 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.field.ContextKey;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.JsonHelper;
-import slimeknights.mantle.util.typed.TypedMap;
-import slimeknights.mantle.util.typed.TypedMapBuilder;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.field.ContextKey;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.JsonHelper;
+import modernmods.mantle.util.typed.TypedMap;
+import modernmods.mantle.util.typed.TypedMapBuilder;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.helper;
+package modernmods.mantle.recipe.helper;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -7,7 +7,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import java.lang.reflect.Method;
 import java.util.function.Function;

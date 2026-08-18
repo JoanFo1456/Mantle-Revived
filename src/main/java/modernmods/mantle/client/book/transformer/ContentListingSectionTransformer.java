@@ -1,9 +1,9 @@
-package slimeknights.mantle.client.book.transformer;
+package modernmods.mantle.client.book.transformer;
 
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.PageData;
-import slimeknights.mantle.client.book.data.SectionData;
-import slimeknights.mantle.client.book.data.content.ContentListing;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.PageData;
+import modernmods.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.book.data.content.ContentListing;
 
 import javax.annotation.Nullable;
 

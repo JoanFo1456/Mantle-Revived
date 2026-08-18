@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import net.minecraft.util.Util;
 import net.minecraft.client.gui.Font;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.FontContext;
-import slimeknights.mantle.client.book.action.StringActionProcessor;
+import modernmods.mantle.client.book.action.StringActionProcessor;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

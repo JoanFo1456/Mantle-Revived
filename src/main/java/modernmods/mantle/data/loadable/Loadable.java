@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable;
+package modernmods.mantle.data.loadable;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -10,18 +10,18 @@ import com.google.gson.JsonSyntaxException;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.ApiStatus.OverrideOnly;
 import org.jetbrains.annotations.Contract;
-import slimeknights.mantle.data.loadable.array.ArrayLoadable;
-import slimeknights.mantle.data.loadable.array.ObjectArrayLoadable;
-import slimeknights.mantle.data.loadable.field.DefaultingField;
-import slimeknights.mantle.data.loadable.field.LoadableField;
-import slimeknights.mantle.data.loadable.field.NullableField;
-import slimeknights.mantle.data.loadable.field.RequiredField;
-import slimeknights.mantle.data.loadable.field.TryDirectField;
-import slimeknights.mantle.data.loadable.mapping.AnyCollectionLoadable;
-import slimeknights.mantle.data.loadable.mapping.ListLoadable;
-import slimeknights.mantle.data.loadable.mapping.MappedLoadable;
-import slimeknights.mantle.data.loadable.mapping.SetLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.array.ArrayLoadable;
+import modernmods.mantle.data.loadable.array.ObjectArrayLoadable;
+import modernmods.mantle.data.loadable.field.DefaultingField;
+import modernmods.mantle.data.loadable.field.LoadableField;
+import modernmods.mantle.data.loadable.field.NullableField;
+import modernmods.mantle.data.loadable.field.RequiredField;
+import modernmods.mantle.data.loadable.field.TryDirectField;
+import modernmods.mantle.data.loadable.mapping.AnyCollectionLoadable;
+import modernmods.mantle.data.loadable.mapping.ListLoadable;
+import modernmods.mantle.data.loadable.mapping.MappedLoadable;
+import modernmods.mantle.data.loadable.mapping.SetLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;

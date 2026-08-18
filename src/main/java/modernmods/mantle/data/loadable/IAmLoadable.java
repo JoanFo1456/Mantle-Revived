@@ -1,6 +1,6 @@
-package slimeknights.mantle.data.loadable;
+package modernmods.mantle.data.loadable;
 
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
 
 /** Interface for an object that has a loadable. It is expected the loadable returned works on the object itself. */
 public interface IAmLoadable {

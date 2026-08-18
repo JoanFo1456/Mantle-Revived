@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model;
+package modernmods.mantle.client.model;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -18,8 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.joml.Matrix4fc;
-import slimeknights.mantle.client.model.util.DynamicItemModel;
-import slimeknights.mantle.util.RetexturedHelper;
+import modernmods.mantle.client.model.util.DynamicItemModel;
+import modernmods.mantle.util.RetexturedHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.List;
  */
 public final class RetexturedItemModel {
   /** Registered id — the value of the {@code "type"} key in a retextured item's model definition. */
-  public static final Identifier ID = slimeknights.mantle.Mantle.getResource("retextured");
+  public static final Identifier ID = modernmods.mantle.Mantle.getResource("retextured");
 
   private RetexturedItemModel() {}
 

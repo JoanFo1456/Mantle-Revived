@@ -1,9 +1,9 @@
-package slimeknights.mantle.data.loadable.record;
+package modernmods.mantle.data.loadable.record;
 
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.data.loadable.field.RecordField;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.field.RecordField;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.function.BiFunction;
 

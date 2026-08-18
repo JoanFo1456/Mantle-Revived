@@ -1,19 +1,19 @@
-package slimeknights.mantle.client.book.data.content;
+package modernmods.mantle.client.book.data.content;
 
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.minecraft.network.chat.Component;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.PageData;
-import slimeknights.mantle.client.book.data.SectionData;
-import slimeknights.mantle.client.book.data.content.ContentPadding.ContentRightPadding;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.client.screen.book.element.BookElement;
-import slimeknights.mantle.client.screen.book.element.PageIconLinkElement;
-import slimeknights.mantle.client.screen.book.element.SizedBookElement;
-import slimeknights.mantle.util.html.HtmlElement;
-import slimeknights.mantle.util.html.HtmlGroup;
-import slimeknights.mantle.util.html.HtmlSerializable;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.PageData;
+import modernmods.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.book.data.content.ContentPadding.ContentRightPadding;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.client.screen.book.element.PageIconLinkElement;
+import modernmods.mantle.client.screen.book.element.SizedBookElement;
+import modernmods.mantle.util.html.HtmlElement;
+import modernmods.mantle.util.html.HtmlGroup;
+import modernmods.mantle.util.html.HtmlSerializable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * Index page where each link in the index is an icon rather than text. Used notably for material pages in Tinkers' Construct.
- * Generally created in a custom {@link slimeknights.mantle.client.book.transformer.BookTransformer}.
+ * Generally created in a custom {@link modernmods.mantle.client.book.transformer.BookTransformer}.
  */
 public class ContentPageIconList extends PageContent {
 
@@ -184,7 +184,7 @@ public class ContentPageIconList extends PageContent {
    * @param indexList  List of indexes from {@link #getPagesNeededForItemCount(int, SectionData, String, String)}
    * @param pages      List of pages to add to the indexes.
    * @param index      Start index to insert new pages. Should generally be the size of {@link #getPagesNeededForItemCount(int, SectionData, String, String)},
-   *                   though you may need to compare {@link SectionData#pages} count if not using {@link slimeknights.mantle.client.book.transformer.IndexTransformer}.
+   *                   though you may need to compare {@link SectionData#pages} count if not using {@link modernmods.mantle.client.book.transformer.IndexTransformer}.
    */
   public static void addPages(SectionData data, List<ContentPageIconList> indexList, Collection<PageWithIcon> pages, int index) {
     Iterator<ContentPageIconList> indexes = indexList.iterator();

@@ -1,4 +1,4 @@
-package slimeknights.mantle.datagen;
+package modernmods.mantle.datagen;
 
 /** Contains some constants used for values shared across SlimeKnights mods */
 public interface MantleValues {

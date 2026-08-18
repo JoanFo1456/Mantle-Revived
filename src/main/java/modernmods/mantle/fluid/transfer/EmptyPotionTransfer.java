@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.transfer;
+package modernmods.mantle.fluid.transfer;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -11,14 +11,14 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.common.IngredientLoadable;
-import slimeknights.mantle.data.loadable.primitive.IntLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.datagen.MantleTags;
-import slimeknights.mantle.recipe.helper.FluidOutput;
-import slimeknights.mantle.recipe.helper.ItemOutput;
-import slimeknights.mantle.recipe.helper.TagPreference;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.common.IngredientLoadable;
+import modernmods.mantle.data.loadable.primitive.IntLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.datagen.MantleTags;
+import modernmods.mantle.recipe.helper.FluidOutput;
+import modernmods.mantle.recipe.helper.ItemOutput;
+import modernmods.mantle.recipe.helper.TagPreference;
 
 /** Fluid transfer info that empties a fluid from a potion item, but empties water if its the water potion */
 public class EmptyPotionTransfer extends EmptyFluidContainerTransfer {

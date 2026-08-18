@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.data.gson;
+package modernmods.mantle.data.gson;
 
 import javax.annotation.ParametersAreNonnullByDefault;

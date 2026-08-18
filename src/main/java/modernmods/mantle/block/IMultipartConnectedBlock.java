@@ -1,4 +1,4 @@
-package slimeknights.mantle.block;
+package modernmods.mantle.block;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.level.block.Block;
@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.core.Direction;
-import slimeknights.mantle.client.model.connected.ConnectedModel;
+import modernmods.mantle.client.model.connected.ConnectedModel;
 
 import java.util.Arrays;
 import java.util.EnumMap;

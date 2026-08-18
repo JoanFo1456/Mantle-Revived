@@ -1,9 +1,9 @@
-package slimeknights.mantle.registration.deferred;
+package modernmods.mantle.registration.deferred;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
-import slimeknights.mantle.registration.object.EnumObject;
-import slimeknights.mantle.registration.object.ItemObject;
+import modernmods.mantle.registration.object.EnumObject;
+import modernmods.mantle.registration.object.ItemObject;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

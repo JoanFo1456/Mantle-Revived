@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.data.predicate.damage;
+package modernmods.mantle.data.predicate.damage;
 
 import javax.annotation.ParametersAreNonnullByDefault;

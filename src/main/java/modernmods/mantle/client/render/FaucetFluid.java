@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.render;
+package modernmods.mantle.client.render;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,11 +11,11 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import org.joml.Vector3f;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.datamap.BlockStateDataMapLoader;
-import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.datamap.BlockStateDataMapLoader;
+import modernmods.mantle.data.loadable.primitive.BooleanLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import javax.annotation.Nonnull;
 import java.util.List;

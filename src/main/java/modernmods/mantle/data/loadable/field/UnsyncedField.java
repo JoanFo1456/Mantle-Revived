@@ -1,9 +1,9 @@
-package slimeknights.mantle.data.loadable.field;
+package modernmods.mantle.data.loadable.field;
 
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.Nullable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.util.typed.TypedMap;
 
 /** Field wrapper that does not sync the value to client, instead using a client value */
 public record UnsyncedField<T,P>(LoadableField<T,P> field, @Nullable T clientValue) implements LoadableField<T,P> {

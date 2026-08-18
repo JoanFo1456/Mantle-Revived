@@ -1,4 +1,4 @@
-package slimeknights.mantle.command.argument;
+package modernmods.mantle.command.argument;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -23,11 +23,11 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static net.minecraft.commands.synchronization.SuggestionProviders.register;
-import static slimeknights.mantle.Mantle.getResource;
+import static modernmods.mantle.Mantle.getResource;
 
 /**
  * Argument type that supports any vanilla registry plus custom tag sources. Due to the lack of context, not a true argument type but rather helpers.
- * @see slimeknights.mantle.command.RegistryArgument
+ * @see modernmods.mantle.command.RegistryArgument
  */
 public class TagSourceArgument {
   /* Name is invalid */

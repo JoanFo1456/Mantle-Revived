@@ -1,4 +1,4 @@
-package slimeknights.mantle.command.client;
+package modernmods.mantle.command.client;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -11,8 +11,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.BookLoader;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.BookLoader;
 
 import java.util.function.Consumer;
 import java.util.stream.Stream;

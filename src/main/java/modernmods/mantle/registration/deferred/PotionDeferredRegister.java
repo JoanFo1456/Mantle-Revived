@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.deferred;
+package modernmods.mantle.registration.deferred;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -6,7 +6,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import slimeknights.mantle.registration.object.EnumObject;
+import modernmods.mantle.registration.object.EnumObject;
 
 import java.util.Locale;
 import java.util.function.Supplier;

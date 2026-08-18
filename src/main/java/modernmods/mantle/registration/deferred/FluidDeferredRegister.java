@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.deferred;
+package modernmods.mantle.registration.deferred;
 
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -20,17 +20,17 @@ import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid.Properties;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import slimeknights.mantle.block.fluid.BurningLiquidBlock;
-import slimeknights.mantle.block.fluid.MobEffectLiquidBlock;
-import slimeknights.mantle.fluid.InvertedFluid;
-import slimeknights.mantle.fluid.InvertedFluidType;
-import slimeknights.mantle.fluid.TextureFluidType;
-import slimeknights.mantle.fluid.UnplaceableFluid;
-import slimeknights.mantle.registration.DelayedSupplier;
-import slimeknights.mantle.registration.FluidBuilder;
-import slimeknights.mantle.registration.RegistrationHelper;
-import slimeknights.mantle.registration.object.FlowingFluidObject;
-import slimeknights.mantle.registration.object.FluidObject;
+import modernmods.mantle.block.fluid.BurningLiquidBlock;
+import modernmods.mantle.block.fluid.MobEffectLiquidBlock;
+import modernmods.mantle.fluid.InvertedFluid;
+import modernmods.mantle.fluid.InvertedFluidType;
+import modernmods.mantle.fluid.TextureFluidType;
+import modernmods.mantle.fluid.UnplaceableFluid;
+import modernmods.mantle.registration.DelayedSupplier;
+import modernmods.mantle.registration.FluidBuilder;
+import modernmods.mantle.registration.RegistrationHelper;
+import modernmods.mantle.registration.object.FlowingFluidObject;
+import modernmods.mantle.registration.object.FluidObject;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable.common;
+package modernmods.mantle.data.loadable.common;
 
 import com.google.gson.JsonSyntaxException;
 import io.netty.handler.codec.DecoderException;
@@ -6,8 +6,8 @@ import io.netty.handler.codec.EncoderException;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.data.loadable.primitive.ResourceLocationLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.primitive.ResourceLocationLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import javax.annotation.Nullable;
 

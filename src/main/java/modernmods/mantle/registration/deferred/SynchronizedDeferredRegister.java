@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.deferred;
+package modernmods.mantle.registration.deferred;
 
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Registry;
@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import slimeknights.mantle.registration.RegistrationIdContext;
+import modernmods.mantle.registration.RegistrationIdContext;
 
 import java.util.function.Supplier;
 

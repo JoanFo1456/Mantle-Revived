@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.ingredient;
+package modernmods.mantle.recipe.ingredient;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,11 +25,11 @@ import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.common.IngredientLoadable;
-import slimeknights.mantle.recipe.MantleRecipes;
-import slimeknights.mantle.registration.object.FluidObject;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.common.IngredientLoadable;
+import modernmods.mantle.recipe.MantleRecipes;
+import modernmods.mantle.registration.object.FluidObject;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;

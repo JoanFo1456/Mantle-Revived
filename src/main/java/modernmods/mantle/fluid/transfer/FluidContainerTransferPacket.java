@@ -1,11 +1,11 @@
-package slimeknights.mantle.fluid.transfer;
+package modernmods.mantle.fluid.transfer;
 
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import slimeknights.mantle.network.packet.IThreadsafePacket;
+import modernmods.mantle.network.packet.IThreadsafePacket;
 
 import java.util.ArrayList;
 import java.util.List;

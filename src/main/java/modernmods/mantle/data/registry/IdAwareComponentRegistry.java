@@ -1,7 +1,7 @@
-package slimeknights.mantle.data.registry;
+package modernmods.mantle.data.registry;
 
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.registration.object.IdAwareObject;
+import modernmods.mantle.registration.object.IdAwareObject;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

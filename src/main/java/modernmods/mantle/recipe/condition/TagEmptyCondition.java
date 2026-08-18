@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.condition;
+package modernmods.mantle.recipe.condition;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Registry;
@@ -7,8 +7,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.loot.MantleLoot;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.loot.MantleLoot;
 
 /** Condition that checks when a tag is empty. Same as {@link net.neoforged.neoforge.common.conditions.TagEmptyCondition} but for any registry */
 public class TagEmptyCondition<T> extends TagCondition<T> implements LootItemCondition {

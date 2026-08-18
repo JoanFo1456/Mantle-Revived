@@ -1,4 +1,4 @@
-package slimeknights.mantle.client;
+package modernmods.mantle.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;

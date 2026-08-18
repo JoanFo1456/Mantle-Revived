@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.block.entity;
+package modernmods.mantle.block.entity;
 
 import javax.annotation.ParametersAreNonnullByDefault;

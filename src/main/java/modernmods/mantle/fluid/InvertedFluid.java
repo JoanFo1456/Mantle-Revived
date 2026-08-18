@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid;
+package modernmods.mantle.fluid;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;

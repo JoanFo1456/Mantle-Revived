@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -15,8 +15,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.neoforged.neoforge.common.world.BiomeModifier;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.util.JsonHelper;
 
 import java.nio.file.Path;
 

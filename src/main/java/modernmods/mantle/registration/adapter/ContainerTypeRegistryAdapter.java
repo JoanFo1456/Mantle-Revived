@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.adapter;
+package modernmods.mantle.registration.adapter;
 
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;

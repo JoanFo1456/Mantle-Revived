@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot;
+package modernmods.mantle.loot;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -12,11 +12,11 @@ import net.neoforged.neoforge.common.conditions.ICondition.IContext;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.LootTableLoadEvent;
 import net.neoforged.bus.api.EventPriority;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.listener.IEarlyReloadListener;
-import slimeknights.mantle.loot.LootTableInjection.LootPoolInjection;
-import slimeknights.mantle.recipe.condition.ConditionHelper;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.listener.IEarlyReloadListener;
+import modernmods.mantle.loot.LootTableInjection.LootPoolInjection;
+import modernmods.mantle.recipe.condition.ConditionHelper;
+import modernmods.mantle.util.JsonHelper;
 
 import java.io.IOException;
 import java.io.Reader;

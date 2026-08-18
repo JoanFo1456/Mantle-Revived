@@ -1,16 +1,16 @@
-package slimeknights.mantle.client.model.builder;
+package modernmods.mantle.client.model.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Builder for {@link slimeknights.mantle.client.model.FallbackModelLoader}.
+ * Builder for {@link modernmods.mantle.client.model.FallbackModelLoader}.
  * <p>
  * In 26.1.2 datagen no longer exposes a generic {@code ModelBuilder}; child models are now supplied as pre-serialized
  * {@link JsonObject} instances. update callers to pass serialized child models.

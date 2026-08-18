@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen;
+package modernmods.mantle.client.screen;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
@@ -13,8 +13,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
-import slimeknights.mantle.inventory.MultiModuleContainerMenu;
-import slimeknights.mantle.inventory.WrapperSlot;
+import modernmods.mantle.inventory.MultiModuleContainerMenu;
+import modernmods.mantle.inventory.WrapperSlot;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

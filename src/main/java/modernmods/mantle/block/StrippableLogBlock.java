@@ -1,4 +1,4 @@
-package slimeknights.mantle.block;
+package modernmods.mantle.block;
 
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;

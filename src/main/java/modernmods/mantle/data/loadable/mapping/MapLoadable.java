@@ -1,14 +1,14 @@
-package slimeknights.mantle.data.loadable.mapping;
+package modernmods.mantle.data.loadable.mapping;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.field.LoadableField;
-import slimeknights.mantle.data.loadable.primitive.StringLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.field.LoadableField;
+import modernmods.mantle.data.loadable.primitive.StringLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.HashMap;
 import java.util.Map;

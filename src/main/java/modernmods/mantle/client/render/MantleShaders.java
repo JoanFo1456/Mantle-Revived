@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.render;
+package modernmods.mantle.client.render;
 
 /**
  * Handles any custom shaders registered by Mantle.

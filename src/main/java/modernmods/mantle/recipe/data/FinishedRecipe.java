@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.data;
+package modernmods.mantle.recipe.data;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;

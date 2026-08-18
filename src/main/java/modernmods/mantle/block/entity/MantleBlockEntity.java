@@ -1,4 +1,4 @@
-package slimeknights.mantle.block.entity;
+package modernmods.mantle.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;

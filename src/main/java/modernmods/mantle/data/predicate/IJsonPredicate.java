@@ -1,7 +1,7 @@
-package slimeknights.mantle.data.predicate;
+package modernmods.mantle.data.predicate;
 
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 
 /** Generic interface for predicate based JSON loaders */
 public interface IJsonPredicate<I> extends IHaveLoader {

@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.tooltip;
+package modernmods.mantle.fluid.tooltip;
 
 import com.google.gson.JsonObject;
 import lombok.AccessLevel;
@@ -10,7 +10,7 @@ import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
-import slimeknights.mantle.data.GenericDataProvider;
+import modernmods.mantle.data.GenericDataProvider;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

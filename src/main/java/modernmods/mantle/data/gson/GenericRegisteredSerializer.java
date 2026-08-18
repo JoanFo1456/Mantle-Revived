@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.gson;
+package modernmods.mantle.data.gson;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -10,10 +10,10 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
-import slimeknights.mantle.data.gson.GenericRegisteredSerializer.IJsonSerializable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry;
-import slimeknights.mantle.data.registry.NamedComponentRegistry;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.data.gson.GenericRegisteredSerializer.IJsonSerializable;
+import modernmods.mantle.data.registry.GenericLoaderRegistry;
+import modernmods.mantle.data.registry.NamedComponentRegistry;
+import modernmods.mantle.util.JsonHelper;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

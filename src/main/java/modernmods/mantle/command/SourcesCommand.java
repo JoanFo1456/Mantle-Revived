@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -15,7 +15,7 @@ import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model.connected;
+package modernmods.mantle.client.model.connected;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

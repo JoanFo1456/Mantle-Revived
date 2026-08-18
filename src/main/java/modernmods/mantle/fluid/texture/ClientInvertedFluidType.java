@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.texture;
+package modernmods.mantle.fluid.texture;
 
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
@@ -6,7 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.fluids.FluidType;
 
-/** Client logic for {@link slimeknights.mantle.fluid.InvertedFluidType} */
+/** Client logic for {@link modernmods.mantle.fluid.InvertedFluidType} */
 public class ClientInvertedFluidType extends ClientTextureFluidType {
   private Identifier lastFlowing;
   private Identifier invertedFlowing;

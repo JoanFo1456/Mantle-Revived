@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.registration.deferred;
+package modernmods.mantle.registration.deferred;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.network.packet;
+package modernmods.mantle.network.packet;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -7,8 +7,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import slimeknights.mantle.client.book.BookHelper;
-import slimeknights.mantle.util.BlockEntityHelper;
+import modernmods.mantle.client.book.BookHelper;
+import modernmods.mantle.util.BlockEntityHelper;
 
 /**
  * Packet to update the book page in a lectern

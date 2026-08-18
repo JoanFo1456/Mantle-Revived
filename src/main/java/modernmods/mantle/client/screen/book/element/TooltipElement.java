@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

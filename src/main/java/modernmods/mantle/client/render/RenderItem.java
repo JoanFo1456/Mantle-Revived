@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.render;
+package modernmods.mantle.client.render;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,16 +9,16 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import org.joml.Vector3f;
-import slimeknights.mantle.client.model.util.ModelHelper;
-import slimeknights.mantle.data.datamap.BlockStateDataMapLoader;
-import slimeknights.mantle.data.datamap.RegistryDataMapLoader;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.common.DisplayContextLoadable;
-import slimeknights.mantle.data.loadable.common.Vector3fLoadable;
-import slimeknights.mantle.data.loadable.mapping.CollectionLoadable;
-import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.client.model.util.ModelHelper;
+import modernmods.mantle.data.datamap.BlockStateDataMapLoader;
+import modernmods.mantle.data.datamap.RegistryDataMapLoader;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.common.DisplayContextLoadable;
+import modernmods.mantle.data.loadable.common.Vector3fLoadable;
+import modernmods.mantle.data.loadable.mapping.CollectionLoadable;
+import modernmods.mantle.data.loadable.primitive.FloatLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
 
 import java.util.List;
 import java.util.function.Function;

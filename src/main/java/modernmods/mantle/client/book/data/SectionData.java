@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.data;
+package modernmods.mantle.client.book.data;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonElement;
@@ -7,15 +7,15 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.AlwaysCondition;
-import slimeknights.mantle.client.book.BookLoader;
-import slimeknights.mantle.client.book.IHTML;
-import slimeknights.mantle.client.book.data.content.ContentError;
-import slimeknights.mantle.client.book.data.element.ImageData;
-import slimeknights.mantle.client.book.repository.BookRepository;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.util.DataLoadedConditionContext;
-import slimeknights.mantle.util.html.HtmlElement;
-import slimeknights.mantle.util.html.HtmlSerializable;
+import modernmods.mantle.client.book.BookLoader;
+import modernmods.mantle.client.book.IHTML;
+import modernmods.mantle.client.book.data.content.ContentError;
+import modernmods.mantle.client.book.data.element.ImageData;
+import modernmods.mantle.client.book.repository.BookRepository;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.util.DataLoadedConditionContext;
+import modernmods.mantle.util.html.HtmlElement;
+import modernmods.mantle.util.html.HtmlSerializable;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

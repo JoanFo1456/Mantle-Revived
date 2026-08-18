@@ -1,4 +1,4 @@
-package slimeknights.mantle.client;
+package modernmods.mantle.client;
 
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.util.Util;
@@ -18,9 +18,9 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.config.Config;
-import slimeknights.mantle.config.Config.HeartRenderer;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.config.Config;
+import modernmods.mantle.config.Config.HeartRenderer;
 
 import java.util.Random;
 

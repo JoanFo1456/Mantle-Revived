@@ -1,10 +1,10 @@
-package slimeknights.mantle.fluid.texture;
+package modernmods.mantle.fluid.texture;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.neoforged.neoforge.fluids.FluidType;
-import slimeknights.mantle.data.client.DeanimateTextureGenerator;
+import modernmods.mantle.data.client.DeanimateTextureGenerator;
 
 import java.util.Map.Entry;
 import java.util.Set;

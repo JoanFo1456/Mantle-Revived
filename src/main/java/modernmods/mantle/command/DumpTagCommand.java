@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,10 +15,10 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.tags.TagFile;
 import net.minecraft.tags.TagLoader;
 import net.minecraft.tags.TagLoader.EntryWithSource;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.command.argument.TagSource;
-import slimeknights.mantle.command.argument.TagSourceArgument;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.command.argument.TagSource;
+import modernmods.mantle.command.argument.TagSourceArgument;
+import modernmods.mantle.util.JsonHelper;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Command that dumps a tag into a JSON object.
  * TODO 1.21: rename to {@code TagEntriesCommand}.
- * TODO 1.21: move to {@link slimeknights.mantle.command.tags}.
+ * TODO 1.21: move to {@link modernmods.mantle.command.tags}.
  */
 public class DumpTagCommand {
   protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

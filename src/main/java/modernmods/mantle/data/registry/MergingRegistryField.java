@@ -1,12 +1,12 @@
-package slimeknights.mantle.data.registry;
+package modernmods.mantle.data.registry;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import net.minecraft.util.GsonHelper;
-import slimeknights.mantle.data.loadable.field.AlwaysPresentRecordField;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.field.AlwaysPresentRecordField;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.Map.Entry;
 import java.util.function.Function;

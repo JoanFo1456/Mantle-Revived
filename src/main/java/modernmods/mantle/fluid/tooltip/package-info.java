@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.fluid.tooltip;
+package modernmods.mantle.fluid.tooltip;
 
 import javax.annotation.ParametersAreNonnullByDefault;

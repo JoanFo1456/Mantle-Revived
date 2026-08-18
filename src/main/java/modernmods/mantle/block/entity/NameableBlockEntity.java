@@ -1,4 +1,4 @@
-package slimeknights.mantle.block.entity;
+package modernmods.mantle.block.entity;
 
 import lombok.Getter;
 import lombok.Setter;

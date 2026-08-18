@@ -1,7 +1,7 @@
-package slimeknights.mantle.client.book.data;
+package modernmods.mantle.client.book.data;
 
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.client.screen.book.Textures;
+import modernmods.mantle.client.screen.book.Textures;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

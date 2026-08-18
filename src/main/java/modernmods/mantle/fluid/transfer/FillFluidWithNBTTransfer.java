@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.transfer;
+package modernmods.mantle.fluid.transfer;
 
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonObject;
@@ -9,9 +9,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.recipe.helper.ItemOutput;
-import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.recipe.helper.ItemOutput;
+import modernmods.mantle.recipe.ingredient.FluidIngredient;
 
 /** Fluid transfer info that fills a fluid into an item, copying its NBT */
 public class FillFluidWithNBTTransfer extends FillFluidContainerTransfer {

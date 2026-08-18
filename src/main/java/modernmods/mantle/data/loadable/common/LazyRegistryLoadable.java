@@ -1,17 +1,17 @@
-package slimeknights.mantle.data.loadable.common;
+package modernmods.mantle.data.loadable.common;
 
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.util.RegistryHelper;
 
 import javax.annotation.Nullable;
 
 /**
  * Registry loadable for a registry that may not exist immediately upon game launch, such as a Forge registry.
- * Should not be used for world registries; those will need to be handled using the {@link slimeknights.mantle.util.typed.TypedMap} context.
+ * Should not be used for world registries; those will need to be handled using the {@link modernmods.mantle.util.typed.TypedMap} context.
  * @see RegistryLoadable
  */
 @RequiredArgsConstructor

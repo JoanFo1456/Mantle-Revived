@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.data;
+package modernmods.mantle.recipe.data;
 
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -20,10 +20,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
-import slimeknights.mantle.registration.object.BuildingBlockObject;
-import slimeknights.mantle.registration.object.MetalItemObject;
-import slimeknights.mantle.registration.object.WallBuildingBlockObject;
-import slimeknights.mantle.registration.object.WoodBlockObject;
+import modernmods.mantle.registration.object.BuildingBlockObject;
+import modernmods.mantle.registration.object.MetalItemObject;
+import modernmods.mantle.registration.object.WallBuildingBlockObject;
+import modernmods.mantle.registration.object.WoodBlockObject;
 
 import java.util.function.Consumer;
 
@@ -94,7 +94,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
     // note our item is in the center, any mod allowed around the edges
     Identifier largeId = id(largeItem);
     ShapedRecipeBuilder.shaped(items(), category, largeItem)
-                       .define('#', slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(smallTag))
+                       .define('#', modernmods.mantle.data.loadable.common.LazyTagIngredient.of(smallTag))
                        .define('*', smallItem)
                        .pattern("###")
                        .pattern("#*#")
@@ -204,7 +204,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
     Criterion<?> hasPlanks = has(wood);
 
     // planks
-    ShapelessRecipeBuilder.shapeless(items(), RecipeCategory.BUILDING_BLOCKS, wood, 4).requires(slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(wood.getLogItemTag()))
+    ShapelessRecipeBuilder.shapeless(items(), RecipeCategory.BUILDING_BLOCKS, wood, 4).requires(modernmods.mantle.data.loadable.common.LazyTagIngredient.of(wood.getLogItemTag()))
                           .group("planks")
                           .unlockedBy("has_log", has(wood.getLogItemTag()))
                           .save(VanillaFinishedRecipe.output(consumer), key(location(folder + "planks")));
@@ -242,7 +242,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
                        .save(VanillaFinishedRecipe.output(consumer), key(location(folder + "stripped_log_to_wood")));
     // doors
     ShapedRecipeBuilder.shaped(items(), RecipeCategory.DECORATIONS, wood.getFence(), 3)
-                       .define('#', slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(Tags.Items.RODS_WOODEN)).define('W', wood)
+                       .define('#', modernmods.mantle.data.loadable.common.LazyTagIngredient.of(Tags.Items.RODS_WOODEN)).define('W', wood)
                        .pattern("W#W").pattern("W#W")
                        .group("wooden_fence")
                        .unlockedBy("has_planks", hasPlanks)
@@ -280,7 +280,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
     // signs
     ShapedRecipeBuilder.shaped(items(), RecipeCategory.DECORATIONS, wood.getSign(), 3)
                        .group("sign")
-                       .define('#', wood).define('X', slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(Tags.Items.RODS_WOODEN))
+                       .define('#', wood).define('X', modernmods.mantle.data.loadable.common.LazyTagIngredient.of(Tags.Items.RODS_WOODEN))
                        .pattern("###").pattern("###").pattern(" X ")
                        .unlockedBy("has_planks", has(wood))
                        .save(VanillaFinishedRecipe.output(consumer), key(location(folder + "sign")));
@@ -303,7 +303,7 @@ public interface ICommonRecipeHelper extends IRecipeHelper {
     // build the predicate with a lazy tag holder set: ItemPredicate.Builder.of(lookup, tag) resolves the tag eagerly
     // via getOrThrow, which throws "Missing tag" at datagen time (tags not yet bound).
     return inventoryTrigger(new ItemPredicate(
-      java.util.Optional.of(slimeknights.mantle.data.loadable.common.LazyTagIngredient.holderSet(tag)),
+      java.util.Optional.of(modernmods.mantle.data.loadable.common.LazyTagIngredient.holderSet(tag)),
       net.minecraft.advancements.criterion.MinMaxBounds.Ints.ANY,
       net.minecraft.advancements.criterion.DataComponentMatchers.ANY));
   }

@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -18,12 +18,12 @@ import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
 import static net.minecraft.commands.synchronization.SuggestionProviders.register;
-import static slimeknights.mantle.Mantle.getResource;
+import static modernmods.mantle.Mantle.getResource;
 
 /**
  * Argument type that supports any vanilla registry. Due to the lack of context, not a true argument type but rather helpers.
- * TODO 1.21: move to {@link slimeknights.mantle.command.argument}.
- * @see slimeknights.mantle.command.argument.TagSourceArgument
+ * TODO 1.21: move to {@link modernmods.mantle.command.argument}.
+ * @see modernmods.mantle.command.argument.TagSourceArgument
  */
 public class RegistryArgument {
   /* Name is invalid */

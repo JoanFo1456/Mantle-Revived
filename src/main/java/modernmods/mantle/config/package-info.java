@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.config;
+package modernmods.mantle.config;
 
 import javax.annotation.ParametersAreNonnullByDefault;

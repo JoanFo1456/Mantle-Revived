@@ -1,15 +1,15 @@
-package slimeknights.mantle.client.render;
+package modernmods.mantle.client.render;
 
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
-import slimeknights.mantle.client.model.util.ModelHelper;
-import slimeknights.mantle.data.datamap.BlockStateDataMapLoader;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.common.Vector3fLoadable;
-import slimeknights.mantle.data.loadable.mapping.CollectionLoadable;
-import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.client.model.util.ModelHelper;
+import modernmods.mantle.data.datamap.BlockStateDataMapLoader;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.common.Vector3fLoadable;
+import modernmods.mantle.data.loadable.mapping.CollectionLoadable;
+import modernmods.mantle.data.loadable.primitive.BooleanLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable.common;
+package modernmods.mantle.data.loadable.common;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -9,9 +9,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.Map.Entry;
 import java.util.Optional;

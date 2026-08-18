@@ -1,11 +1,11 @@
-package slimeknights.mantle.block.entity;
+package modernmods.mantle.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import slimeknights.mantle.registration.MantleRegistrations;
+import modernmods.mantle.registration.MantleRegistrations;
 
 import java.util.ArrayList;
 import java.util.List;

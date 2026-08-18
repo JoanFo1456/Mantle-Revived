@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.tooltip;
+package modernmods.mantle.fluid.tooltip;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,13 +26,13 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.SafeClientAccess;
-import slimeknights.mantle.client.TooltipKey;
-import slimeknights.mantle.data.gson.ResourceLocationSerializer;
-import slimeknights.mantle.data.gson.TagKeySerializer;
-import slimeknights.mantle.recipe.ingredient.FluidIngredient;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.SafeClientAccess;
+import modernmods.mantle.client.TooltipKey;
+import modernmods.mantle.data.gson.ResourceLocationSerializer;
+import modernmods.mantle.data.gson.TagKeySerializer;
+import modernmods.mantle.recipe.ingredient.FluidIngredient;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

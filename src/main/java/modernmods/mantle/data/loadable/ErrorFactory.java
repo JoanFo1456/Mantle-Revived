@@ -1,10 +1,10 @@
-package slimeknights.mantle.data.loadable;
+package modernmods.mantle.data.loadable;
 
 import com.google.gson.JsonSyntaxException;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import slimeknights.mantle.data.loadable.field.ConstantField;
-import slimeknights.mantle.data.loadable.field.RecordField;
+import modernmods.mantle.data.loadable.field.ConstantField;
+import modernmods.mantle.data.loadable.field.RecordField;
 
 import java.util.function.Consumer;
 

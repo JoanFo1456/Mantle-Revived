@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable.common;
+package modernmods.mantle.data.loadable.common;
 
 import com.google.gson.JsonSyntaxException;
 import io.netty.handler.codec.DecoderException;
@@ -11,9 +11,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.CommonHooks;
-import slimeknights.mantle.data.loadable.field.ContextKey;
-import slimeknights.mantle.data.loadable.primitive.ResourceLocationLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.field.ContextKey;
+import modernmods.mantle.data.loadable.primitive.ResourceLocationLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 /** Loadable for dynamic registries that are only available through a runtime lookup. */
 public record DynamicRegistryLoadable<T>(ResourceKey<? extends Registry<T>> registryKey) implements ResourceLocationLoadable<T> {

@@ -1,4 +1,4 @@
-package slimeknights.mantle.item;
+package modernmods.mantle.item;
 
 import lombok.Getter;
 import net.minecraft.world.item.ItemStack;

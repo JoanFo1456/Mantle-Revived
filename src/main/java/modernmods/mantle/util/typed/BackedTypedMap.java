@@ -1,4 +1,4 @@
-package slimeknights.mantle.util.typed;
+package modernmods.mantle.util.typed;
 
 import javax.annotation.Nullable;
 import java.util.IdentityHashMap;

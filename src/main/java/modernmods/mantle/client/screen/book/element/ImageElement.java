@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -6,8 +6,8 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
-import slimeknights.mantle.client.book.data.element.ImageData;
-import slimeknights.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.book.data.element.ImageData;
+import modernmods.mantle.client.screen.book.BookScreen;
 
 import static java.util.Objects.requireNonNullElse;
 

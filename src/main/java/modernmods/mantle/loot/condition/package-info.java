@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.loot.condition;
+package modernmods.mantle.loot.condition;
 
 import javax.annotation.ParametersAreNonnullByDefault;

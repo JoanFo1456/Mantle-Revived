@@ -1,14 +1,14 @@
-package slimeknights.mantle.loot;
+package modernmods.mantle.loot;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.primitive.StringLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.primitive.StringLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
 
 import java.util.ArrayList;
 import java.util.Collections;

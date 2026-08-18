@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.model.data.ModelProperty;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import javax.annotation.Nullable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.deferred;
+package modernmods.mantle.registration.deferred;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -6,7 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import slimeknights.mantle.registration.object.EnumObject;
+import modernmods.mantle.registration.object.EnumObject;
 
 import java.util.Locale;
 import java.util.function.BiFunction;

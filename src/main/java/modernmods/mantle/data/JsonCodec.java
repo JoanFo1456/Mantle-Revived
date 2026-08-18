@@ -1,4 +1,4 @@
-package slimeknights.mantle.data;
+package modernmods.mantle.data;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -8,7 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 /**
  * Simple implementation of a codec mapping to a JSON serializer.

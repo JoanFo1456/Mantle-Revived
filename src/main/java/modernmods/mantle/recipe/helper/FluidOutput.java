@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.helper;
+package modernmods.mantle.recipe.helper;
 
 import com.google.gson.JsonObject;
 import lombok.Getter;
@@ -11,13 +11,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.common.FluidStackLoadable;
-import slimeknights.mantle.data.loadable.common.NBTLoadable;
-import slimeknights.mantle.data.loadable.field.LoadableField;
-import slimeknights.mantle.data.loadable.primitive.IntLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.common.FluidStackLoadable;
+import modernmods.mantle.data.loadable.common.NBTLoadable;
+import modernmods.mantle.data.loadable.field.LoadableField;
+import modernmods.mantle.data.loadable.primitive.IntLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Class representing a fluid stack output. Supports both direct stacks and tag output, behaving like {@link slimeknights.mantle.recipe.ingredient.FluidIngredient} used for output
+ * Class representing a fluid stack output. Supports both direct stacks and tag output, behaving like {@link modernmods.mantle.recipe.ingredient.FluidIngredient} used for output
  */
 public abstract class FluidOutput implements Supplier<FluidStack> {
   /** Empty instance */

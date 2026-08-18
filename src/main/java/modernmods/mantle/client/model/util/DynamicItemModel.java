@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model.util;
+package modernmods.mantle.client.model.util;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ItemModel;

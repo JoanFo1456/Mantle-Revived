@@ -1,20 +1,20 @@
-package slimeknights.mantle.data.loadable;
+package modernmods.mantle.data.loadable;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.field.ContextKey;
-import slimeknights.mantle.data.loadable.field.LoadableField;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.field.ContextKey;
+import modernmods.mantle.data.loadable.field.LoadableField;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.function.Function;
 
 /**
  * Loadable for dealing with legacy parsing elements. For instance, a deprecated JSON field.
- * See also: {@link slimeknights.mantle.data.loadable.field.LegacyField} for a simpler but less flexible approach.
+ * See also: {@link modernmods.mantle.data.loadable.field.LegacyField} for a simpler but less flexible approach.
  */
 @RequiredArgsConstructor
 public abstract class LegacyLoadable<T> implements RecordLoadable<T> {

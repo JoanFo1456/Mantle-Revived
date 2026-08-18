@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book;
+package modernmods.mantle.client.screen.book;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -7,7 +7,7 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
-import slimeknights.mantle.client.book.data.element.TextComponentData;
+import modernmods.mantle.client.book.data.element.TextComponentData;
 
 import java.util.ArrayList;
 import java.util.Arrays;

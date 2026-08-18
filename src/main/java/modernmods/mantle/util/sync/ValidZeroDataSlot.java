@@ -1,4 +1,4 @@
-package slimeknights.mantle.util.sync;
+package modernmods.mantle.util.sync;
 
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.DataSlot;

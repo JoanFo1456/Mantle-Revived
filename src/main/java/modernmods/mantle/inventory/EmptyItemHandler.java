@@ -1,4 +1,4 @@
-package slimeknights.mantle.inventory;
+package modernmods.mantle.inventory;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

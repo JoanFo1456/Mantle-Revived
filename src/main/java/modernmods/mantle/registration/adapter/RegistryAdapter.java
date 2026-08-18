@@ -1,8 +1,8 @@
-package slimeknights.mantle.registration.adapter;
+package modernmods.mantle.registration.adapter;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import java.util.Objects;
 

@@ -1,8 +1,8 @@
-package slimeknights.mantle.data.loadable.mapping;
+package modernmods.mantle.data.loadable.mapping;
 
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
-import slimeknights.mantle.data.loadable.primitive.StringLoadable;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.primitive.EnumLoadable;
+import modernmods.mantle.data.loadable.primitive.StringLoadable;
 
 import java.util.Collections;
 import java.util.EnumMap;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.adapter;
+package modernmods.mantle.registration.adapter;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

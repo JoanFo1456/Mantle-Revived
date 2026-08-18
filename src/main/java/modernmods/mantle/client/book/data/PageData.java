@@ -1,17 +1,17 @@
-package slimeknights.mantle.client.book.data;
+package modernmods.mantle.client.book.data;
 
 import com.google.gson.JsonElement;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.AlwaysCondition;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.BookLoader;
-import slimeknights.mantle.client.book.data.content.ContentError;
-import slimeknights.mantle.client.book.data.content.PageContent;
-import slimeknights.mantle.client.book.data.element.IDataElement;
-import slimeknights.mantle.client.book.repository.BookRepository;
-import slimeknights.mantle.util.DataLoadedConditionContext;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.BookLoader;
+import modernmods.mantle.client.book.data.content.ContentError;
+import modernmods.mantle.client.book.data.content.PageContent;
+import modernmods.mantle.client.book.data.element.IDataElement;
+import modernmods.mantle.client.book.repository.BookRepository;
+import modernmods.mantle.util.DataLoadedConditionContext;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Array;

@@ -1,14 +1,14 @@
-package slimeknights.mantle.client.book;
+package modernmods.mantle.client.book;
 
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import slimeknights.mantle.util.html.HtmlElement;
-import slimeknights.mantle.util.html.HtmlGroup;
-import slimeknights.mantle.util.html.HtmlSerializable;
-import slimeknights.mantle.util.html.HtmlString;
+import modernmods.mantle.util.html.HtmlElement;
+import modernmods.mantle.util.html.HtmlGroup;
+import modernmods.mantle.util.html.HtmlSerializable;
+import modernmods.mantle.util.html.HtmlString;
 
 import java.util.Arrays;
 

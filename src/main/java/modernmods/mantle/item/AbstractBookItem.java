@@ -1,4 +1,4 @@
-package slimeknights.mantle.item;
+package modernmods.mantle.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -17,17 +17,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.SafeClientAccess;
-import slimeknights.mantle.client.book.BookScreenOpener;
-import slimeknights.mantle.datagen.MantleTags;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.SafeClientAccess;
+import modernmods.mantle.client.book.BookScreenOpener;
+import modernmods.mantle.datagen.MantleTags;
+import modernmods.mantle.util.RegistryHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-/** Item implementing all standard book behaviors, just requires calling methods from {@link slimeknights.mantle.client.book.data.BookData} in a few abstract methods. */
+/** Item implementing all standard book behaviors, just requires calling methods from {@link modernmods.mantle.client.book.data.BookData} in a few abstract methods. */
 @SuppressWarnings("unused")  // API
 public abstract class AbstractBookItem extends LecternBookItem {
   private static final Component CLICK_TO_OPEN = Mantle.makeComponent("item", "book.click_to_open").withStyle(ChatFormatting.YELLOW, ChatFormatting.ITALIC);

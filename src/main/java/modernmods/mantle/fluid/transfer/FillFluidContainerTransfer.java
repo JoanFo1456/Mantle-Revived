@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.transfer;
+package modernmods.mantle.fluid.transfer;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -17,12 +17,12 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.common.IngredientLoadable;
-import slimeknights.mantle.fluid.FluidTransferHelper;
-import slimeknights.mantle.recipe.helper.ItemOutput;
-import slimeknights.mantle.recipe.ingredient.FluidIngredient;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.common.IngredientLoadable;
+import modernmods.mantle.fluid.FluidTransferHelper;
+import modernmods.mantle.recipe.helper.ItemOutput;
+import modernmods.mantle.recipe.ingredient.FluidIngredient;
+import modernmods.mantle.util.JsonHelper;
 
 import java.lang.reflect.Type;
 import java.util.function.Consumer;

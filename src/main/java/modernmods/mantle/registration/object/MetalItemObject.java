@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.object;
+package modernmods.mantle.registration.object;
 
 import lombok.Getter;
 import net.minecraft.tags.BlockTags;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static slimeknights.mantle.Mantle.commonResource;
+import static modernmods.mantle.Mantle.commonResource;
 
 /** Object wrapper containing ingots, nuggets, and blocks */
 public class MetalItemObject extends ItemObject<Block> implements MultiObject<ItemLike> {

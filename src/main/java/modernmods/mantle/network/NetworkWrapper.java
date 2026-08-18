@@ -1,4 +1,4 @@
-package slimeknights.mantle.network;
+package modernmods.mantle.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,8 +18,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.network.packet.ISimplePacket;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.network.packet.ISimplePacket;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

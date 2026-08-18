@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.gson;
+package modernmods.mantle.data.gson;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -8,7 +8,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import net.minecraft.util.GsonHelper;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import slimeknights.mantle.recipe.condition.ConditionHelper;
+import modernmods.mantle.recipe.condition.ConditionHelper;
 
 import java.lang.reflect.Type;
 

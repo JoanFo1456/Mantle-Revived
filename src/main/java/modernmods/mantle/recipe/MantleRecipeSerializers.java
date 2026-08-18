@@ -1,9 +1,9 @@
-package slimeknights.mantle.recipe;
+package modernmods.mantle.recipe;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
-import static slimeknights.mantle.registration.RegistrationHelper.injected;
+import static modernmods.mantle.registration.RegistrationHelper.injected;
 
 /** @deprecated use {@link MantleRecipes} */
 @Deprecated(forRemoval = true)

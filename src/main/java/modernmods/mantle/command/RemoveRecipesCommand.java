@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -35,13 +35,13 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.neoforged.neoforge.common.conditions.NeverCondition;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.array.ArrayLoadable;
-import slimeknights.mantle.data.predicate.IJsonPredicate;
-import slimeknights.mantle.data.predicate.item.ItemPredicate;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.array.ArrayLoadable;
+import modernmods.mantle.data.predicate.IJsonPredicate;
+import modernmods.mantle.data.predicate.item.ItemPredicate;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.io.BufferedWriter;
@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static slimeknights.mantle.util.JsonHelper.DEFAULT_GSON;
+import static modernmods.mantle.util.JsonHelper.DEFAULT_GSON;
 
 /**
  * Command to disable recipes based on various presets or by ID.
@@ -212,7 +212,7 @@ public class RemoveRecipesCommand {
 
     // create the object for removing recipes
     JsonObject json = new JsonObject();
-    json.add("conditions", slimeknights.mantle.recipe.condition.ConditionHelper.serialize(new ICondition[]{NeverCondition.INSTANCE}));
+    json.add("conditions", modernmods.mantle.recipe.condition.ConditionHelper.serialize(new ICondition[]{NeverCondition.INSTANCE}));
     String jsonString = DEFAULT_GSON.toJson(json);
 
     int successes = 0;

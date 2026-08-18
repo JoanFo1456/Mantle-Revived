@@ -1,20 +1,20 @@
-package slimeknights.mantle.datagen;
+package modernmods.mantle.datagen;
 
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.ApiStatus.Internal;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import java.util.concurrent.CompletableFuture;
 
-import static slimeknights.mantle.datagen.MantleTags.Fluids.BEETROOT_SOUP;
-import static slimeknights.mantle.datagen.MantleTags.Fluids.LAVA;
-import static slimeknights.mantle.datagen.MantleTags.Fluids.MUSHROOM_STEW;
-import static slimeknights.mantle.datagen.MantleTags.Fluids.RABBIT_STEW;
-import static slimeknights.mantle.datagen.MantleTags.Fluids.SOUP;
-import static slimeknights.mantle.datagen.MantleTags.Fluids.WATER;
+import static modernmods.mantle.datagen.MantleTags.Fluids.BEETROOT_SOUP;
+import static modernmods.mantle.datagen.MantleTags.Fluids.LAVA;
+import static modernmods.mantle.datagen.MantleTags.Fluids.MUSHROOM_STEW;
+import static modernmods.mantle.datagen.MantleTags.Fluids.RABBIT_STEW;
+import static modernmods.mantle.datagen.MantleTags.Fluids.SOUP;
+import static modernmods.mantle.datagen.MantleTags.Fluids.WATER;
 
 /** Provider for tags added by mantle, generally not useful for other mods */
 @Internal

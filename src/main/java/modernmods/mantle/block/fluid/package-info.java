@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.block.fluid;
+package modernmods.mantle.block.fluid;
 
 import javax.annotation.ParametersAreNonnullByDefault;

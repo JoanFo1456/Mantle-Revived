@@ -1,11 +1,11 @@
-package slimeknights.mantle.recipe.cooking;
+package modernmods.mantle.recipe.cooking;
 
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
-import slimeknights.mantle.data.loadable.field.LoadableField;
-import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
-import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
-import slimeknights.mantle.recipe.helper.ItemOutput;
+import modernmods.mantle.data.loadable.field.LoadableField;
+import modernmods.mantle.data.loadable.primitive.EnumLoadable;
+import modernmods.mantle.data.loadable.primitive.FloatLoadable;
+import modernmods.mantle.recipe.helper.ItemOutput;
 
 /** Simplifies the serializers for result recipes */
 public interface CookingResultRecipe {

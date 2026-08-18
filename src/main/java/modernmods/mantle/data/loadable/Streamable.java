@@ -1,8 +1,8 @@
-package slimeknights.mantle.data.loadable;
+package modernmods.mantle.data.loadable;
 
 import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.util.typed.TypedMap;
 
 /** This interface partially implements Mojang's future {@code StreamCodec} for the sake of ensuring all {@link Loadable} are automatically compatible with stream codecs. */
 public interface Streamable<T> {

@@ -1,4 +1,4 @@
-package slimeknights.mantle.block;
+package modernmods.mantle.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,17 +26,17 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.util.TranslationHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.util.TranslationHelper;
 
 import javax.annotation.Nullable;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
-import static slimeknights.mantle.util.TranslationHelper.COMMA_FORMAT;
+import static modernmods.mantle.util.TranslationHelper.COMMA_FORMAT;
 
 /**
  * Decorative block to place on the side of a tank, reads fluid value.
- * @see slimeknights.mantle.datagen.MantleTags.Blocks#ATTACHED_GAUGES
+ * @see modernmods.mantle.datagen.MantleTags.Blocks#ATTACHED_GAUGES
  */
 public class GaugeBlock extends Block {
   private static final String CAPACITY_KEY = Mantle.makeDescriptionId("gui", "fluid.capacity");

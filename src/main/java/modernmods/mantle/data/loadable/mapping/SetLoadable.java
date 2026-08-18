@@ -1,7 +1,7 @@
-package slimeknights.mantle.data.loadable.mapping;
+package modernmods.mantle.data.loadable.mapping;
 
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.field.LoadableField;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.field.LoadableField;
 
 import java.util.Collection;
 import java.util.Map;

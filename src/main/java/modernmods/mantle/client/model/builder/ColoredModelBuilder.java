@@ -1,16 +1,16 @@
-package slimeknights.mantle.client.model.builder;
+package modernmods.mantle.client.model.builder;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.model.util.ColoredBlockModel.ColorData;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.model.util.ColoredBlockModel.ColorData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Builder for {@link slimeknights.mantle.client.model.util.ColoredBlockModel}, used as a base for other model builders.
+ * Builder for {@link modernmods.mantle.client.model.util.ColoredBlockModel}, used as a base for other model builders.
  * <p>
  * Ported to the 26.1.2 datagen {@link CustomLoaderBuilder}, which is no longer generic over a model builder and no longer
  * takes an {@code ExistingFileHelper}.

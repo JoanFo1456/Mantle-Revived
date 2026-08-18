@@ -1,15 +1,15 @@
-package slimeknights.mantle.data.predicate;
+package modernmods.mantle.data.predicate;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.mapping.ConditionalLoadable.ConditionalObject;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.DefaultingLoaderRegistry;
-import slimeknights.mantle.util.DataLoadedConditionContext;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.mapping.ConditionalLoadable.ConditionalObject;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.registry.DefaultingLoaderRegistry;
+import modernmods.mantle.util.DataLoadedConditionContext;
 
 import javax.annotation.Nullable;
 import java.util.List;

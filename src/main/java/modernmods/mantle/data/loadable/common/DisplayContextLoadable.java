@@ -1,13 +1,13 @@
-package slimeknights.mantle.data.loadable.common;
+package modernmods.mantle.data.loadable.common;
 
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.mapping.EnumMapLoadable;
-import slimeknights.mantle.data.loadable.primitive.ResourceLocationLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.mapping.EnumMapLoadable;
+import modernmods.mantle.data.loadable.primitive.ResourceLocationLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.Map;
 

@@ -1,13 +1,13 @@
-package slimeknights.mantle.data.loadable.mapping;
+package modernmods.mantle.data.loadable.mapping;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.data.loadable.ErrorFactory;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.array.ArrayLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.ErrorFactory;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.array.ArrayLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.ArrayList;
 import java.util.Collection;

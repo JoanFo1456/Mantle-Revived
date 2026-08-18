@@ -1,13 +1,13 @@
-package slimeknights.mantle.data.loadable.field;
+package modernmods.mantle.data.loadable.field;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.neoforged.neoforge.common.conditions.ICondition.IContext;
-import slimeknights.mantle.data.loadable.ErrorFactory;
-import slimeknights.mantle.util.typed.TypedMap;
-import slimeknights.mantle.util.typed.TypedMap.Key;
+import modernmods.mantle.data.loadable.ErrorFactory;
+import modernmods.mantle.util.typed.TypedMap;
+import modernmods.mantle.util.typed.TypedMap.Key;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
@@ -21,7 +21,7 @@ public class ContextKey<T> implements Key<T> {
   public static final ContextKey<Identifier> ID = new ContextKey<>("id");
   /** Key for adding debug info to log messages. Generally not useful as a field */
   public static final ContextKey<String> DEBUG = new ContextKey<>("debug info");
-  /** Key for adding condition context, used in {@link slimeknights.mantle.data.loadable.mapping.ConditionalLoadable} */
+  /** Key for adding condition context, used in {@link modernmods.mantle.data.loadable.mapping.ConditionalLoadable} */
   public static final ContextKey<IContext> CONDITION_CONTEXT = new ContextKey<>("condition context");
   /** Key for accessing dynamic registries during data pack reloads. */
   public static final ContextKey<HolderLookup.Provider> REGISTRY_ACCESS = new ContextKey<>("registry access");

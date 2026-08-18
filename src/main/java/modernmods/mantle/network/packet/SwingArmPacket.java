@@ -1,4 +1,4 @@
-package slimeknights.mantle.network.packet;
+package modernmods.mantle.network.packet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -7,7 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import slimeknights.mantle.util.OffhandCooldownTracker;
+import modernmods.mantle.util.OffhandCooldownTracker;
 
 /** Packet to tell a client to swing an entity arm, as the vanilla one resets cooldown */
 public class SwingArmPacket implements IThreadsafePacket {

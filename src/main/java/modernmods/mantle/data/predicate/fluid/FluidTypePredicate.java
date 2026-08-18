@@ -1,11 +1,11 @@
-package slimeknights.mantle.data.predicate.fluid;
+package modernmods.mantle.data.predicate.fluid;
 
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.predicate.IJsonPredicate;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.predicate.IJsonPredicate;
 
 import java.util.Set;
 

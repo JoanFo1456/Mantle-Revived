@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.cooking;
+package modernmods.mantle.recipe.cooking;
 
 import lombok.Getter;
 import net.minecraft.world.item.ItemStack;
@@ -10,13 +10,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
-import slimeknights.mantle.data.loadable.common.IngredientLoadable;
-import slimeknights.mantle.data.loadable.field.LoadableField;
-import slimeknights.mantle.data.loadable.primitive.IntLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.recipe.MantleRecipes;
-import slimeknights.mantle.recipe.helper.ItemOutput;
-import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
+import modernmods.mantle.data.loadable.common.IngredientLoadable;
+import modernmods.mantle.data.loadable.field.LoadableField;
+import modernmods.mantle.data.loadable.primitive.IntLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.recipe.MantleRecipes;
+import modernmods.mantle.recipe.helper.ItemOutput;
+import modernmods.mantle.recipe.helper.LoadableRecipeSerializer;
 
 /** Extension of {@link SmeltingRecipe} to support {@link ItemOutput} */
 @Getter

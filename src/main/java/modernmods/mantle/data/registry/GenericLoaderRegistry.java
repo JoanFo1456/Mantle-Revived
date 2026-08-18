@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.registry;
+package modernmods.mantle.data.registry;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -7,13 +7,13 @@ import com.google.gson.JsonSyntaxException;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.gson.GenericRegisteredSerializer;
-import slimeknights.mantle.data.loadable.field.RecordField;
-import slimeknights.mantle.data.loadable.mapping.ConditionalLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.gson.GenericRegisteredSerializer;
+import modernmods.mantle.data.loadable.field.RecordField;
+import modernmods.mantle.data.loadable.mapping.ConditionalLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
+import modernmods.mantle.util.typed.TypedMap;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;

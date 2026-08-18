@@ -1,11 +1,11 @@
-package slimeknights.mantle.datagen;
+package modernmods.mantle.datagen;
 
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.inventory.MenuType;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.BuiltinRegistryTagProvider;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.BuiltinRegistryTagProvider;
 
 import java.util.concurrent.CompletableFuture;
 

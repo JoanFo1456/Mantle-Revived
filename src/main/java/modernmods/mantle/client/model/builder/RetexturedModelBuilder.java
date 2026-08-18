@@ -1,11 +1,11 @@
-package slimeknights.mantle.client.model.builder;
+package modernmods.mantle.client.model.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
-/** Builder for {@link slimeknights.mantle.client.model.RetexturedModel} */
+/** Builder for {@link modernmods.mantle.client.model.RetexturedModel} */
 public class RetexturedModelBuilder extends ColoredModelBuilder {
   private final JsonArray retextured = new JsonArray();
 

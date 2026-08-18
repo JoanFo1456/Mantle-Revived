@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -16,7 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import java.io.BufferedWriter;
 import java.io.File;

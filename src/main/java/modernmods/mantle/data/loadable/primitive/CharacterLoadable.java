@@ -1,10 +1,10 @@
-package slimeknights.mantle.data.loadable.primitive;
+package modernmods.mantle.data.loadable.primitive;
 
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.data.loadable.array.ArrayLoadable;
-import slimeknights.mantle.data.loadable.array.CharArrayLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.array.ArrayLoadable;
+import modernmods.mantle.data.loadable.array.CharArrayLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 /** Loadable for a single character */
 @SuppressWarnings("unused")  // API

@@ -1,4 +1,4 @@
-package slimeknights.mantle.client;
+package modernmods.mantle.client;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -9,9 +9,9 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.listener.ISafeManagerReloadListener;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.listener.ISafeManagerReloadListener;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.util.Collections;

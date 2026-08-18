@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model.util;
+package modernmods.mantle.client.model.util;
 
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.resources.model.sprite.Material;

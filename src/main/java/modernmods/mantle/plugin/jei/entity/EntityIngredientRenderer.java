@@ -1,4 +1,4 @@
-package slimeknights.mantle.plugin.jei.entity;
+package modernmods.mantle.plugin.jei.entity;
 
 import lombok.RequiredArgsConstructor;
 import mezz.jei.api.ingredients.IIngredientRenderer;
@@ -16,8 +16,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.recipe.ingredient.EntityIngredient;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.recipe.ingredient.EntityIngredient;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

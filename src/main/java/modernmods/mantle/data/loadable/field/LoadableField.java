@@ -1,10 +1,10 @@
-package slimeknights.mantle.data.loadable.field;
+package modernmods.mantle.data.loadable.field;
 
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 /**
  * Interface for a field in a JSON object loaded from a single field, typically used in {@link RecordLoadable} but also usable statically.

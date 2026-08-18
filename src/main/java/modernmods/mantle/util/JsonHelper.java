@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,11 +20,11 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import org.jetbrains.annotations.Contract;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.common.BlockStateLoadable;
-import slimeknights.mantle.network.NetworkWrapper;
-import slimeknights.mantle.network.packet.ISimplePacket;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.common.BlockStateLoadable;
+import modernmods.mantle.network.NetworkWrapper;
+import modernmods.mantle.network.packet.ISimplePacket;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -217,7 +217,7 @@ public class JsonHelper {
    * @param <T>  Object type
    * @return  Registry value
    * @throws JsonSyntaxException  If something failed to parse
-   * @deprecated use {@link slimeknights.mantle.data.loadable.Loadables}
+   * @deprecated use {@link modernmods.mantle.data.loadable.Loadables}
    */
   @Deprecated(forRemoval = true)
   public static <T> T convertToEntry(Registry<T> registry, JsonElement element, String key) {
@@ -239,7 +239,7 @@ public class JsonHelper {
    * @param <T>  Object type
    * @return  Registry value
    * @throws JsonSyntaxException  If something failed to parse
-   * @deprecated use {@link slimeknights.mantle.data.loadable.Loadables}
+   * @deprecated use {@link modernmods.mantle.data.loadable.Loadables}
    */
   @Deprecated(forRemoval = true)
   public static <T> T getAsEntry(Registry<T> registry, JsonObject parent, String key) {
@@ -256,14 +256,14 @@ public class JsonHelper {
     throw new JsonSyntaxException("Invalid " + enumClass.getSimpleName() + " " + name);
   }
 
-  /** @deprecated use {@link slimeknights.mantle.data.loadable.primitive.EnumLoadable} */
+  /** @deprecated use {@link modernmods.mantle.data.loadable.primitive.EnumLoadable} */
   @Deprecated(forRemoval = true)
   public static <T extends Enum<T>> T convertToEnum(JsonElement element, String key, Class<T> enumClass) {
     String name = GsonHelper.convertToString(element, key);
     return enumByName(name, enumClass);
   }
 
-  /** @deprecated use {@link slimeknights.mantle.data.loadable.primitive.EnumLoadable} */
+  /** @deprecated use {@link modernmods.mantle.data.loadable.primitive.EnumLoadable} */
   @Deprecated(forRemoval = true)
   public static <T extends Enum<T>> T getAsEnum(JsonObject json, String key, Class<T> enumClass) {
     String name = GsonHelper.getAsString(json, key);
@@ -381,31 +381,31 @@ public class JsonHelper {
 
   /* Block States */
 
-  /** @deprecated use {@link BlockStateLoadable} with {@link slimeknights.mantle.data.loadable.Loadable#convert(JsonElement, String)} */
+  /** @deprecated use {@link BlockStateLoadable} with {@link modernmods.mantle.data.loadable.Loadable#convert(JsonElement, String)} */
   @Deprecated(forRemoval = true)
   public static BlockState convertToBlockState(JsonElement element, String key) {
     return BlockStateLoadable.DIFFERENCE.convert(element, key);
   }
 
-  /** @deprecated use {@link BlockStateLoadable#DIFFERENCE} with {@link slimeknights.mantle.data.loadable.Loadable#getIfPresent(JsonObject, String)} */
+  /** @deprecated use {@link BlockStateLoadable#DIFFERENCE} with {@link modernmods.mantle.data.loadable.Loadable#getIfPresent(JsonObject, String)} */
   @Deprecated(forRemoval = true)
   public static BlockState getAsBlockState(JsonObject parent, String key) {
     return BlockStateLoadable.DIFFERENCE.getIfPresent(parent, key);
   }
 
-  /** @deprecated use {@link BlockStateLoadable#DIFFERENCE} with {@link slimeknights.mantle.data.loadable.record.RecordLoadable#deserialize(JsonObject)} */
+  /** @deprecated use {@link BlockStateLoadable#DIFFERENCE} with {@link modernmods.mantle.data.loadable.record.RecordLoadable#deserialize(JsonObject)} */
   @Deprecated(forRemoval = true)
   public static BlockState convertToBlockState(JsonObject json) {
     return BlockStateLoadable.DIFFERENCE.deserialize(json);
   }
 
-  /** @deprecated use {@link BlockStateLoadable#DIFFERENCE} with {@link slimeknights.mantle.data.loadable.Loadable#serialize(Object)}*/
+  /** @deprecated use {@link BlockStateLoadable#DIFFERENCE} with {@link modernmods.mantle.data.loadable.Loadable#serialize(Object)}*/
   @Deprecated(forRemoval = true)
   public static JsonElement serializeBlockState(BlockState state) {
     return BlockStateLoadable.DIFFERENCE.serialize(state);
   }
 
-  /** @deprecated use {@link BlockStateLoadable#DIFFERENCE} with {@link slimeknights.mantle.data.loadable.record.RecordLoadable#serialize(Object, JsonObject)} */
+  /** @deprecated use {@link BlockStateLoadable#DIFFERENCE} with {@link modernmods.mantle.data.loadable.record.RecordLoadable#serialize(Object, JsonObject)} */
   @Deprecated(forRemoval = true)
   public static JsonObject serializeBlockState(BlockState state, JsonObject json) {
     BlockStateLoadable.DIFFERENCE.serialize(state, json);

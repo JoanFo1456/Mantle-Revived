@@ -1,15 +1,15 @@
-package slimeknights.mantle.client.book.data.content;
+package modernmods.mantle.client.book.data.content;
 
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.element.ImageData;
-import slimeknights.mantle.client.book.data.element.TextData;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.client.screen.book.element.BookElement;
-import slimeknights.mantle.client.screen.book.element.ImageElement;
-import slimeknights.mantle.client.screen.book.element.TextElement;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.element.ImageData;
+import modernmods.mantle.client.book.data.element.TextData;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.client.screen.book.element.ImageElement;
+import modernmods.mantle.client.screen.book.element.TextElement;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.structure;
+package modernmods.mantle.client.book.structure;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;

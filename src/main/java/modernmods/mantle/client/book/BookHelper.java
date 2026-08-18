@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book;
+package modernmods.mantle.client.book;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;

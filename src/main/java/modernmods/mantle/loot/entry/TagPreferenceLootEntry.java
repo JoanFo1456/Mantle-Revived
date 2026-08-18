@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot.entry;
+package modernmods.mantle.loot.entry;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -11,8 +11,8 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import slimeknights.mantle.loot.MantleLoot;
-import slimeknights.mantle.recipe.helper.TagPreference;
+import modernmods.mantle.loot.MantleLoot;
+import modernmods.mantle.recipe.helper.TagPreference;
 
 import java.util.List;
 import java.util.function.Consumer;

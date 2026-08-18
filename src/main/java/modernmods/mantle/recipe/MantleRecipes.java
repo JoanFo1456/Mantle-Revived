@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe;
+package modernmods.mantle.recipe;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -7,17 +7,17 @@ import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.recipe.cooking.BlastingResultRecipe;
-import slimeknights.mantle.recipe.cooking.CampfireResultRecipe;
-import slimeknights.mantle.recipe.cooking.SmeltingResultRecipe;
-import slimeknights.mantle.recipe.cooking.SmokingResultRecipe;
-import slimeknights.mantle.recipe.crafting.ShapedFallbackRecipe;
-import slimeknights.mantle.recipe.crafting.ShapedRetexturedRecipe;
-import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
-import slimeknights.mantle.recipe.ingredient.FluidContainerIngredient;
-import slimeknights.mantle.recipe.ingredient.PotionDisplayIngredient;
-import slimeknights.mantle.recipe.ingredient.PotionIngredient;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.recipe.cooking.BlastingResultRecipe;
+import modernmods.mantle.recipe.cooking.CampfireResultRecipe;
+import modernmods.mantle.recipe.cooking.SmeltingResultRecipe;
+import modernmods.mantle.recipe.cooking.SmokingResultRecipe;
+import modernmods.mantle.recipe.crafting.ShapedFallbackRecipe;
+import modernmods.mantle.recipe.crafting.ShapedRetexturedRecipe;
+import modernmods.mantle.recipe.helper.LoadableRecipeSerializer;
+import modernmods.mantle.recipe.ingredient.FluidContainerIngredient;
+import modernmods.mantle.recipe.ingredient.PotionDisplayIngredient;
+import modernmods.mantle.recipe.ingredient.PotionIngredient;
 
 /** Handles any custom recipes added by Mantle */
 public class MantleRecipes {

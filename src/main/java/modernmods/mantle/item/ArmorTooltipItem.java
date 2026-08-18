@@ -1,4 +1,4 @@
-package slimeknights.mantle.item;
+package modernmods.mantle.item;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -7,7 +7,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
-import slimeknights.mantle.util.TranslationHelper;
+import modernmods.mantle.util.TranslationHelper;
 
 import java.util.ArrayList;
 import java.util.List;

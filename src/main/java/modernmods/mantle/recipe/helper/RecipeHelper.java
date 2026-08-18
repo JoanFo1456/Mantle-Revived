@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.helper;
+package modernmods.mantle.recipe.helper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
-import slimeknights.mantle.recipe.IMultiRecipe;
+import modernmods.mantle.recipe.IMultiRecipe;
 
 import java.util.Comparator;
 import java.util.List;
@@ -141,7 +141,7 @@ public class RecipeHelper {
   }
 
 
-  /* RecipeMap utils (client-side source, e.g. slimeknights.mantle.recipe.sync.ClientRecipeCache) */
+  /* RecipeMap utils (client-side source, e.g. modernmods.mantle.recipe.sync.ClientRecipeCache) */
 
   /**
    * Gets all recipes of a given type from a {@link RecipeMap}. The map already indexes by type, so no

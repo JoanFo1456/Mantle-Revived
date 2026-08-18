@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.crafting;
+package modernmods.mantle.recipe.crafting;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,17 +25,17 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.common.IngredientLoadable;
-import slimeknights.mantle.recipe.MantleRecipes;
-import slimeknights.mantle.util.JsonHelper;
-import slimeknights.mantle.util.RetexturedHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.common.IngredientLoadable;
+import modernmods.mantle.recipe.MantleRecipes;
+import modernmods.mantle.util.JsonHelper;
+import modernmods.mantle.util.RetexturedHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Recipe which sets the texture for a {@link slimeknights.mantle.block.RetexturedBlock} based on an ingredient input.
+ * Recipe which sets the texture for a {@link modernmods.mantle.block.RetexturedBlock} based on an ingredient input.
  * <p>In 26.1.2 {@link ShapedRecipe} keeps its pattern and result private and can no longer be subclassed for custom
  * serializers, so this composes a delegate {@link ShapedRecipe} rather than extending it.
  */
@@ -170,11 +170,11 @@ public class ShapedRetexturedRecipe implements CraftingRecipe {
       // LoggingRecipeSerializer#registryJsonOps); re-parsing with plain JsonOps makes tag ingredients fail structurally
       com.mojang.serialization.DynamicOps<JsonElement> ops = (com.mojang.serialization.DynamicOps<JsonElement>) dynamic.getOps();
       JsonObject json = dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
-      slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.set(ops);
+      modernmods.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.set(ops);
       try {
         return fromJson(json);
       } finally {
-        slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.remove();
+        modernmods.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.remove();
       }
     },
     recipe -> new Dynamic<>(JsonOps.INSTANCE, toJson(recipe)));
@@ -184,7 +184,7 @@ public class ShapedRetexturedRecipe implements CraftingRecipe {
   public static final RecipeSerializer<ShapedRetexturedRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 
   private static ShapedRetexturedRecipe fromJson(JsonObject json) {
-    ShapedRecipe base = ShapedRecipe.MAP_CODEC.codec().parse(slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), json).getOrThrow(JsonSyntaxException::new);
+    ShapedRecipe base = ShapedRecipe.MAP_CODEC.codec().parse(modernmods.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), json).getOrThrow(JsonSyntaxException::new);
     // fetch the texture from the pattern key if it is a primitive
     JsonElement textureElement = JsonHelper.getElement(json, "texture");
     Ingredient texture;
@@ -194,7 +194,7 @@ public class ShapedRetexturedRecipe implements CraftingRecipe {
         throw new JsonSyntaxException("Invalid texture key: '" + textureKey + "' is an invalid symbol (must be 1 character only).");
       }
       // parse the key map from the JSON to resolve the symbol
-      ShapedRecipePattern.Data data = ShapedRecipePattern.Data.MAP_CODEC.codec().parse(slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), json).getOrThrow(JsonSyntaxException::new);
+      ShapedRecipePattern.Data data = ShapedRecipePattern.Data.MAP_CODEC.codec().parse(modernmods.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), json).getOrThrow(JsonSyntaxException::new);
       texture = data.key().get(textureKey.charAt(0));
       if (texture == null) {
         throw new JsonSyntaxException("Texture ingredient references symbol '" + textureKey + "' but it's not defined in the key");

@@ -1,13 +1,13 @@
-package slimeknights.mantle.data.loadable.primitive;
+package modernmods.mantle.data.loadable.primitive;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.field.LoadableField;
-import slimeknights.mantle.data.loadable.mapping.EnumMapLoadable;
-import slimeknights.mantle.data.loadable.mapping.EnumSetLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.field.LoadableField;
+import modernmods.mantle.data.loadable.mapping.EnumMapLoadable;
+import modernmods.mantle.data.loadable.mapping.EnumSetLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import javax.annotation.Nullable;
 import java.util.Locale;

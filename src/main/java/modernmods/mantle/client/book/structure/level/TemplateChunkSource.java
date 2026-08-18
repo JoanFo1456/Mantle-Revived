@@ -1,6 +1,6 @@
 // Credit to Immersive Engineering and blusunrize for this class
 // See: https://github.com/BluSunrize/ImmersiveEngineering/blob/1.18/src/main/java/blusunrize/immersiveengineering/common/util/fakeworld/TemplateChunkProvider.java
-package slimeknights.mantle.client.book.structure.level;
+package modernmods.mantle.client.book.structure.level;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;

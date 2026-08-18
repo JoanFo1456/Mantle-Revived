@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.client.model.connected;
+package modernmods.mantle.client.model.connected;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.recipe.container;
+package modernmods.mantle.recipe.container;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.adapter;
+package modernmods.mantle.registration.adapter;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.types.Type;
@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
 import net.minecraft.core.Registry;
-import slimeknights.mantle.registration.object.EnumObject;
+import modernmods.mantle.registration.object.EnumObject;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

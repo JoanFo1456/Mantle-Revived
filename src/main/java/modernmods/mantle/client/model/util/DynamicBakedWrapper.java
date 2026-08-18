@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model.util;
+package modernmods.mantle.client.model.util;
 
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;

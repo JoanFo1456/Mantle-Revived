@@ -1,4 +1,4 @@
-package slimeknights.mantle.inventory;
+package modernmods.mantle.inventory;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLEnvironment;
-import slimeknights.mantle.util.BlockEntityHelper;
+import modernmods.mantle.util.BlockEntityHelper;
 
 import javax.annotation.Nullable;
 

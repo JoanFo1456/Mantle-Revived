@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.object;
+package modernmods.mantle.registration.object;
 
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
@@ -9,9 +9,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.recipe.helper.FluidOutput;
-import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.recipe.helper.FluidOutput;
+import modernmods.mantle.recipe.ingredient.FluidIngredient;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

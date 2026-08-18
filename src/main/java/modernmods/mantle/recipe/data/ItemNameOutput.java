@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.data;
+package modernmods.mantle.recipe.data;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -6,8 +6,8 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import slimeknights.mantle.data.loadable.common.NBTLoadable;
-import slimeknights.mantle.recipe.helper.ItemOutput;
+import modernmods.mantle.data.loadable.common.NBTLoadable;
+import modernmods.mantle.recipe.helper.ItemOutput;
 
 import javax.annotation.Nullable;
 

@@ -1,11 +1,11 @@
-package slimeknights.mantle.registration.adapter;
+package modernmods.mantle.registration.adapter;
 
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid.Properties;
 import net.minecraft.core.Registry;
-import slimeknights.mantle.registration.DelayedSupplier;
-import slimeknights.mantle.registration.FluidBuilder;
+import modernmods.mantle.registration.DelayedSupplier;
+import modernmods.mantle.registration.FluidBuilder;
 
 import java.util.function.Function;
 

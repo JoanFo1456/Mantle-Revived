@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book;
+package modernmods.mantle.client.screen.book;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -9,8 +9,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.StringUtils;
 import org.joml.Matrix3x2fStack;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.data.element.TextData;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.data.element.TextData;
 
 import java.util.ArrayList;
 import java.util.Arrays;

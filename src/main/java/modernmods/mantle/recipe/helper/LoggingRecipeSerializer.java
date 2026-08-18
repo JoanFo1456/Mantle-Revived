@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.helper;
+package modernmods.mantle.recipe.helper;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;

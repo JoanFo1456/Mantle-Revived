@@ -1,11 +1,11 @@
-package slimeknights.mantle.client.book.repository;
+package modernmods.mantle.client.book.repository;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import org.apache.commons.io.IOUtils;
-import slimeknights.mantle.client.book.BookLoader;
-import slimeknights.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.book.BookLoader;
+import modernmods.mantle.client.book.data.SectionData;
 
 import javax.annotation.Nullable;
 import java.io.IOException;

@@ -1,15 +1,15 @@
-package slimeknights.mantle.client.book.data.content;
+package modernmods.mantle.client.book.data.content;
 
 import net.minecraft.network.chat.FormattedText;
-import slimeknights.mantle.client.book.IHTML;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.PageData;
-import slimeknights.mantle.client.book.data.element.TextData;
-import slimeknights.mantle.client.book.repository.BookRepository;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.client.screen.book.element.BookElement;
-import slimeknights.mantle.client.screen.book.element.TextElement;
-import slimeknights.mantle.util.html.HtmlElement;
+import modernmods.mantle.client.book.IHTML;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.PageData;
+import modernmods.mantle.client.book.data.element.TextData;
+import modernmods.mantle.client.book.repository.BookRepository;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.client.screen.book.element.TextElement;
+import modernmods.mantle.util.html.HtmlElement;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

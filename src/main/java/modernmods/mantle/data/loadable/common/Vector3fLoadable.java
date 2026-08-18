@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable.common;
+package modernmods.mantle.data.loadable.common;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -7,8 +7,8 @@ import com.google.gson.JsonParseException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import org.joml.Vector3f;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 /** Loadable for {@link Vector3f}. Supports reading as an array or a JSON object. */
 public enum Vector3fLoadable implements RecordLoadable<Vector3f> {

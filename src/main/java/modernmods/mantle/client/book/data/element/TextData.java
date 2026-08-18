@@ -1,13 +1,13 @@
-package slimeknights.mantle.client.book.data.element;
+package modernmods.mantle.client.book.data.element;
 
 import net.minecraft.network.chat.Component;
-import slimeknights.mantle.client.book.HTMLUtils;
-import slimeknights.mantle.client.book.IHTML;
-import slimeknights.mantle.client.book.action.StringActionProcessor;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.util.html.HtmlElement;
-import slimeknights.mantle.util.html.HtmlGroup;
-import slimeknights.mantle.util.html.HtmlSerializable;
+import modernmods.mantle.client.book.HTMLUtils;
+import modernmods.mantle.client.book.IHTML;
+import modernmods.mantle.client.book.action.StringActionProcessor;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.util.html.HtmlElement;
+import modernmods.mantle.util.html.HtmlGroup;
+import modernmods.mantle.util.html.HtmlSerializable;
 
 import javax.annotation.Nullable;
 import java.util.regex.Matcher;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.object;
+package modernmods.mantle.registration.object;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.util.RegistryHelper;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

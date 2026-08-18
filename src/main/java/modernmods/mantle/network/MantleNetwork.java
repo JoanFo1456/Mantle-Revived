@@ -1,17 +1,17 @@
-package slimeknights.mantle.network;
+package modernmods.mantle.network;
 
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.fluid.transfer.FluidContainerTransferPacket;
-import slimeknights.mantle.network.packet.DropLecternBookPacket;
-import slimeknights.mantle.network.packet.OpenLecternBookPacket;
-import slimeknights.mantle.network.packet.OpenNamedBookPacket;
-import slimeknights.mantle.network.packet.SwingArmPacket;
-import slimeknights.mantle.network.packet.UpdateHeldPagePacket;
-import slimeknights.mantle.network.packet.UpdateInventoryPagePacket;
-import slimeknights.mantle.network.packet.UpdateLecternPagePacket;
-import slimeknights.mantle.network.NetworkWrapper.PacketDirection;
-import slimeknights.mantle.recipe.sync.RecipeSyncPacket;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.fluid.transfer.FluidContainerTransferPacket;
+import modernmods.mantle.network.packet.DropLecternBookPacket;
+import modernmods.mantle.network.packet.OpenLecternBookPacket;
+import modernmods.mantle.network.packet.OpenNamedBookPacket;
+import modernmods.mantle.network.packet.SwingArmPacket;
+import modernmods.mantle.network.packet.UpdateHeldPagePacket;
+import modernmods.mantle.network.packet.UpdateInventoryPagePacket;
+import modernmods.mantle.network.packet.UpdateLecternPagePacket;
+import modernmods.mantle.network.NetworkWrapper.PacketDirection;
+import modernmods.mantle.recipe.sync.RecipeSyncPacket;
 
 public class MantleNetwork {
   /**

@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.texture;
+package modernmods.mantle.fluid.texture;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -6,9 +6,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import slimeknights.mantle.client.model.TextureColorHelper;
-import slimeknights.mantle.data.loadable.common.ColorLoadable;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.client.model.TextureColorHelper;
+import modernmods.mantle.data.loadable.common.ColorLoadable;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

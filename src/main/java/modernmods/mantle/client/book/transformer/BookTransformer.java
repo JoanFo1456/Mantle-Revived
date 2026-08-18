@@ -1,11 +1,11 @@
-package slimeknights.mantle.client.book.transformer;
+package modernmods.mantle.client.book.transformer;
 
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.PageData;
-import slimeknights.mantle.client.book.data.SectionData;
-import slimeknights.mantle.client.book.data.content.ContentPadding.PaddingBookTransformer;
-import slimeknights.mantle.client.book.data.content.ContentTableOfContents;
-import slimeknights.mantle.client.book.data.element.TextData;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.PageData;
+import modernmods.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.book.data.content.ContentPadding.PaddingBookTransformer;
+import modernmods.mantle.client.book.data.content.ContentTableOfContents;
+import modernmods.mantle.client.book.data.element.TextData;
 
 import java.util.List;
 

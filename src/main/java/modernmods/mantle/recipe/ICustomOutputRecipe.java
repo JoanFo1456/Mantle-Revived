@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe;
+package modernmods.mantle.recipe;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;

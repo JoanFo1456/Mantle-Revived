@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;

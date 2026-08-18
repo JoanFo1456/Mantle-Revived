@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.data;
+package modernmods.mantle.client.book.data;
 
 public interface IDataItem {
   void load();

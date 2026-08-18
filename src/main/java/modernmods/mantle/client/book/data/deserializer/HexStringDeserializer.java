@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.data.deserializer;
+package modernmods.mantle.client.book.data.deserializer;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

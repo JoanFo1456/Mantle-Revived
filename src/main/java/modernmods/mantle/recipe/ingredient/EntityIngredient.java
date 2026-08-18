@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.ingredient;
+package modernmods.mantle.recipe.ingredient;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonElement;
@@ -10,12 +10,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
-import slimeknights.mantle.data.loadable.IAmLoadable;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.mapping.EitherLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.data.loadable.IAmLoadable;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.mapping.EitherLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.RegistryHelper;
 
 import java.util.Collection;
 import java.util.Collections;

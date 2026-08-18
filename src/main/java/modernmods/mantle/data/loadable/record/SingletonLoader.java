@@ -1,10 +1,10 @@
-package slimeknights.mantle.data.loadable.record;
+package modernmods.mantle.data.loadable.record;
 
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.function.Function;
 

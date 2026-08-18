@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.loot.entry;
+package modernmods.mantle.loot.entry;
 
 import javax.annotation.ParametersAreNonnullByDefault;

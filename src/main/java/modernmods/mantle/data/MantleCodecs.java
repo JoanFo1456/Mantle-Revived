@@ -1,4 +1,4 @@
-package slimeknights.mantle.data;
+package modernmods.mantle.data;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
@@ -9,8 +9,8 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
-import slimeknights.mantle.data.JsonCodec.GsonCodec;
-import slimeknights.mantle.data.loadable.common.IngredientLoadable;
+import modernmods.mantle.data.JsonCodec.GsonCodec;
+import modernmods.mantle.data.loadable.common.IngredientLoadable;
 
 /** This class contains codecs for various vanilla things that we need to use in codecs. Typically the reason is forge pre-emptively moved a thing to codecs before vanilla did. */
 public class MantleCodecs {

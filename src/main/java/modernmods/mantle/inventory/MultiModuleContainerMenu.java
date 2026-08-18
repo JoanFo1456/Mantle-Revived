@@ -1,4 +1,4 @@
-package slimeknights.mantle.inventory;
+package modernmods.mantle.inventory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

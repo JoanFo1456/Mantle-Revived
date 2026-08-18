@@ -1,4 +1,4 @@
-package slimeknights.mantle.datagen;
+package modernmods.mantle.datagen;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 /** List of all tags used directly by mantle */
 public class MantleTags {
@@ -31,7 +31,7 @@ public class MantleTags {
     /**
      * Blocks in this tag will show the fluid of attached block.
      * Must have {@link net.minecraft.world.level.block.state.properties.BlockStateProperties#FACING}.
-     * @see slimeknights.mantle.block.GaugeBlock
+     * @see modernmods.mantle.block.GaugeBlock
      */
     public static final TagKey<Block> ATTACHED_GAUGES = tag("gauges/attached");
     /** Blocks in this tag will show the fluid contained. Must have a block entity with a fluid handler capability. */

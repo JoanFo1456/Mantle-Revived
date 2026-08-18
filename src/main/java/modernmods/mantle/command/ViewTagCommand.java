@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -8,8 +8,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.command.argument.TagSource;
-import slimeknights.mantle.command.argument.TagSourceArgument;
+import modernmods.mantle.command.argument.TagSource;
+import modernmods.mantle.command.argument.TagSourceArgument;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * Command that lists all values in a tag.
  * TODO 1.21: rename to {@code TagValuesCommand}.
- * TODO 1.21: move to {@link slimeknights.mantle.command.tags}.
+ * TODO 1.21: move to {@link modernmods.mantle.command.tags}.
  */
 public class ViewTagCommand {
   /** Tag has no values */

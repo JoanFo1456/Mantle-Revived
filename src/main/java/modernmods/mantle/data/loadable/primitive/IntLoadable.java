@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable.primitive;
+package modernmods.mantle.data.loadable.primitive;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -6,16 +6,16 @@ import com.google.gson.JsonSyntaxException;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.array.ArrayLoadable;
-import slimeknights.mantle.data.loadable.array.ByteArrayLoadable;
-import slimeknights.mantle.data.loadable.array.IntArrayLoadable;
-import slimeknights.mantle.data.loadable.array.ShortArrayLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.array.ArrayLoadable;
+import modernmods.mantle.data.loadable.array.ByteArrayLoadable;
+import modernmods.mantle.data.loadable.array.IntArrayLoadable;
+import modernmods.mantle.data.loadable.array.ShortArrayLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 /**
  * Loadable for an integer.
- * @see slimeknights.mantle.data.loadable.common.ColorLoadable
+ * @see modernmods.mantle.data.loadable.common.ColorLoadable
  */
 @SuppressWarnings("unused")  // API
 @RequiredArgsConstructor

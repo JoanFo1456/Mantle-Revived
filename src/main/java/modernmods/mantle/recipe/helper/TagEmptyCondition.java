@@ -1,13 +1,13 @@
-package slimeknights.mantle.recipe.helper;
+package modernmods.mantle.recipe.helper;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 
-/** @deprecated use {@link slimeknights.mantle.recipe.condition.TagEmptyCondition} */
+/** @deprecated use {@link modernmods.mantle.recipe.condition.TagEmptyCondition} */
 @Deprecated(forRemoval = true)
-public class TagEmptyCondition<T> extends slimeknights.mantle.recipe.condition.TagEmptyCondition<T> {
+public class TagEmptyCondition<T> extends modernmods.mantle.recipe.condition.TagEmptyCondition<T> {
   public TagEmptyCondition(TagKey<T> tag) {
     super(tag);
   }

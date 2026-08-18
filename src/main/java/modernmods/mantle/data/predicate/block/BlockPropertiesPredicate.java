@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.predicate.block;
+package modernmods.mantle.data.predicate.block;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,10 +14,10 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.JsonHelper;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.JsonHelper;
+import modernmods.mantle.util.typed.TypedMap;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

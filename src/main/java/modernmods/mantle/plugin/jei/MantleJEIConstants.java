@@ -1,8 +1,8 @@
-package slimeknights.mantle.plugin.jei;
+package modernmods.mantle.plugin.jei;
 
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.ingredients.IIngredientType;
-import slimeknights.mantle.recipe.ingredient.EntityIngredient.EntityInput;
+import modernmods.mantle.recipe.ingredient.EntityIngredient.EntityInput;
 
 public class MantleJEIConstants {
   /** Ingredient for an entity */

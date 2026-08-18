@@ -1,15 +1,15 @@
-package slimeknights.mantle.client.book.transformer;
+package modernmods.mantle.client.book.transformer;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.PageData;
-import slimeknights.mantle.client.book.data.SectionData;
-import slimeknights.mantle.client.book.data.content.ContentBlank;
-import slimeknights.mantle.client.book.data.content.ContentSectionList;
-import slimeknights.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.PageData;
+import modernmods.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.book.data.content.ContentBlank;
+import modernmods.mantle.client.book.data.content.ContentSectionList;
+import modernmods.mantle.client.screen.book.BookScreen;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;

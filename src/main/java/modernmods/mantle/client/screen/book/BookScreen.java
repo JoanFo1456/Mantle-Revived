@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book;
+package modernmods.mantle.client.screen.book;
 
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementNode;
@@ -20,12 +20,12 @@ import org.joml.Vector4f;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import org.lwjgl.glfw.GLFW;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.PageData;
-import slimeknights.mantle.client.book.data.SectionData;
-import slimeknights.mantle.client.screen.book.element.BookElement;
-import slimeknights.mantle.util.html.HtmlElement;
-import slimeknights.mantle.util.html.HtmlSerializable;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.PageData;
+import modernmods.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.util.html.HtmlElement;
+import modernmods.mantle.util.html.HtmlSerializable;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

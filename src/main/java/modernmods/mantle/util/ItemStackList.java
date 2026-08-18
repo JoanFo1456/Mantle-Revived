@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;

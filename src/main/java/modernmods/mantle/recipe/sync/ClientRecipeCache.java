@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.sync;
+package modernmods.mantle.recipe.sync;
 
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeMap;
@@ -11,7 +11,7 @@ import java.util.List;
  * Populated on player join and on {@code /reload} (see {@link RecipeSyncHandler}); cleared when the
  * client disconnects. The recipes it holds are exactly those whose {@link net.minecraft.world.item.crafting.RecipeType}
  * a mod opted into through {@link SyncableRecipes}. Query the cache through the {@code RecipeMap}
- * overloads on {@link slimeknights.mantle.recipe.helper.RecipeHelper}, for example:
+ * overloads on {@link modernmods.mantle.recipe.helper.RecipeHelper}, for example:
  * <pre>{@code
  * RecipeMap map = ClientRecipeCache.getRecipeMap();
  * List<MeltingRecipe> recipes = RecipeHelper.getRecipes(map, MyRecipeTypes.MELTING.get(), MeltingRecipe.class);

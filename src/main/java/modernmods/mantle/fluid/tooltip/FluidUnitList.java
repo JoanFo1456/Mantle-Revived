@@ -1,9 +1,9 @@
-package slimeknights.mantle.fluid.tooltip;
+package modernmods.mantle.fluid.tooltip;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.util.RegistryHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;

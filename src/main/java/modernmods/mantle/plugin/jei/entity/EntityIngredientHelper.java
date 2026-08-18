@@ -1,12 +1,12 @@
-package slimeknights.mantle.plugin.jei.entity;
+package modernmods.mantle.plugin.jei.entity;
 
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.plugin.jei.MantleJEIConstants;
-import slimeknights.mantle.recipe.ingredient.EntityIngredient;
+import modernmods.mantle.plugin.jei.MantleJEIConstants;
+import modernmods.mantle.recipe.ingredient.EntityIngredient;
 
 import javax.annotation.Nullable;
 

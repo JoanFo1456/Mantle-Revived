@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.registration.adapter;
+package modernmods.mantle.registration.adapter;
 
 import javax.annotation.ParametersAreNonnullByDefault;

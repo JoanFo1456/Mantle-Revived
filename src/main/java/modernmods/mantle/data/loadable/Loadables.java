@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable;
+package modernmods.mantle.data.loadable;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -27,17 +27,17 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import slimeknights.mantle.client.model.util.ModelHelper;
-import slimeknights.mantle.data.MantleCodecs;
-import slimeknights.mantle.data.loadable.common.CodecLoadable;
-import slimeknights.mantle.data.loadable.common.DynamicRegistryLoadable;
-import slimeknights.mantle.data.loadable.common.LazyRegistryLoadable;
-import slimeknights.mantle.data.loadable.common.RegistryLoadable;
-import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
-import slimeknights.mantle.data.loadable.primitive.IntLoadable;
-import slimeknights.mantle.data.loadable.primitive.IntLoadable.IntNetwork;
-import slimeknights.mantle.data.loadable.primitive.ResourceLocationLoadable;
-import slimeknights.mantle.data.loadable.primitive.StringLoadable;
+import modernmods.mantle.client.model.util.ModelHelper;
+import modernmods.mantle.data.MantleCodecs;
+import modernmods.mantle.data.loadable.common.CodecLoadable;
+import modernmods.mantle.data.loadable.common.DynamicRegistryLoadable;
+import modernmods.mantle.data.loadable.common.LazyRegistryLoadable;
+import modernmods.mantle.data.loadable.common.RegistryLoadable;
+import modernmods.mantle.data.loadable.primitive.EnumLoadable;
+import modernmods.mantle.data.loadable.primitive.IntLoadable;
+import modernmods.mantle.data.loadable.primitive.IntLoadable.IntNetwork;
+import modernmods.mantle.data.loadable.primitive.ResourceLocationLoadable;
+import modernmods.mantle.data.loadable.primitive.StringLoadable;
 
 import java.util.function.BiFunction;
 

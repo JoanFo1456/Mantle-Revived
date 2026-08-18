@@ -1,11 +1,11 @@
-package slimeknights.mantle.item;
+package modernmods.mantle.item;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import slimeknights.mantle.network.MantleNetwork;
-import slimeknights.mantle.network.packet.OpenLecternBookPacket;
+import modernmods.mantle.network.MantleNetwork;
+import modernmods.mantle.network.packet.OpenLecternBookPacket;
 
 /** Interface for book items to work with lecterns */
 public interface ILecternBookItem {
@@ -24,7 +24,7 @@ public interface ILecternBookItem {
 
   /**
    * Called client side to open the lectern screen, unsafe to call serverside.
-   * Typical implementions will make use of {@link slimeknights.mantle.client.book.data.BookData#openGui(BlockPos, ItemStack)}
+   * Typical implementions will make use of {@link modernmods.mantle.client.book.data.BookData#openGui(BlockPos, ItemStack)}
    * @param pos   Lectern position
    * @param book  Book stack instance
    */

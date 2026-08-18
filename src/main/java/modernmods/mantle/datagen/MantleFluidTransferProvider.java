@@ -1,4 +1,4 @@
-package slimeknights.mantle.datagen;
+package modernmods.mantle.datagen;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -13,14 +13,14 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.NotCondition;
 import org.jetbrains.annotations.ApiStatus.Internal;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.fluid.transfer.AbstractFluidContainerTransferProvider;
-import slimeknights.mantle.fluid.transfer.EmptyPotionTransfer;
-import slimeknights.mantle.fluid.transfer.FillFluidContainerTransfer;
-import slimeknights.mantle.fluid.transfer.FillFluidWithNBTTransfer;
-import slimeknights.mantle.recipe.condition.TagFilledCondition;
-import slimeknights.mantle.recipe.helper.ItemOutput;
-import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.fluid.transfer.AbstractFluidContainerTransferProvider;
+import modernmods.mantle.fluid.transfer.EmptyPotionTransfer;
+import modernmods.mantle.fluid.transfer.FillFluidContainerTransfer;
+import modernmods.mantle.fluid.transfer.FillFluidWithNBTTransfer;
+import modernmods.mantle.recipe.condition.TagFilledCondition;
+import modernmods.mantle.recipe.helper.ItemOutput;
+import modernmods.mantle.recipe.ingredient.FluidIngredient;
 
 import javax.annotation.Nullable;
 

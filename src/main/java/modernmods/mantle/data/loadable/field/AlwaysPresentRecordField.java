@@ -1,8 +1,8 @@
-package slimeknights.mantle.data.loadable.field;
+package modernmods.mantle.data.loadable.field;
 
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.function.Function;
 

@@ -1,12 +1,12 @@
-package slimeknights.mantle.data.loadable.array;
+package modernmods.mantle.data.loadable.array;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.field.DefaultingField;
-import slimeknights.mantle.data.loadable.field.LoadableField;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.field.DefaultingField;
+import modernmods.mantle.data.loadable.field.LoadableField;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.Arrays;
 import java.util.function.Function;

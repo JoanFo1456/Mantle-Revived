@@ -1,12 +1,12 @@
-package slimeknights.mantle.loot.condition;
+package modernmods.mantle.loot.condition;
 
 import com.google.gson.GsonBuilder;
 import com.mojang.serialization.Codec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import slimeknights.mantle.data.JsonCodec.GsonCodec;
-import slimeknights.mantle.data.gson.GenericRegisteredSerializer;
-import slimeknights.mantle.data.gson.GenericRegisteredSerializer.IJsonSerializable;
+import modernmods.mantle.data.JsonCodec.GsonCodec;
+import modernmods.mantle.data.gson.GenericRegisteredSerializer;
+import modernmods.mantle.data.gson.GenericRegisteredSerializer.IJsonSerializable;
 
 import java.util.List;
 

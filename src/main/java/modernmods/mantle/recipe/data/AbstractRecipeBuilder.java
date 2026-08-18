@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.data;
+package modernmods.mantle.recipe.data;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -11,7 +11,7 @@ import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import javax.annotation.Nonnull;
 import java.util.function.BiConsumer;

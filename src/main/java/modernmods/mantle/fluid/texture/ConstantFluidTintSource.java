@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.texture;
+package modernmods.mantle.fluid.texture;
 
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.client.fluid.FluidTintSource;

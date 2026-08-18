@@ -1,4 +1,4 @@
-package slimeknights.mantle.util.sync;
+package modernmods.mantle.util.sync;
 
 import lombok.AllArgsConstructor;
 import net.minecraft.world.inventory.ContainerData;

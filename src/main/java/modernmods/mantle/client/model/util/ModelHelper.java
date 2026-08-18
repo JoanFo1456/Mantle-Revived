@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model.util;
+package modernmods.mantle.client.model.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -62,7 +62,7 @@ public class ModelHelper {
    * @param <T> Output type
    * @return  Vector3f of data
    * @throws JsonParseException  If there is no array or the length is wrong
-   * @deprecated use {@link slimeknights.mantle.data.loadable.array.FloatArrayLoadable}
+   * @deprecated use {@link modernmods.mantle.data.loadable.array.FloatArrayLoadable}
    */
   @Deprecated(forRemoval = true)
   public static <T> T arrayToObject(JsonObject json, String name, int size, Function<float[], T> mapper) {
@@ -83,14 +83,14 @@ public class ModelHelper {
    * @param name  Name of the array in the object to fetch
    * @return  Vector3f of data
    * @throws JsonParseException  If there is no array or the length is wrong
-   * @deprecated use {@link slimeknights.mantle.data.loadable.common.Vector3fLoadable}
+   * @deprecated use {@link modernmods.mantle.data.loadable.common.Vector3fLoadable}
    */
   @Deprecated(forRemoval = true)
   public static Vector3f arrayToVector(JsonObject json, String name) {
     return arrayToObject(json, name, 3, arr -> new Vector3f(arr[0], arr[1], arr[2]));
   }
 
-  /** @deprecated use {@link slimeknights.mantle.data.loadable.common.Vector3fLoadable} */
+  /** @deprecated use {@link modernmods.mantle.data.loadable.common.Vector3fLoadable} */
   @Deprecated(forRemoval = true)
   public static JsonArray vectorToJson(Vector3f vector) {
     JsonArray array = new JsonArray();

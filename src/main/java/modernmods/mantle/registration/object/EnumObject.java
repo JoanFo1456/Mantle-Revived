@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.object;
+package modernmods.mantle.registration.object;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

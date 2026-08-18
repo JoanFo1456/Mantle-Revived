@@ -1,4 +1,4 @@
-package slimeknights.mantle.block;
+package modernmods.mantle.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,9 +9,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import slimeknights.mantle.block.entity.IRetexturedBlockEntity;
-import slimeknights.mantle.util.BlockEntityHelper;
-import slimeknights.mantle.util.RetexturedHelper;
+import modernmods.mantle.block.entity.IRetexturedBlockEntity;
+import modernmods.mantle.util.BlockEntityHelper;
+import modernmods.mantle.util.RetexturedHelper;
 
 import javax.annotation.Nullable;
 

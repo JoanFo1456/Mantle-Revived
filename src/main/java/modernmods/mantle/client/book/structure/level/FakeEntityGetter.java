@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.structure.level;
+package modernmods.mantle.client.book.structure.level;
 
 import net.minecraft.util.AbortableIterationConsumer;
 import net.minecraft.world.entity.Entity;

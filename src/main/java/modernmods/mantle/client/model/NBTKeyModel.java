@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model;
+package modernmods.mantle.client.model;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -19,8 +19,8 @@ import net.minecraft.util.GsonHelper;
 import net.neoforged.neoforge.client.model.AbstractUnbakedModel;
 import net.neoforged.neoforge.client.model.StandardModelParameters;
 import net.neoforged.neoforge.client.model.UnbakedModelLoader;
-import slimeknights.mantle.client.model.util.MantleItemLayerModel;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.client.model.util.MantleItemLayerModel;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.List;
  * <p>
  * In 26.1.2 the item model system was rewritten ({@code ItemOverrides} removed in favor of the item model / select
  * property system). This class keeps the extra-texture registry, deserialization and per-variant geometry; to switch the
- * variant per stack, drive it from a {@link slimeknights.mantle.client.model.util.DynamicItemModel} keyed on the NBT string
+ * variant per stack, drive it from a {@link modernmods.mantle.client.model.util.DynamicItemModel} keyed on the NBT string
  * (registered as an item-model type via {@code RegisterItemModelsEvent}, referenced from the item's client model JSON),
  * whose {@code bakeModel} bakes this geometry with the variant's texture. The item-model wiring must be validated visually
  * in-game.

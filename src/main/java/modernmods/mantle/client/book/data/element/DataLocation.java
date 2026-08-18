@@ -1,8 +1,8 @@
-package slimeknights.mantle.client.book.data.element;
+package modernmods.mantle.client.book.data.element;
 
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.client.book.repository.BookRepository;
+import modernmods.mantle.client.book.repository.BookRepository;
 
 public class DataLocation implements IDataElement {
 

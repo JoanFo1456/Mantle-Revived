@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model.util;
+package modernmods.mantle.client.model.util;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
@@ -23,7 +23,7 @@ import net.minecraft.util.GsonHelper;
 import net.neoforged.neoforge.client.model.AbstractUnbakedModel;
 import net.neoforged.neoforge.client.model.StandardModelParameters;
 import net.neoforged.neoforge.client.model.UnbakedModelLoader;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

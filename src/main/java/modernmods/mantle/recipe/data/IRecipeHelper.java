@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.data;
+package modernmods.mantle.recipe.data;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,9 +11,9 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.recipe.condition.TagFilledCondition;
-import slimeknights.mantle.registration.object.IdAwareObject;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.recipe.condition.TagFilledCondition;
+import modernmods.mantle.registration.object.IdAwareObject;
 
 import java.util.Objects;
 import java.util.function.Consumer;

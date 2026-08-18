@@ -1,4 +1,4 @@
-package slimeknights.mantle.plugin.jei;
+package modernmods.mantle.plugin.jei;
 
 import com.google.common.collect.Streams;
 import mezz.jei.api.constants.VanillaTypes;
@@ -12,8 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.recipe.crafting.ShapedRetexturedRecipe;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.recipe.crafting.ShapedRetexturedRecipe;
 
 import java.util.List;
 import java.util.Optional;

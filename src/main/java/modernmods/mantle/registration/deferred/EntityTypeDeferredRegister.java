@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.deferred;
+package modernmods.mantle.registration.deferred;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import slimeknights.mantle.registration.object.EntityObject;
+import modernmods.mantle.registration.object.EntityObject;
 
 import java.util.function.Supplier;
 

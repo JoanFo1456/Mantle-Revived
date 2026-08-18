@@ -1,4 +1,4 @@
-package slimeknights.mantle.command.client;
+package modernmods.mantle.command.client;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -18,12 +18,12 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import org.apache.commons.lang3.text.WordUtils;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.BookLoader;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.command.GeneratePackHelper;
-import slimeknights.mantle.command.MantleCommand;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.BookLoader;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.command.GeneratePackHelper;
+import modernmods.mantle.command.MantleCommand;
 
 import javax.annotation.Nullable;
 import java.io.BufferedWriter;

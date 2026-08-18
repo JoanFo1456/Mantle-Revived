@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.datamap;
+package modernmods.mantle.data.datamap;
 
 import com.google.gson.JsonObject;
 import lombok.AccessLevel;
@@ -10,8 +10,8 @@ import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
-import slimeknights.mantle.data.GenericDataProvider;
-import slimeknights.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.GenericDataProvider;
+import modernmods.mantle.data.loadable.Loadable;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

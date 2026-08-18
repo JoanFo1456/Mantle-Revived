@@ -1,4 +1,4 @@
-package slimeknights.mantle.util.html;
+package modernmods.mantle.util.html;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

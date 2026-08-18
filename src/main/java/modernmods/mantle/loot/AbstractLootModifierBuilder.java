@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot;
+package modernmods.mantle.loot;
 
 import lombok.RequiredArgsConstructor;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;

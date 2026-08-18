@@ -1,4 +1,4 @@
-package slimeknights.mantle.command.client;
+package modernmods.mantle.command.client;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -9,8 +9,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.command.SourcesCommand;
-import slimeknights.mantle.command.SourcesCommand.SourceFolder;
+import modernmods.mantle.command.SourcesCommand;
+import modernmods.mantle.command.SourcesCommand.SourceFolder;
 
 import java.util.ArrayList;
 import java.util.List;

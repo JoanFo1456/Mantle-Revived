@@ -1,12 +1,12 @@
-package slimeknights.mantle.client.book.data.content;
+package modernmods.mantle.client.book.data.content;
 
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.SectionData;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.client.screen.book.element.BookElement;
-import slimeknights.mantle.client.screen.book.element.SelectionElement;
-import slimeknights.mantle.util.html.HtmlElement;
-import slimeknights.mantle.util.html.HtmlSerializable;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.client.screen.book.element.SelectionElement;
+import modernmods.mantle.util.html.HtmlElement;
+import modernmods.mantle.util.html.HtmlSerializable;
 
 import java.util.ArrayList;
 

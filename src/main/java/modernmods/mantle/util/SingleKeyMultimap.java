@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ImmutableMultiset;

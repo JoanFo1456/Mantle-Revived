@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.texture;
+package modernmods.mantle.fluid.texture;
 
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -11,9 +11,9 @@ import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.fluid.InvertedFluidType;
-import slimeknights.mantle.fluid.TextureFluidType;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.fluid.InvertedFluidType;
+import modernmods.mantle.fluid.TextureFluidType;
 
 /**
  * Registers the client fluid type extensions for Mantle's model-driven fluid types.

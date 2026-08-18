@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book;
+package modernmods.mantle.client.screen.book;
 
 import net.minecraft.resources.Identifier;
 

@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.sync;
+package modernmods.mantle.recipe.sync;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
-import slimeknights.mantle.network.MantleNetwork;
+import modernmods.mantle.network.MantleNetwork;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,7 +73,7 @@ public final class RecipeSyncHandler {
       RecipeHolder.STREAM_CODEC.encode(buffer, holder);
       return true;
     } catch (RuntimeException e) {
-      slimeknights.mantle.Mantle.logger.warn("Skipping recipe {} from client sync (unresolvable): {}", holder.id(), e.getMessage());
+      modernmods.mantle.Mantle.logger.warn("Skipping recipe {} from client sync (unresolvable): {}", holder.id(), e.getMessage());
       return false;
     } finally {
       buffer.release();

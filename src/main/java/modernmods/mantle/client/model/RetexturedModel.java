@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model;
+package modernmods.mantle.client.model;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
@@ -11,9 +11,9 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.util.GsonHelper;
 import net.neoforged.neoforge.client.model.DelegateUnbakedModel;
 import net.neoforged.neoforge.client.model.UnbakedModelLoader;
-import slimeknights.mantle.client.model.util.ColoredBlockModel;
-import slimeknights.mantle.client.model.util.ModelTextureIteratable;
-import slimeknights.mantle.client.model.util.SimpleBlockModel;
+import modernmods.mantle.client.model.util.ColoredBlockModel;
+import modernmods.mantle.client.model.util.ModelTextureIteratable;
+import modernmods.mantle.client.model.util.SimpleBlockModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +21,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Model that dynamically retextures a list of textures based on data from {@link slimeknights.mantle.util.RetexturedHelper}.
+ * Model that dynamically retextures a list of textures based on data from {@link modernmods.mantle.util.RetexturedHelper}.
  * <p>
  * In 26.1.2 dynamic baked-model wrapping ({@code BakedModelWrapper}/{@code ItemOverrides}/{@code ModelData}) was removed.
  * This class preserves the texture-name resolution and deserialization and delegates static geometry to the wrapped model.
  * To retexture dynamically per placed block, register a {@code CustomUnbakedBlockStateModel} in the block's blockstate JSON
- * whose baked model extends {@link slimeknights.mantle.client.model.util.DynamicBakedWrapper} and swaps the baked variant
- * from {@link slimeknights.mantle.util.RetexturedHelper#BLOCK_PROPERTY} in the block's {@code ModelData}; for the item form
- * use a {@link slimeknights.mantle.client.model.util.DynamicItemModel} keyed on the stored texture. Both require the
+ * whose baked model extends {@link modernmods.mantle.client.model.util.DynamicBakedWrapper} and swaps the baked variant
+ * from {@link modernmods.mantle.util.RetexturedHelper#BLOCK_PROPERTY} in the block's {@code ModelData}; for the item form
+ * use a {@link modernmods.mantle.client.model.util.DynamicItemModel} keyed on the stored texture. Both require the
  * per-variant re-bake plus the blockstate/item JSON wiring, which must be validated visually in-game.
  */
 @SuppressWarnings("WeakerAccess")

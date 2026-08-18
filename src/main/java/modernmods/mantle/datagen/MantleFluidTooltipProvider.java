@@ -1,11 +1,11 @@
-package slimeknights.mantle.datagen;
+package modernmods.mantle.datagen;
 
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.ApiStatus.Internal;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.fluid.tooltip.AbstractFluidTooltipProvider;
-import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.fluid.tooltip.AbstractFluidTooltipProvider;
+import modernmods.mantle.fluid.tooltip.FluidTooltipHandler;
 
 /** Mantle datagen for fluid tooltips. For mods, don't use this, use {@link AbstractFluidTooltipProvider} */
 @Internal

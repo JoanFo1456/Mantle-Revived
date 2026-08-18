@@ -1,12 +1,12 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import slimeknights.mantle.client.book.data.SectionData;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.client.screen.book.TextDataRenderer;
+import modernmods.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.TextDataRenderer;
 
 import java.util.ArrayList;
 import java.util.List;

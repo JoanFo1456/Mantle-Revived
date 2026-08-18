@@ -1,6 +1,6 @@
-package slimeknights.mantle.client.book.action.protocol;
+package modernmods.mantle.client.book.action.protocol;
 
-import slimeknights.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.BookScreen;
 
 public abstract class ActionProtocol {
   public abstract void processCommand(BookScreen book, String param);

@@ -1,15 +1,15 @@
-package slimeknights.mantle.client.screen.book;
+package modernmods.mantle.client.screen.book;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.BookData;
 
 import javax.annotation.Nullable;
 
-import static slimeknights.mantle.client.screen.book.Textures.TEX_BOOK;
+import static modernmods.mantle.client.screen.book.Textures.TEX_BOOK;
 
 public class ArrowButton extends Button {
 

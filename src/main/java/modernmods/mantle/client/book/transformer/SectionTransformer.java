@@ -1,10 +1,10 @@
-package slimeknights.mantle.client.book.transformer;
+package modernmods.mantle.client.book.transformer;
 
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.PageData;
-import slimeknights.mantle.client.book.data.SectionData;
-import slimeknights.mantle.client.book.data.content.PageContent;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.PageData;
+import modernmods.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.book.data.content.PageContent;
 
 /** Transformer that locates a specific section to transform */
 public abstract class SectionTransformer extends BookTransformer {

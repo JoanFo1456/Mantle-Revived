@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.listener;
+package modernmods.mantle.data.listener;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
@@ -11,7 +11,7 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.util.JsonHelper;
 
 import java.io.IOException;
 import java.io.Reader;

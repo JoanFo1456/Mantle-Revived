@@ -1,4 +1,4 @@
-package slimeknights.mantle.command.argument;
+package modernmods.mantle.command.argument;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagEntry;
 import net.minecraft.tags.TagKey;
-import slimeknights.mantle.command.argument.ResourceOrTagKeyArgument.Result;
+import modernmods.mantle.command.argument.ResourceOrTagKeyArgument.Result;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;

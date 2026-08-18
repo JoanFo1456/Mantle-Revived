@@ -1,11 +1,11 @@
-package slimeknights.mantle.network.packet;
+package modernmods.mantle.network.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import slimeknights.mantle.client.book.BookHelper;
+import modernmods.mantle.client.book.BookHelper;
 
 /**
  * Packet to update the page in a book in the players hand

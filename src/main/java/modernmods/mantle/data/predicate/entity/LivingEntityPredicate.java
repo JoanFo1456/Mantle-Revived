@@ -1,15 +1,15 @@
-package slimeknights.mantle.data.predicate.entity;
+package modernmods.mantle.data.predicate.entity;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.loadable.record.SingletonLoader;
-import slimeknights.mantle.data.predicate.IJsonPredicate;
-import slimeknights.mantle.data.predicate.RegistryPredicateRegistry;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.loadable.record.SingletonLoader;
+import modernmods.mantle.data.predicate.IJsonPredicate;
+import modernmods.mantle.data.predicate.RegistryPredicateRegistry;
 
 import java.util.List;
 import java.util.function.Predicate;

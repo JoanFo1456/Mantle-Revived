@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot;
+package modernmods.mantle.loot;
 
 import com.google.gson.JsonObject;
 import net.minecraft.data.CachedOutput;
@@ -6,8 +6,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import slimeknights.mantle.data.GenericDataProvider;
-import slimeknights.mantle.recipe.condition.ConditionHelper;
+import modernmods.mantle.data.GenericDataProvider;
+import modernmods.mantle.recipe.condition.ConditionHelper;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package slimeknights.mantle.network.packet;
+package modernmods.mantle.network.packet;
 
 import lombok.AllArgsConstructor;
 import net.minecraft.core.BlockPos;
@@ -6,7 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import slimeknights.mantle.item.ILecternBookItem;
+import modernmods.mantle.item.ILecternBookItem;
 
 /**
  * Packet to open a book on a lectern

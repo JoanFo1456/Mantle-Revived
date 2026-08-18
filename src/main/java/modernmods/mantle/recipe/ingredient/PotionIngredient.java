@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.ingredient;
+package modernmods.mantle.recipe.ingredient;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -15,10 +15,10 @@ import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.jetbrains.annotations.Nullable;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.recipe.MantleRecipes;
-import slimeknights.mantle.recipe.helper.LoadableIngredientSerializer;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.recipe.MantleRecipes;
+import modernmods.mantle.recipe.helper.LoadableIngredientSerializer;
 
 import java.util.Arrays;
 import java.util.List;

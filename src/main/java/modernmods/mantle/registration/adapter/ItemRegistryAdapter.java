@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.adapter;
+package modernmods.mantle.registration.adapter;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import org.apache.commons.lang3.function.TriFunction;
@@ -15,18 +15,18 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.core.Registry;
-import slimeknights.mantle.item.BlockTooltipItem;
-import slimeknights.mantle.item.BurnableBlockItem;
-import slimeknights.mantle.item.BurnableHangingSignItem;
-import slimeknights.mantle.item.BurnableSignItem;
-import slimeknights.mantle.item.BurnableTallBlockItem;
-import slimeknights.mantle.item.TooltipItem;
-import slimeknights.mantle.registration.RegistrationHelper;
-import slimeknights.mantle.registration.object.BuildingBlockObject;
-import slimeknights.mantle.registration.object.EnumObject;
-import slimeknights.mantle.registration.object.FenceBuildingBlockObject;
-import slimeknights.mantle.registration.object.WallBuildingBlockObject;
-import slimeknights.mantle.registration.object.WoodBlockObject;
+import modernmods.mantle.item.BlockTooltipItem;
+import modernmods.mantle.item.BurnableBlockItem;
+import modernmods.mantle.item.BurnableHangingSignItem;
+import modernmods.mantle.item.BurnableSignItem;
+import modernmods.mantle.item.BurnableTallBlockItem;
+import modernmods.mantle.item.TooltipItem;
+import modernmods.mantle.registration.RegistrationHelper;
+import modernmods.mantle.registration.object.BuildingBlockObject;
+import modernmods.mantle.registration.object.EnumObject;
+import modernmods.mantle.registration.object.FenceBuildingBlockObject;
+import modernmods.mantle.registration.object.WallBuildingBlockObject;
+import modernmods.mantle.registration.object.WoodBlockObject;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

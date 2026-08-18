@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot.condition;
+package modernmods.mantle.loot.condition;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
@@ -12,7 +12,7 @@ import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import slimeknights.mantle.loot.MantleLoot;
+import modernmods.mantle.loot.MantleLoot;
 
 /** Loot condition that only runs if all required values in the given loot context set are present. Good heuristic for using that set. */
 public record HasLootContextSetCondition(ContextKeySet set) implements LootItemCondition {

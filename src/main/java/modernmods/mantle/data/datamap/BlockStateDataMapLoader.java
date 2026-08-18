@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.datamap;
+package modernmods.mantle.data.datamap;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,9 +16,9 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

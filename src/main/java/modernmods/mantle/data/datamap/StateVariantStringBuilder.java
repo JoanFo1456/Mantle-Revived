@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.datamap;
+package modernmods.mantle.data.datamap;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;

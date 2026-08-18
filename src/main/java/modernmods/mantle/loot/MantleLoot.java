@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot;
+package modernmods.mantle.loot;
 
 import com.google.gson.JsonDeserializer;
 import com.mojang.serialization.MapCodec;
@@ -15,24 +15,24 @@ import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.loot.condition.BlockTagLootCondition;
-import slimeknights.mantle.loot.condition.ContainsItemModifierLootCondition;
-import slimeknights.mantle.loot.condition.EmptyModifierLootCondition;
-import slimeknights.mantle.loot.condition.HasLootContextSetCondition;
-import slimeknights.mantle.loot.condition.ILootModifierCondition;
-import slimeknights.mantle.loot.condition.InvertedModifierLootCondition;
-import slimeknights.mantle.loot.entry.TagPreferenceLootEntry;
-import slimeknights.mantle.loot.function.RetexturedLootFunction;
-import slimeknights.mantle.loot.function.SetFluidLootFunction;
-import slimeknights.mantle.recipe.condition.TagCombinationCondition;
-import slimeknights.mantle.recipe.condition.TagEmptyCondition;
-import slimeknights.mantle.recipe.condition.TagFilledCondition;
-import slimeknights.mantle.registration.adapter.RegistryAdapter;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.loot.condition.BlockTagLootCondition;
+import modernmods.mantle.loot.condition.ContainsItemModifierLootCondition;
+import modernmods.mantle.loot.condition.EmptyModifierLootCondition;
+import modernmods.mantle.loot.condition.HasLootContextSetCondition;
+import modernmods.mantle.loot.condition.ILootModifierCondition;
+import modernmods.mantle.loot.condition.InvertedModifierLootCondition;
+import modernmods.mantle.loot.entry.TagPreferenceLootEntry;
+import modernmods.mantle.loot.function.RetexturedLootFunction;
+import modernmods.mantle.loot.function.SetFluidLootFunction;
+import modernmods.mantle.recipe.condition.TagCombinationCondition;
+import modernmods.mantle.recipe.condition.TagEmptyCondition;
+import modernmods.mantle.recipe.condition.TagFilledCondition;
+import modernmods.mantle.registration.adapter.RegistryAdapter;
 
 import java.util.Objects;
 
-import static slimeknights.mantle.loot.condition.ILootModifierCondition.MODIFIER_CONDITIONS;
+import static modernmods.mantle.loot.condition.ILootModifierCondition.MODIFIER_CONDITIONS;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MantleLoot {

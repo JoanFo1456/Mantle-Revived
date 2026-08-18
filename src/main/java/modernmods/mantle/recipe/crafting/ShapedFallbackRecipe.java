@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.crafting;
+package modernmods.mantle.recipe.crafting;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -26,9 +26,9 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.level.Level;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.recipe.MantleRecipes;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.recipe.MantleRecipes;
+import modernmods.mantle.util.JsonHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -139,11 +139,11 @@ public class ShapedFallbackRecipe implements CraftingRecipe {
       // LoggingRecipeSerializer#registryJsonOps); re-parsing with plain JsonOps makes tag ingredients fail structurally
       com.mojang.serialization.DynamicOps<JsonElement> ops = (com.mojang.serialization.DynamicOps<JsonElement>) dynamic.getOps();
       JsonObject json = dynamic.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
-      slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.set(ops);
+      modernmods.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.set(ops);
       try {
         return fromJson(json);
       } finally {
-        slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.remove();
+        modernmods.mantle.recipe.helper.LoggingRecipeSerializer.DECODE_OPS.remove();
       }
     },
     recipe -> new Dynamic<>(JsonOps.INSTANCE, toJson(recipe)));
@@ -153,7 +153,7 @@ public class ShapedFallbackRecipe implements CraftingRecipe {
   public static final RecipeSerializer<ShapedFallbackRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 
   private static ShapedFallbackRecipe fromJson(JsonObject json) {
-    ShapedRecipe base = ShapedRecipe.MAP_CODEC.codec().parse(slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), json).getOrThrow(JsonSyntaxException::new);
+    ShapedRecipe base = ShapedRecipe.MAP_CODEC.codec().parse(modernmods.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), json).getOrThrow(JsonSyntaxException::new);
     List<Identifier> alternatives = JsonHelper.parseList(json, "alternatives", Loadables.RESOURCE_LOCATION);
     return new ShapedFallbackRecipe(base, alternatives);
   }

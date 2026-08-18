@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot;
+package modernmods.mantle.loot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,8 +14,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
-import slimeknights.mantle.data.MantleCodecs;
-import slimeknights.mantle.recipe.helper.ItemOutput;
+import modernmods.mantle.data.MantleCodecs;
+import modernmods.mantle.recipe.helper.ItemOutput;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

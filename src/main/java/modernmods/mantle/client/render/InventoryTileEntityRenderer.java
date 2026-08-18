@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.render;
+package modernmods.mantle.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;

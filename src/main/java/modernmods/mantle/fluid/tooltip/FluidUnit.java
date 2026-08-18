@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.tooltip;
+package modernmods.mantle.fluid.tooltip;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

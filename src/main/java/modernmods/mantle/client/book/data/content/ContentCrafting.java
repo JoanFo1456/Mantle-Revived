@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.data.content;
+package modernmods.mantle.client.book.data.content;
 
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
@@ -21,25 +21,25 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.BookLoadException;
-import slimeknights.mantle.client.book.data.element.ImageData;
-import slimeknights.mantle.client.book.data.element.IngredientData;
-import slimeknights.mantle.client.book.data.element.TextData;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.client.screen.book.element.BookElement;
-import slimeknights.mantle.client.screen.book.element.ImageElement;
-import slimeknights.mantle.client.screen.book.element.ItemElement;
-import slimeknights.mantle.client.screen.book.element.TextElement;
-import slimeknights.mantle.util.html.HtmlElement;
-import slimeknights.mantle.util.html.HtmlGroup;
-import slimeknights.mantle.util.html.HtmlSerializable;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.BookLoadException;
+import modernmods.mantle.client.book.data.element.ImageData;
+import modernmods.mantle.client.book.data.element.IngredientData;
+import modernmods.mantle.client.book.data.element.TextData;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.client.screen.book.element.ImageElement;
+import modernmods.mantle.client.screen.book.element.ItemElement;
+import modernmods.mantle.client.screen.book.element.TextElement;
+import modernmods.mantle.util.html.HtmlElement;
+import modernmods.mantle.util.html.HtmlGroup;
+import modernmods.mantle.util.html.HtmlSerializable;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-import static slimeknights.mantle.client.screen.book.Textures.TEX_CRAFTING;
+import static modernmods.mantle.client.screen.book.Textures.TEX_CRAFTING;
 
 public class ContentCrafting extends PageContent {
   public static final Identifier ID = Mantle.getResource("crafting");

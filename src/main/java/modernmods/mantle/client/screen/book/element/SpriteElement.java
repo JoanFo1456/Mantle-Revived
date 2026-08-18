@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
-import static slimeknights.mantle.client.screen.book.element.ItemElement.ITEM_SIZE_HARDCODED;
+import static modernmods.mantle.client.screen.book.element.ItemElement.ITEM_SIZE_HARDCODED;
 
 /** Element that just draws a sprite from a texture atlas */
 public class SpriteElement extends SizedBookElement {

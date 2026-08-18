@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 public abstract class ButtonElement extends SizedBookElement {
 

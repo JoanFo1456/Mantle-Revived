@@ -1,4 +1,4 @@
-package slimeknights.mantle.util.html;
+package modernmods.mantle.util.html;
 
 /** Html element for adding raw HTML without the builder. Usage of this class is best avoided. */
 public record RawHtml(String contents) implements HtmlSerializable {

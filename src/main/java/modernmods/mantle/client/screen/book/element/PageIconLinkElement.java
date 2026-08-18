@@ -1,19 +1,19 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import slimeknights.mantle.client.book.IHTML;
-import slimeknights.mantle.client.book.action.StringActionProcessor;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.PageData;
-import slimeknights.mantle.client.book.data.element.TextData;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.util.html.HtmlElement;
-import slimeknights.mantle.util.html.HtmlSerializable;
+import modernmods.mantle.client.book.IHTML;
+import modernmods.mantle.client.book.action.StringActionProcessor;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.PageData;
+import modernmods.mantle.client.book.data.element.TextData;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.util.html.HtmlElement;
+import modernmods.mantle.util.html.HtmlSerializable;
 
-/** Link elements for {@link slimeknights.mantle.client.book.data.content.ContentPageIconList} */
+/** Link elements for {@link modernmods.mantle.client.book.data.content.ContentPageIconList} */
 public class PageIconLinkElement extends SizedBookElement implements IHTML {
 
   public PageData pageData;

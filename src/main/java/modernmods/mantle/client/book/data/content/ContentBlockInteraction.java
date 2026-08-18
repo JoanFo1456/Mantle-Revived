@@ -1,21 +1,21 @@
-package slimeknights.mantle.client.book.data.content;
+package modernmods.mantle.client.book.data.content;
 
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.element.ImageData;
-import slimeknights.mantle.client.book.data.element.IngredientData;
-import slimeknights.mantle.client.book.data.element.TextData;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.client.screen.book.element.BookElement;
-import slimeknights.mantle.client.screen.book.element.ImageElement;
-import slimeknights.mantle.client.screen.book.element.ItemElement;
-import slimeknights.mantle.client.screen.book.element.TextElement;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.element.ImageData;
+import modernmods.mantle.client.book.data.element.IngredientData;
+import modernmods.mantle.client.book.data.element.TextData;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.client.screen.book.element.ImageElement;
+import modernmods.mantle.client.screen.book.element.ItemElement;
+import modernmods.mantle.client.screen.book.element.TextElement;
 
 import java.util.ArrayList;
 
-import static slimeknights.mantle.client.screen.book.Textures.TEX_MISC;
+import static modernmods.mantle.client.screen.book.Textures.TEX_MISC;
 
 public class ContentBlockInteraction extends PageContent {
   public static final Identifier ID = Mantle.getResource("block_interaction");

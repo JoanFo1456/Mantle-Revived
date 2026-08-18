@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.transfer;
+package modernmods.mantle.fluid.transfer;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -11,11 +11,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import slimeknights.mantle.data.GenericDataProvider;
-import slimeknights.mantle.recipe.helper.FluidOutput;
-import slimeknights.mantle.recipe.helper.ItemOutput;
-import slimeknights.mantle.recipe.ingredient.FluidIngredient;
-import slimeknights.mantle.registration.object.FluidObject;
+import modernmods.mantle.data.GenericDataProvider;
+import modernmods.mantle.recipe.helper.FluidOutput;
+import modernmods.mantle.recipe.helper.ItemOutput;
+import modernmods.mantle.recipe.ingredient.FluidIngredient;
+import modernmods.mantle.registration.object.FluidObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -101,7 +101,7 @@ public abstract class AbstractFluidContainerTransferProvider extends GenericData
       if (conditions.length != 0) {
         JsonArray array = new JsonArray();
         for (ICondition condition : conditions) {
-          array.add(slimeknights.mantle.recipe.condition.ConditionHelper.serialize(condition));
+          array.add(modernmods.mantle.recipe.condition.ConditionHelper.serialize(condition));
         }
         element.getAsJsonObject().add("conditions", array);
       }

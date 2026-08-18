@@ -1,18 +1,18 @@
-package slimeknights.mantle.data.predicate.damage;
+package modernmods.mantle.data.predicate.damage;
 
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.predicate.IJsonPredicate;
-import slimeknights.mantle.data.predicate.TagPredicateRegistry;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.predicate.IJsonPredicate;
+import modernmods.mantle.data.predicate.TagPredicateRegistry;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-import static slimeknights.mantle.data.loadable.record.SingletonLoader.singleton;
+import static modernmods.mantle.data.loadable.record.SingletonLoader.singleton;
 
 /**
  * Predicate testing for damage sources

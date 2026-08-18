@@ -1,9 +1,9 @@
-package slimeknights.mantle.data.loadable.field;
+package modernmods.mantle.data.loadable.field;
 
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.data.loadable.ErrorFactory;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.ErrorFactory;
+import modernmods.mantle.util.typed.TypedMap;
 
 import javax.annotation.Nullable;
 

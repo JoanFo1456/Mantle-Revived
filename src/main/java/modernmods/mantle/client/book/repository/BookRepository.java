@@ -1,8 +1,8 @@
-package slimeknights.mantle.client.book.repository;
+package modernmods.mantle.client.book.repository;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
-import slimeknights.mantle.client.book.data.SectionData;
+import modernmods.mantle.client.book.data.SectionData;
 
 import javax.annotation.Nullable;
 import java.util.List;

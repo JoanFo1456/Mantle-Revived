@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.Identifier;
@@ -7,9 +7,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.network.MantleNetwork;
-import slimeknights.mantle.network.packet.SwingArmPacket;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.network.MantleNetwork;
+import modernmods.mantle.network.packet.SwingArmPacket;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;

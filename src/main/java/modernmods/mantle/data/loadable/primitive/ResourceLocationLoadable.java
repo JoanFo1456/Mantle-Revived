@@ -1,10 +1,10 @@
-package slimeknights.mantle.data.loadable.primitive;
+package modernmods.mantle.data.loadable.primitive;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.util.JsonHelper;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.util.JsonHelper;
+import modernmods.mantle.util.typed.TypedMap;
 
 /**
  * Helper for the common case of making a string loadable that uses resource locations.

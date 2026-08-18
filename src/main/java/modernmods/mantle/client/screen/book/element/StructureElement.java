@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Transformation;
@@ -12,9 +12,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import slimeknights.mantle.client.book.structure.StructureInfo;
-import slimeknights.mantle.client.book.structure.level.TemplateLevel;
-import slimeknights.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.book.structure.StructureInfo;
+import modernmods.mantle.client.book.structure.level.TemplateLevel;
+import modernmods.mantle.client.screen.book.BookScreen;
 
 import java.util.List;
 import java.util.stream.IntStream;

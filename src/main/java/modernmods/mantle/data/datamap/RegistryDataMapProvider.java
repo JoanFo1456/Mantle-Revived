@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.datamap;
+package modernmods.mantle.data.datamap;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;
@@ -6,8 +6,8 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.data.GenericDataProvider;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.GenericDataProvider;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
 
 import java.util.HashMap;
 import java.util.Map;

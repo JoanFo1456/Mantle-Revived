@@ -1,4 +1,4 @@
-package slimeknights.mantle.data;
+package modernmods.mantle.data;
 
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.Registry;

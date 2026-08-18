@@ -1,4 +1,4 @@
-package slimeknights.mantle.item;
+package modernmods.mantle.item;
 
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;

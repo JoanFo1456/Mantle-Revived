@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.listener;
+package modernmods.mantle.data.listener;
 
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;

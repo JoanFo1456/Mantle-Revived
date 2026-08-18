@@ -1,4 +1,4 @@
-package slimeknights.mantle.util.typed;
+package modernmods.mantle.util.typed;
 
 import org.jetbrains.annotations.Contract;
 

@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model;
+package modernmods.mantle.client.model;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -27,8 +27,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
 import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.util.RetexturedHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.util.RetexturedHelper;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

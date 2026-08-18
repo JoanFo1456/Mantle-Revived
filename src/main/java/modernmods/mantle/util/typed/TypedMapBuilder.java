@@ -1,8 +1,8 @@
-package slimeknights.mantle.util.typed;
+package modernmods.mantle.util.typed;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import lombok.NoArgsConstructor;
-import slimeknights.mantle.util.typed.TypedMap.Key;
+import modernmods.mantle.util.typed.TypedMap.Key;
 
 import java.util.HashMap;
 import java.util.Map;

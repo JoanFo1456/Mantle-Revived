@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.texture;
+package modernmods.mantle.fluid.texture;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.fluids.FluidType;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import slimeknights.mantle.client.render.FluidRenderer;
+import modernmods.mantle.client.render.FluidRenderer;
 
 import javax.annotation.Nullable;
 

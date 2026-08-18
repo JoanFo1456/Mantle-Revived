@@ -1,4 +1,4 @@
-package slimeknights.mantle.command.argument;
+package modernmods.mantle.command.argument;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;

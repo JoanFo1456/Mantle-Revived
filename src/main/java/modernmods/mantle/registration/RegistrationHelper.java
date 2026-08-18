@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration;
+package modernmods.mantle.registration;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import lombok.AccessLevel;
@@ -8,7 +8,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.util.RegistryHelper;
 
 import java.util.ArrayList;
 import java.util.List;

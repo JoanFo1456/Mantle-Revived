@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.helper;
+package modernmods.mantle.recipe.helper;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,9 +10,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.bus.api.EventPriority;
-import slimeknights.mantle.config.Config;
-import slimeknights.mantle.util.LogicHelper;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.config.Config;
+import modernmods.mantle.util.LogicHelper;
+import modernmods.mantle.util.RegistryHelper;
 
 import java.util.Comparator;
 import java.util.List;

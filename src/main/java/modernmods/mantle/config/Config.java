@@ -1,4 +1,4 @@
-package slimeknights.mantle.config;
+package modernmods.mantle.config;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;

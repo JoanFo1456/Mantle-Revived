@@ -1,4 +1,4 @@
-package slimeknights.mantle.plugin.jei;
+package modernmods.mantle.plugin.jei;
 
 import com.mojang.serialization.Codec;
 import mezz.jei.api.IModPlugin;
@@ -10,12 +10,12 @@ import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.screen.MultiModuleScreen;
-import slimeknights.mantle.inventory.MultiModuleContainerMenu;
-import slimeknights.mantle.plugin.jei.entity.EntityIngredientHelper;
-import slimeknights.mantle.plugin.jei.entity.EntityIngredientRenderer;
-import slimeknights.mantle.recipe.ingredient.EntityIngredient.EntityInput;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.screen.MultiModuleScreen;
+import modernmods.mantle.inventory.MultiModuleContainerMenu;
+import modernmods.mantle.plugin.jei.entity.EntityIngredientHelper;
+import modernmods.mantle.plugin.jei.entity.EntityIngredientRenderer;
+import modernmods.mantle.recipe.ingredient.EntityIngredient.EntityInput;
 
 import java.util.Collections;
 import java.util.List;

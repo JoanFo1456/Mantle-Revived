@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.data;
+package modernmods.mantle.client.book.data;
 
 import java.util.ArrayList;
 

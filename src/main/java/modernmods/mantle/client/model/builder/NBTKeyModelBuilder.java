@@ -1,11 +1,11 @@
-package slimeknights.mantle.client.model.builder;
+package modernmods.mantle.client.model.builder;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
-/** Loader for {@link slimeknights.mantle.client.model.NBTKeyModel} */
+/** Loader for {@link modernmods.mantle.client.model.NBTKeyModel} */
 @SuppressWarnings("unused")  // API
 public class NBTKeyModelBuilder extends CustomLoaderBuilder {
   private String key = null;

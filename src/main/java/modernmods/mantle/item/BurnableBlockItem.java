@@ -1,4 +1,4 @@
-package slimeknights.mantle.item;
+package modernmods.mantle.item;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;

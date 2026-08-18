@@ -1,4 +1,4 @@
-package slimeknights.mantle.block.entity;
+package modernmods.mantle.block.entity;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
@@ -9,15 +9,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.model.data.ModelData;
-import slimeknights.mantle.block.RetexturedBlock;
-import slimeknights.mantle.util.RetexturedHelper;
+import modernmods.mantle.block.RetexturedBlock;
+import modernmods.mantle.util.RetexturedHelper;
 
 import javax.annotation.Nonnull;
 
-import static slimeknights.mantle.util.RetexturedHelper.TAG_TEXTURE;
+import static modernmods.mantle.util.RetexturedHelper.TAG_TEXTURE;
 
 /**
- * Standard implementation for {@link IRetexturedBlockEntity}, use alongside {@link RetexturedBlock} and {@link slimeknights.mantle.item.RetexturedBlockItem}
+ * Standard implementation for {@link IRetexturedBlockEntity}, use alongside {@link RetexturedBlock} and {@link modernmods.mantle.item.RetexturedBlockItem}
  */
 public class DefaultRetexturedBlockEntity extends MantleBlockEntity implements IRetexturedBlockEntity {
   @Nonnull

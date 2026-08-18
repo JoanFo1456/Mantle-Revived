@@ -1,4 +1,4 @@
-package slimeknights.mantle.inventory;
+package modernmods.mantle.inventory;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -9,7 +9,7 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
-import slimeknights.mantle.block.entity.MantleBlockEntity;
+import modernmods.mantle.block.entity.MantleBlockEntity;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;

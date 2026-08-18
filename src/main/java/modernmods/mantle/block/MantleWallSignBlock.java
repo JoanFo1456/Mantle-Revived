@@ -1,11 +1,11 @@
-package slimeknights.mantle.block;
+package modernmods.mantle.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import slimeknights.mantle.block.entity.MantleSignBlockEntity;
+import modernmods.mantle.block.entity.MantleSignBlockEntity;
 
 public class MantleWallSignBlock extends WallSignBlock {
   public MantleWallSignBlock(Properties props, WoodType type) {

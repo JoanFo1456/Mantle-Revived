@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration;
+package modernmods.mantle.registration;
 
 import net.minecraft.resources.Identifier;
 

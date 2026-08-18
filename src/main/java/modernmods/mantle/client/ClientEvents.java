@@ -1,4 +1,4 @@
-package slimeknights.mantle.client;
+package modernmods.mantle.client;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.AttackIndicatorStatus;
@@ -43,32 +43,32 @@ import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import slimeknights.mantle.client.render.MantleRenderTypes;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.block.GaugeBlock;
-import slimeknights.mantle.client.book.BookLoader;
-import slimeknights.mantle.client.book.repository.FileRepository;
-import slimeknights.mantle.client.model.FallbackModelLoader;
-import slimeknights.mantle.client.model.NBTKeyModel;
-import slimeknights.mantle.client.model.RetexturedBlockStateModel;
-import slimeknights.mantle.client.model.RetexturedItemModel;
-import slimeknights.mantle.client.model.RetexturedModel;
-import slimeknights.mantle.client.model.TextureColorHelper;
-import slimeknights.mantle.client.model.connected.ConnectedBlockStateModel;
-import slimeknights.mantle.client.model.connected.ConnectedModel;
-import slimeknights.mantle.client.model.util.ColoredBlockModel;
-import slimeknights.mantle.client.model.util.MantleItemLayerModel;
-import slimeknights.mantle.client.model.util.ModelHelper;
-import slimeknights.mantle.client.render.FluidCuboid;
-import slimeknights.mantle.client.render.RenderItem;
-import slimeknights.mantle.command.client.MantleClientCommand;
-import slimeknights.mantle.datagen.MantleTags;
-import slimeknights.mantle.fluid.texture.FluidTextureManager;
-import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
-import slimeknights.mantle.registration.MantleRegistrations;
-import slimeknights.mantle.registration.RegistrationHelper;
-import slimeknights.mantle.util.OffhandCooldownTracker;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.client.render.MantleRenderTypes;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.block.GaugeBlock;
+import modernmods.mantle.client.book.BookLoader;
+import modernmods.mantle.client.book.repository.FileRepository;
+import modernmods.mantle.client.model.FallbackModelLoader;
+import modernmods.mantle.client.model.NBTKeyModel;
+import modernmods.mantle.client.model.RetexturedBlockStateModel;
+import modernmods.mantle.client.model.RetexturedItemModel;
+import modernmods.mantle.client.model.RetexturedModel;
+import modernmods.mantle.client.model.TextureColorHelper;
+import modernmods.mantle.client.model.connected.ConnectedBlockStateModel;
+import modernmods.mantle.client.model.connected.ConnectedModel;
+import modernmods.mantle.client.model.util.ColoredBlockModel;
+import modernmods.mantle.client.model.util.MantleItemLayerModel;
+import modernmods.mantle.client.model.util.ModelHelper;
+import modernmods.mantle.client.render.FluidCuboid;
+import modernmods.mantle.client.render.RenderItem;
+import modernmods.mantle.command.client.MantleClientCommand;
+import modernmods.mantle.datagen.MantleTags;
+import modernmods.mantle.fluid.texture.FluidTextureManager;
+import modernmods.mantle.fluid.tooltip.FluidTooltipHandler;
+import modernmods.mantle.registration.MantleRegistrations;
+import modernmods.mantle.registration.RegistrationHelper;
+import modernmods.mantle.util.OffhandCooldownTracker;
+import modernmods.mantle.util.RegistryHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +87,7 @@ public class ClientEvents {
   /** Clears the synced client recipe cache on disconnect so a later world/server join starts fresh */
   @SubscribeEvent
   static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
-    slimeknights.mantle.recipe.sync.ClientRecipeCache.clear();
+    modernmods.mantle.recipe.sync.ClientRecipeCache.clear();
   }
 
   @SuppressWarnings("ConstantConditions")

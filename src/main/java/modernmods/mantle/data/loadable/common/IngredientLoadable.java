@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.loadable.common;
+package modernmods.mantle.data.loadable.common;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonArray;
@@ -17,9 +17,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.recipe.data.ItemNameIngredient;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.recipe.data.ItemNameIngredient;
+import modernmods.mantle.util.typed.TypedMap;
 
 /** Loadable for ingredients, handling Forge ingredients */
 public enum IngredientLoadable implements Loadable<Ingredient> {
@@ -84,7 +84,7 @@ public enum IngredientLoadable implements Loadable<Ingredient> {
     element = normalizeNestedIngredients(element, true);
     // use the reload's registry-aware ops so custom ingredients with nested "#tag" children (neoforge:intersection,
     // neoforge:compound, ...) resolve their tags lazily; plain JsonOps parses the children as raw item ids and rejects "#".
-    return Ingredient.CODEC.parse(slimeknights.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), element).getOrThrow(JsonParseException::new);
+    return Ingredient.CODEC.parse(modernmods.mantle.recipe.helper.LoggingRecipeSerializer.registryJsonOps(), element).getOrThrow(JsonParseException::new);
   }
 
   /**

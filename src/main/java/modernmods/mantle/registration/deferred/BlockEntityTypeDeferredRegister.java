@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.deferred;
+package modernmods.mantle.registration.deferred;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.types.Type;
@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import slimeknights.mantle.registration.object.EnumObject;
+import modernmods.mantle.registration.object.EnumObject;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;

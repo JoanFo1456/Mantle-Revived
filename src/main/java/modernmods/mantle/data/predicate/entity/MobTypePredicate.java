@@ -1,12 +1,12 @@
-package slimeknights.mantle.data.predicate.entity;
+package modernmods.mantle.data.predicate.entity;
 
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.NamedComponentRegistry;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.registry.NamedComponentRegistry;
 
 /** Predicate matching a specific mob type */
 public record MobTypePredicate(LivingEntityPredicate type) implements LivingEntityPredicate {

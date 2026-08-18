@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -43,16 +43,16 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import slimeknights.mantle.command.argument.RegistryTagSource;
-import slimeknights.mantle.command.argument.TagSource;
-import slimeknights.mantle.command.argument.TagSourceArgument;
+import modernmods.mantle.command.argument.RegistryTagSource;
+import modernmods.mantle.command.argument.TagSource;
+import modernmods.mantle.command.argument.TagSourceArgument;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * Command to list all tags for an entry.
- * TODO 1.21: move to {@link slimeknights.mantle.command.tags}.
+ * TODO 1.21: move to {@link modernmods.mantle.command.tags}.
  */
 @SuppressWarnings("deprecation")
 public class TagsForCommand {

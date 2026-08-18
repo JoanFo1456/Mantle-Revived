@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -12,8 +12,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import slimeknights.mantle.command.argument.TagSourceArgument;
-import slimeknights.mantle.command.tags.ModifyTagCommand;
+import modernmods.mantle.command.argument.TagSourceArgument;
+import modernmods.mantle.command.tags.ModifyTagCommand;
 
 import java.util.function.Consumer;
 

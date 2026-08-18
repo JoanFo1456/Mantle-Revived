@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.gson;
+package modernmods.mantle.data.gson;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -10,7 +10,7 @@ import com.google.gson.JsonSerializer;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.util.JsonHelper;
 
 import java.lang.reflect.Type;
 

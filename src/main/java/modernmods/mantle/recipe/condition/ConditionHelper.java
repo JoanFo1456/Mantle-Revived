@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.condition;
+package modernmods.mantle.recipe.condition;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

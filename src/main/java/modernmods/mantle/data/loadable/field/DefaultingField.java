@@ -1,9 +1,9 @@
-package slimeknights.mantle.data.loadable.field;
+package modernmods.mantle.data.loadable.field;
 
 import com.google.common.base.Objects;
 import com.google.gson.JsonObject;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import javax.annotation.Nullable;
 import java.util.function.BiPredicate;

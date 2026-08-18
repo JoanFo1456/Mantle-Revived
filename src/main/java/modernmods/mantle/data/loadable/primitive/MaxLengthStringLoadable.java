@@ -1,8 +1,8 @@
-package slimeknights.mantle.data.loadable.primitive;
+package modernmods.mantle.data.loadable.primitive;
 
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.util.typed.TypedMap;
 
 /**
  * Implementation of a loadable for a string. Access through {@link StringLoadable#maxLength(int)}.

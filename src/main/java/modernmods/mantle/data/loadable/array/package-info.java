@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package slimeknights.mantle.data.loadable.array;
+package modernmods.mantle.data.loadable.array;
 
 import javax.annotation.ParametersAreNonnullByDefault;

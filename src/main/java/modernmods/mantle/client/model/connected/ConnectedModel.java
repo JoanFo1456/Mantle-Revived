@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model.connected;
+package modernmods.mantle.client.model.connected;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -15,9 +15,9 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.DelegateUnbakedModel;
 import net.neoforged.neoforge.client.model.UnbakedModelLoader;
-import slimeknights.mantle.client.model.util.ColoredBlockModel;
-import slimeknights.mantle.client.model.util.ModelTextureIteratable;
-import slimeknights.mantle.client.model.util.SimpleBlockModel;
+import modernmods.mantle.client.model.util.ColoredBlockModel;
+import modernmods.mantle.client.model.util.ModelTextureIteratable;
+import modernmods.mantle.client.model.util.SimpleBlockModel;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -36,7 +36,7 @@ import java.util.function.Function;
  * mutable {@code BlockElement} representation were removed. This class preserves the deserialization, the connection
  * registry hookup, and the pure connection bit math, delegating static geometry to the wrapped model. To connect textures
  * dynamically, register a {@code CustomUnbakedBlockStateModel} whose baked model extends
- * {@link slimeknights.mantle.client.model.util.DynamicBakedWrapper} and, from the connection bits in the block's
+ * {@link modernmods.mantle.client.model.util.DynamicBakedWrapper} and, from the connection bits in the block's
  * {@code ModelData}, selects the pre-baked connected variant. The per-connection re-bake plus the blockstate JSON wiring
  * must be validated visually in-game.
  */

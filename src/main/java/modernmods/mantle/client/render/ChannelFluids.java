@@ -1,11 +1,11 @@
-package slimeknights.mantle.client.render;
+package modernmods.mantle.client.render;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.datamap.RegistryDataMapLoader;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.datamap.RegistryDataMapLoader;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
 
 /** Data class for rendering the fluids in a casting channel */
 public record ChannelFluids(FluidCuboid down, Center center, Side side) {

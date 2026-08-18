@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.texture;
+package modernmods.mantle.fluid.texture;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
@@ -12,9 +12,9 @@ import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.minecraft.core.Registry;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.listener.IEarlySafeManagerReloadListener;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.listener.IEarlySafeManagerReloadListener;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.util.Collections;

@@ -1,8 +1,8 @@
-package slimeknights.mantle.registration.adapter;
+package modernmods.mantle.registration.adapter;
 
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.core.Registry;
-import slimeknights.mantle.registration.object.EnumObject;
+import modernmods.mantle.registration.object.EnumObject;
 
 import java.util.function.Function;
 

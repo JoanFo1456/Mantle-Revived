@@ -1,4 +1,4 @@
-package slimeknights.mantle.data;
+package modernmods.mantle.data;
 
 import com.google.common.hash.Hashing;
 import com.google.common.hash.HashingOutputStream;
@@ -16,8 +16,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;

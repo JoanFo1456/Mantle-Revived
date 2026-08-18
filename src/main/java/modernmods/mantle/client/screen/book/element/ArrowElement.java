@@ -1,10 +1,10 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.input.KeyEvent;
-import slimeknights.mantle.client.screen.book.ArrowButton;
+import modernmods.mantle.client.screen.book.ArrowButton;
 
 public class ArrowElement extends ButtonElement {
 

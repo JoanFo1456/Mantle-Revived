@@ -1,11 +1,11 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import slimeknights.mantle.client.book.data.element.TextData;
+import modernmods.mantle.client.book.data.element.TextData;
 
-/** Element within a {@link slimeknights.mantle.client.book.data.content.ContentListing} */
+/** Element within a {@link modernmods.mantle.client.book.data.content.ContentListing} */
 public class ListingLeftElement extends TextElement {
   private final boolean isClickable;
   private final int textStart;

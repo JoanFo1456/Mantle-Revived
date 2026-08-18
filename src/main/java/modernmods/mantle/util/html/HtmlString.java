@@ -1,4 +1,4 @@
-package slimeknights.mantle.util.html;
+package modernmods.mantle.util.html;
 
 /** Contains a literal string in HTML text */
 public record HtmlString(String value) implements HtmlSerializable {

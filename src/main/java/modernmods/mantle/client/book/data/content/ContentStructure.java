@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book.data.content;
+package modernmods.mantle.client.book.data.content;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
@@ -10,17 +10,17 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.element.TextData;
-import slimeknights.mantle.client.book.repository.BookRepository;
-import slimeknights.mantle.client.screen.book.ArrowButton;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.client.screen.book.element.AnimationToggleElement;
-import slimeknights.mantle.client.screen.book.element.BookElement;
-import slimeknights.mantle.client.screen.book.element.StructureElement;
-import slimeknights.mantle.client.screen.book.element.TextElement;
-import slimeknights.mantle.util.html.HtmlElement;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.element.TextData;
+import modernmods.mantle.client.book.repository.BookRepository;
+import modernmods.mantle.client.screen.book.ArrowButton;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.element.AnimationToggleElement;
+import modernmods.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.client.screen.book.element.StructureElement;
+import modernmods.mantle.client.screen.book.element.TextElement;
+import modernmods.mantle.util.html.HtmlElement;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

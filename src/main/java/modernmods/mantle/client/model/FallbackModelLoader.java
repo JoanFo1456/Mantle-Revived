@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model;
+package modernmods.mantle.client.model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;

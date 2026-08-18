@@ -1,16 +1,16 @@
-package slimeknights.mantle.recipe.crafting;
+package modernmods.mantle.recipe.crafting;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import slimeknights.mantle.recipe.data.FinishedRecipe;
+import modernmods.mantle.recipe.data.FinishedRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import slimeknights.mantle.recipe.MantleRecipes;
-import slimeknights.mantle.recipe.data.VanillaFinishedRecipe;
+import modernmods.mantle.recipe.MantleRecipes;
+import modernmods.mantle.recipe.data.VanillaFinishedRecipe;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

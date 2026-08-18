@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.google.common.collect.Maps;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -11,9 +11,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.tags.TagLoader;
-import slimeknights.mantle.command.argument.TagSource;
-import slimeknights.mantle.command.argument.TagSourceArgument;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.command.argument.TagSource;
+import modernmods.mantle.command.argument.TagSourceArgument;
+import modernmods.mantle.util.JsonHelper;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 
 /**
  * Dumps all tags to a folder.
- * TODO 1.21: move to {@link slimeknights.mantle.command.tags}.
+ * TODO 1.21: move to {@link modernmods.mantle.command.tags}.
  */
 public class DumpAllTagsCommand {
   private static final String TAG_DUMP_PATH = "./mantle_data_dump";

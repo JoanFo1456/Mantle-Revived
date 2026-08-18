@@ -1,4 +1,4 @@
-package slimeknights.mantle.registration.adapter;
+package modernmods.mantle.registration.adapter;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
@@ -25,25 +25,25 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.minecraft.core.Registry;
-import slimeknights.mantle.block.MantleCeilingHangingSignBlock;
-import slimeknights.mantle.block.MantleStandingSignBlock;
-import slimeknights.mantle.block.MantleWallHangingSignBlock;
-import slimeknights.mantle.block.MantleWallSignBlock;
-import slimeknights.mantle.block.StrippableLogBlock;
-import slimeknights.mantle.block.entity.MantleHangingSignBlockEntity;
-import slimeknights.mantle.block.entity.MantleSignBlockEntity;
-import slimeknights.mantle.registration.RegistrationHelper;
-import slimeknights.mantle.registration.deferred.FluidDeferredRegister;
-import slimeknights.mantle.registration.object.BuildingBlockObject;
-import slimeknights.mantle.registration.object.FenceBuildingBlockObject;
-import slimeknights.mantle.registration.object.WallBuildingBlockObject;
-import slimeknights.mantle.registration.object.WoodBlockObject;
-import slimeknights.mantle.registration.object.WoodBlockObject.WoodVariant;
+import modernmods.mantle.block.MantleCeilingHangingSignBlock;
+import modernmods.mantle.block.MantleStandingSignBlock;
+import modernmods.mantle.block.MantleWallHangingSignBlock;
+import modernmods.mantle.block.MantleWallSignBlock;
+import modernmods.mantle.block.StrippableLogBlock;
+import modernmods.mantle.block.entity.MantleHangingSignBlockEntity;
+import modernmods.mantle.block.entity.MantleSignBlockEntity;
+import modernmods.mantle.registration.RegistrationHelper;
+import modernmods.mantle.registration.deferred.FluidDeferredRegister;
+import modernmods.mantle.registration.object.BuildingBlockObject;
+import modernmods.mantle.registration.object.FenceBuildingBlockObject;
+import modernmods.mantle.registration.object.WallBuildingBlockObject;
+import modernmods.mantle.registration.object.WoodBlockObject;
+import modernmods.mantle.registration.object.WoodBlockObject.WoodVariant;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static slimeknights.mantle.util.RegistryHelper.getHolder;
+import static modernmods.mantle.util.RegistryHelper.getHolder;
 
 /**
  * Provides utility registration methods when registering blocks.

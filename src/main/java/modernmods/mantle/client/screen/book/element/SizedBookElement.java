@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 public abstract class SizedBookElement extends BookElement {
 
@@ -17,7 +17,7 @@ public abstract class SizedBookElement extends BookElement {
 
   /**
    * Changes the scale of this element.
-   * Used notably by {@link slimeknights.mantle.client.book.data.content.ContentPageIconList}
+   * Used notably by {@link modernmods.mantle.client.book.data.content.ContentPageIconList}
    */
   public void scale(float scale) {
     this.width = (int) (this.width * scale);

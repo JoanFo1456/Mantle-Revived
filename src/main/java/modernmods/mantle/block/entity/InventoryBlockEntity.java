@@ -1,4 +1,4 @@
-package slimeknights.mantle.block.entity;
+package modernmods.mantle.block.entity;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
@@ -23,7 +23,7 @@ import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import slimeknights.mantle.util.ItemStackList;
+import modernmods.mantle.util.ItemStackList;
 
 // Updated version of InventoryLogic in Mantle. Also contains a few bugfixes DOES NOT OVERRIDE createMenu
 public abstract class InventoryBlockEntity extends NameableBlockEntity implements Container, MenuProvider, Nameable {

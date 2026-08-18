@@ -1,4 +1,4 @@
-package slimeknights.mantle.command.tags;
+package modernmods.mantle.command.tags;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -12,13 +12,13 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagEntry;
 import net.minecraft.tags.TagFile;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.command.GeneratePackHelper;
-import slimeknights.mantle.command.MantleCommand;
-import slimeknights.mantle.command.argument.ResourceOrTagKeyArgument;
-import slimeknights.mantle.command.argument.TagSource;
-import slimeknights.mantle.command.argument.TagSourceArgument;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.command.GeneratePackHelper;
+import modernmods.mantle.command.MantleCommand;
+import modernmods.mantle.command.argument.ResourceOrTagKeyArgument;
+import modernmods.mantle.command.argument.TagSource;
+import modernmods.mantle.command.argument.TagSourceArgument;
+import modernmods.mantle.util.JsonHelper;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

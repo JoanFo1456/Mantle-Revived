@@ -1,4 +1,4 @@
-package slimeknights.mantle.block;
+package modernmods.mantle.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -19,8 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
-import slimeknights.mantle.block.entity.INameableMenuProvider;
-import slimeknights.mantle.inventory.BaseContainerMenu;
+import modernmods.mantle.block.entity.INameableMenuProvider;
+import modernmods.mantle.inventory.BaseContainerMenu;
 
 import javax.annotation.Nullable;
 

@@ -1,11 +1,11 @@
-package slimeknights.mantle.client.book.data.content;
+package modernmods.mantle.client.book.data.content;
 
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.book.data.BookLoadException;
-import slimeknights.mantle.client.book.data.element.TextData;
-import slimeknights.mantle.client.screen.book.BookScreen;
-import slimeknights.mantle.client.screen.book.element.BookElement;
-import slimeknights.mantle.client.screen.book.element.TextElement;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.book.data.BookLoadException;
+import modernmods.mantle.client.book.data.element.TextData;
+import modernmods.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.client.screen.book.element.TextElement;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

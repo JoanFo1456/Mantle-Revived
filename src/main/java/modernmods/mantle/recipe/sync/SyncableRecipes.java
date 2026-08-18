@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.sync;
+package modernmods.mantle.recipe.sync;
 
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -15,7 +15,7 @@ import java.util.Set;
  * integration, in-book recipe display, etc.) opt those types into this registry. On player join and
  * on {@code /reload}, Mantle collects every recipe of a registered type and ships it to the client,
  * where it is decoded into {@link ClientRecipeCache#getRecipeMap()} and can be queried through the
- * {@code RecipeMap} overloads on {@link slimeknights.mantle.recipe.helper.RecipeHelper}.
+ * {@code RecipeMap} overloads on {@link modernmods.mantle.recipe.helper.RecipeHelper}.
  * <p>
  * <b>This registry is empty by default.</b> Mantle deliberately does not sync any vanilla recipe type
  * (JEI and vanilla already provide those client-side, and syncing them would inflate the packet).

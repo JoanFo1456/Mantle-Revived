@@ -1,8 +1,8 @@
-package slimeknights.mantle.registration;
+package modernmods.mantle.registration;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import slimeknights.mantle.block.entity.MantleHangingSignBlockEntity;
-import slimeknights.mantle.block.entity.MantleSignBlockEntity;
+import modernmods.mantle.block.entity.MantleHangingSignBlockEntity;
+import modernmods.mantle.block.entity.MantleSignBlockEntity;
 
 /**
  * Various objects registered under Mantle

@@ -1,6 +1,6 @@
-package slimeknights.mantle.util.html;
+package modernmods.mantle.util.html;
 
-import slimeknights.mantle.data.loadable.common.ColorLoadable;
+import modernmods.mantle.data.loadable.common.ColorLoadable;
 
 import java.util.ArrayList;
 import java.util.Collections;

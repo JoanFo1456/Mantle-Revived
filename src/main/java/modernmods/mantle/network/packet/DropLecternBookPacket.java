@@ -1,4 +1,4 @@
-package slimeknights.mantle.network.packet;
+package modernmods.mantle.network.packet;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

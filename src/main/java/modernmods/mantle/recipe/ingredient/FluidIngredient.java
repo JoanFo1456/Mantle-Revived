@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.ingredient;
+package modernmods.mantle.recipe.ingredient;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,15 +11,15 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import slimeknights.mantle.data.loadable.IAmLoadable;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.common.FluidStackLoadable;
-import slimeknights.mantle.data.loadable.field.LegacyField;
-import slimeknights.mantle.data.loadable.mapping.EitherLoadable;
-import slimeknights.mantle.data.loadable.primitive.IntLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.data.loadable.IAmLoadable;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.common.FluidStackLoadable;
+import modernmods.mantle.data.loadable.field.LegacyField;
+import modernmods.mantle.data.loadable.mapping.EitherLoadable;
+import modernmods.mantle.data.loadable.primitive.IntLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.util.RegistryHelper;
 
 import java.util.Collections;
 import java.util.List;

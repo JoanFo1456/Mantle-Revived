@@ -1,7 +1,7 @@
-package slimeknights.mantle.client.book.data.content;
+package modernmods.mantle.client.book.data.content;
 
-import slimeknights.mantle.client.book.data.BookData;
-import slimeknights.mantle.client.screen.book.element.BookElement;
+import modernmods.mantle.client.book.data.BookData;
+import modernmods.mantle.client.screen.book.element.BookElement;
 
 import java.util.ArrayList;
 

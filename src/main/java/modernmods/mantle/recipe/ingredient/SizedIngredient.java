@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.ingredient;
+package modernmods.mantle.recipe.ingredient;
 
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
@@ -7,9 +7,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import slimeknights.mantle.data.loadable.common.IngredientLoadable;
-import slimeknights.mantle.data.loadable.primitive.IntLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.loadable.common.IngredientLoadable;
+import modernmods.mantle.data.loadable.primitive.IntLoadable;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -95,7 +95,7 @@ public class SizedIngredient implements Predicate<ItemStack> {
   public static SizedIngredient fromTag(TagKey<Item> tag, int amountNeeded) {
     // resolve the tag lazily: at datagen time (and during pre-reload decode) item tags are not bound yet, so an eager
     // getOrThrow(tag) throws "Missing tag". LazyTagIngredient defers the lookup until the ingredient is actually used.
-    return of(slimeknights.mantle.data.loadable.common.LazyTagIngredient.of(tag), amountNeeded);
+    return of(modernmods.mantle.data.loadable.common.LazyTagIngredient.of(tag), amountNeeded);
   }
 
   /**
@@ -133,13 +133,13 @@ public class SizedIngredient implements Predicate<ItemStack> {
                      .collect(Collectors.toList());
   }
 
-  /** use {@link #LOADABLE} with {@link slimeknights.mantle.data.loadable.Loadable#encode(FriendlyByteBuf, Object)} */
+  /** use {@link #LOADABLE} with {@link modernmods.mantle.data.loadable.Loadable#encode(FriendlyByteBuf, Object)} */
   @Deprecated(forRemoval = true)
   public void write(FriendlyByteBuf buffer) {
     LOADABLE.encode(buffer, this);
   }
 
-  /** @deprecated use {@link #LOADABLE} with {@link slimeknights.mantle.data.loadable.Loadable#serialize(Object)} or {@link RecordLoadable#serialize(Object, JsonObject)} */
+  /** @deprecated use {@link #LOADABLE} with {@link modernmods.mantle.data.loadable.Loadable#serialize(Object)} or {@link RecordLoadable#serialize(Object, JsonObject)} */
   @Deprecated(forRemoval = true)
   public JsonObject serialize() {
     JsonObject json = new JsonObject();
@@ -147,7 +147,7 @@ public class SizedIngredient implements Predicate<ItemStack> {
     return json;
   }
 
-  /** @deprecated use {@link #LOADABLE} with {@link slimeknights.mantle.data.loadable.Loadable#decode(FriendlyByteBuf)}  */
+  /** @deprecated use {@link #LOADABLE} with {@link modernmods.mantle.data.loadable.Loadable#decode(FriendlyByteBuf)}  */
   @Deprecated(forRemoval = true)
   public static SizedIngredient read(FriendlyByteBuf buffer) {
     return LOADABLE.decode(buffer);

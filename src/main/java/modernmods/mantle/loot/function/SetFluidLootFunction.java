@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot.function;
+package modernmods.mantle.loot.function;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -16,7 +16,7 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
-import slimeknights.mantle.loot.MantleLoot;
+import modernmods.mantle.loot.MantleLoot;
 
 import java.util.List;
 

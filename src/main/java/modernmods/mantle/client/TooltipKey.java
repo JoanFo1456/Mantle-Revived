@@ -1,4 +1,4 @@
-package slimeknights.mantle.client;
+package modernmods.mantle.client;
 
 /** Options for which tooltip is being used on an item */
 public enum TooltipKey {

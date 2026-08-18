@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.screen.book.element;
+package modernmods.mantle.client.screen.book.element;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -15,7 +15,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.FontContext;
 import org.joml.Vector2i;
-import slimeknights.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.screen.book.BookScreen;
 
 import java.util.List;
 import java.util.stream.Stream;

@@ -1,4 +1,4 @@
-package slimeknights.mantle;
+package modernmods.mantle;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.component.DataComponents;
@@ -17,7 +17,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import slimeknights.mantle.datagen.MantleTags;
+import modernmods.mantle.datagen.MantleTags;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

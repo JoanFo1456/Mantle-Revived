@@ -1,4 +1,4 @@
-package slimeknights.mantle.util;
+package modernmods.mantle.util;
 
 import java.lang.ref.WeakReference;
 import java.util.function.Consumer;

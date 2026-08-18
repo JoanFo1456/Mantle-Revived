@@ -1,10 +1,10 @@
-package slimeknights.mantle.data.loadable.record;
+package modernmods.mantle.data.loadable.record;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Function15;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.data.loadable.field.RecordField;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.field.RecordField;
+import modernmods.mantle.util.typed.TypedMap;
 
 /** Record loadable with 14 fields plus the loader itself */
 @SuppressWarnings("DuplicatedCode")

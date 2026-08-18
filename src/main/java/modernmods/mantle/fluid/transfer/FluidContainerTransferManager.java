@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.transfer;
+package modernmods.mantle.fluid.transfer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,9 +26,9 @@ import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.fluids.FluidStack;
-import slimeknights.mantle.data.gson.GenericRegisteredSerializer;
-import slimeknights.mantle.network.MantleNetwork;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.data.gson.GenericRegisteredSerializer;
+import modernmods.mantle.network.MantleNetwork;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -89,7 +89,7 @@ public class FluidContainerTransferManager extends SimpleJsonResourceReloadListe
   /** For internal use only */
   public void init() {
     NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, AddServerReloadListenersEvent.class, e -> {
-      e.addListener(slimeknights.mantle.Mantle.getResource(FOLDER.replace('/', '_')), this);
+      e.addListener(modernmods.mantle.Mantle.getResource(FOLDER.replace('/', '_')), this);
       this.context = e.getConditionContext();
     });
     NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, OnDatapackSyncEvent.class, e -> JsonHelper.syncPackets(e, MantleNetwork.INSTANCE, new FluidContainerTransferPacket(this.getContainerItems())));
@@ -99,7 +99,7 @@ public class FluidContainerTransferManager extends SimpleJsonResourceReloadListe
   @Nullable
   private IFluidContainerTransfer loadFluidTransfer(Identifier key, JsonObject json) {
     try {
-      if (!json.has("conditions") || slimeknights.mantle.recipe.condition.ConditionHelper.processConditions(GsonHelper.getAsJsonArray(json, "conditions"), context)) {
+      if (!json.has("conditions") || modernmods.mantle.recipe.condition.ConditionHelper.processConditions(GsonHelper.getAsJsonArray(json, "conditions"), context)) {
         return GSON.fromJson(json, IFluidContainerTransfer.class);
       }
     } catch (JsonSyntaxException e) {

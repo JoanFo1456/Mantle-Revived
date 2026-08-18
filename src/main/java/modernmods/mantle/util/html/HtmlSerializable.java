@@ -1,4 +1,4 @@
-package slimeknights.mantle.util.html;
+package modernmods.mantle.util.html;
 
 /** Common interface for HTML elements. */
 public interface HtmlSerializable {

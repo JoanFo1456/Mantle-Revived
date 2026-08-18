@@ -1,14 +1,14 @@
-package slimeknights.mantle.data.predicate.fluid;
+package modernmods.mantle.data.predicate.fluid;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
-import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.loadable.record.SingletonLoader;
-import slimeknights.mantle.data.predicate.IJsonPredicate;
-import slimeknights.mantle.data.predicate.RegistryPredicateRegistry;
-import slimeknights.mantle.util.RegistryHelper;
+import modernmods.mantle.data.loadable.Loadables;
+import modernmods.mantle.data.loadable.record.RecordLoadable;
+import modernmods.mantle.data.loadable.record.SingletonLoader;
+import modernmods.mantle.data.predicate.IJsonPredicate;
+import modernmods.mantle.data.predicate.RegistryPredicateRegistry;
+import modernmods.mantle.util.RegistryHelper;
 
 import java.util.List;
 import java.util.function.Function;
@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 /**
  * Size and data independent way to condition on fluids.
  * Allows for more advance combinations than standard ingredients at the cost of being unable to list values.
- * @see slimeknights.mantle.recipe.ingredient.FluidIngredient
+ * @see modernmods.mantle.recipe.ingredient.FluidIngredient
  */
 public interface FluidPredicate extends IJsonPredicate<Fluid> {
   /** Predicate that matches all fluids */

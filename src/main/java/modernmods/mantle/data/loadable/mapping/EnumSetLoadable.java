@@ -1,9 +1,9 @@
-package slimeknights.mantle.data.loadable.mapping;
+package modernmods.mantle.data.loadable.mapping;
 
 import com.google.gson.JsonElement;
-import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
-import slimeknights.mantle.util.typed.TypedMap;
+import modernmods.mantle.data.loadable.Loadable;
+import modernmods.mantle.data.loadable.primitive.EnumLoadable;
+import modernmods.mantle.util.typed.TypedMap;
 
 import java.util.Collection;
 import java.util.Collections;

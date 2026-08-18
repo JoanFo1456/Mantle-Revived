@@ -1,15 +1,15 @@
-package slimeknights.mantle.client.model.builder;
+package modernmods.mantle.client.model.builder;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.model.util.MantleItemLayerModel.LayerData;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.model.util.MantleItemLayerModel.LayerData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** Builder for {@link slimeknights.mantle.client.model.util.MantleItemLayerModel} */
+/** Builder for {@link modernmods.mantle.client.model.util.MantleItemLayerModel} */
 @SuppressWarnings("unused")  // API
 public class MantleItemLayerBuilder extends CustomLoaderBuilder {
   private final List<LayerData> layers = new ArrayList<>();

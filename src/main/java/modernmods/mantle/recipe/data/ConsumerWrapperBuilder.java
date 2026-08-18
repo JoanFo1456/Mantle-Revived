@@ -1,4 +1,4 @@
-package slimeknights.mantle.recipe.data;
+package modernmods.mantle.recipe.data;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.gson.JsonArray;
@@ -124,7 +124,7 @@ public class ConsumerWrapperBuilder {
       if (!conditions.isEmpty()) {
         JsonArray conditionsArray = new JsonArray();
         for (ICondition condition : conditions) {
-          conditionsArray.add(slimeknights.mantle.recipe.condition.ConditionHelper.serialize(condition));
+          conditionsArray.add(modernmods.mantle.recipe.condition.ConditionHelper.serialize(condition));
         }
         json.add("neoforge:conditions", conditionsArray);
       }

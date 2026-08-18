@@ -1,4 +1,4 @@
-package slimeknights.mantle.block.fluid;
+package modernmods.mantle.block.fluid;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
-import slimeknights.mantle.registration.deferred.FluidDeferredRegister;
+import modernmods.mantle.registration.deferred.FluidDeferredRegister;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

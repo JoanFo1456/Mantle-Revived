@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid;
+package modernmods.mantle.fluid;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
-import slimeknights.mantle.registration.FluidBuilder;
+import modernmods.mantle.registration.FluidBuilder;
 
 import java.util.function.Supplier;
 

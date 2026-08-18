@@ -1,4 +1,4 @@
-package slimeknights.mantle.loot.condition;
+package modernmods.mantle.loot.condition;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -9,7 +9,7 @@ import com.google.gson.JsonSerializationContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.Mantle;
+import modernmods.mantle.Mantle;
 
 import java.lang.reflect.Type;
 import java.util.List;

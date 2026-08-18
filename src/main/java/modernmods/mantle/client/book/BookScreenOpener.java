@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.book;
+package modernmods.mantle.client.book;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -6,9 +6,9 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 
 /**
- * This interface allows calling methods from {@link slimeknights.mantle.client.book.data.BookData} without class loading client classes.
+ * This interface allows calling methods from {@link modernmods.mantle.client.book.data.BookData} without class loading client classes.
  * Thus, despite being in the client package, this is safe to use on the serverside.
- * @apiNote This interface should not be implemented, just use {@link slimeknights.mantle.client.book.data.BookData}
+ * @apiNote This interface should not be implemented, just use {@link modernmods.mantle.client.book.data.BookData}
  */
 @NonExtendable
 public interface BookScreenOpener {

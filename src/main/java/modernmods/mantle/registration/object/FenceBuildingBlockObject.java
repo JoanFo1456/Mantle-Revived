@@ -1,9 +1,9 @@
-package slimeknights.mantle.registration.object;
+package modernmods.mantle.registration.object;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceBlock;
-import slimeknights.mantle.registration.RegistrationHelper;
+import modernmods.mantle.registration.RegistrationHelper;
 
 import java.util.List;
 import java.util.Objects;

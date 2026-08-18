@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.model;
+package modernmods.mantle.client.model;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -13,8 +13,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.math.NumberUtils;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.client.model.util.ModelHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.client.model.util.ModelHelper;
 
 import java.awt.Color;
 import java.util.function.ToIntFunction;

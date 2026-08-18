@@ -1,8 +1,8 @@
-package slimeknights.mantle.client.book.action;
+package modernmods.mantle.client.book.action;
 
 import net.minecraft.resources.Identifier;
-import slimeknights.mantle.client.book.action.protocol.ActionProtocol;
-import slimeknights.mantle.client.screen.book.BookScreen;
+import modernmods.mantle.client.book.action.protocol.ActionProtocol;
+import modernmods.mantle.client.screen.book.BookScreen;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

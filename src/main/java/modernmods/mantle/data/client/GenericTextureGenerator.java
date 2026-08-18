@@ -1,4 +1,4 @@
-package slimeknights.mantle.data.client;
+package modernmods.mantle.data.client;
 
 import com.google.common.hash.Hashing;
 import com.google.gson.JsonObject;
@@ -12,8 +12,8 @@ import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.data.GenericDataProvider;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.data.GenericDataProvider;
 
 import javax.annotation.Nullable;
 import java.io.IOException;

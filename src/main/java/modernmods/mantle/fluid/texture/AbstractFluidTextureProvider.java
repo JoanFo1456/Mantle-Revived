@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid.texture;
+package modernmods.mantle.fluid.texture;
 
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
@@ -7,9 +7,9 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.minecraft.core.Registry;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import slimeknights.mantle.data.GenericDataProvider;
-import slimeknights.mantle.registration.object.FluidObject;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.data.GenericDataProvider;
+import modernmods.mantle.registration.object.FluidObject;
+import modernmods.mantle.util.JsonHelper;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

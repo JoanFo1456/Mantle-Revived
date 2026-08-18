@@ -1,4 +1,4 @@
-package slimeknights.mantle.command;
+package modernmods.mantle.command;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,8 +16,8 @@ import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.neoforge.common.conditions.NeverCondition;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.fml.ModList;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.util.JsonHelper;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.util.JsonHelper;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -73,7 +73,7 @@ public class GeneratePackHelper {
   /** Saves a JSON that removes the given resource using forge conditions */
   public static boolean saveConditionRemove(Path path, String conditionKey) {
     JsonObject json = new JsonObject();
-    json.add(conditionKey, slimeknights.mantle.recipe.condition.ConditionHelper.serialize(new ICondition[]{NeverCondition.INSTANCE}));
+    json.add(conditionKey, modernmods.mantle.recipe.condition.ConditionHelper.serialize(new ICondition[]{NeverCondition.INSTANCE}));
     return saveJson(json, path);
   }
 

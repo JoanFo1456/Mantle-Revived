@@ -1,4 +1,4 @@
-package slimeknights.mantle.mixin;
+package modernmods.mantle.mixin;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import slimeknights.mantle.registration.RegistrationIdContext;
+import modernmods.mantle.registration.RegistrationIdContext;
 
 /**
  * As of Minecraft 26.1, {@link Item.Properties} carries a mandatory registry id that the item constructor dereferences
