@@ -1,4 +1,4 @@
-package slimeknights.mantle.fluid;
+package modernmods.mantle.fluid;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -30,15 +30,15 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
-import slimeknights.mantle.Mantle;
-import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
-import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer;
-import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
-import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferResult;
+import modernmods.mantle.Mantle;
+import modernmods.mantle.fluid.transfer.FluidContainerTransferManager;
+import modernmods.mantle.fluid.transfer.IFluidContainerTransfer;
+import modernmods.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
+import modernmods.mantle.fluid.transfer.IFluidContainerTransfer.TransferResult;
 
 import javax.annotation.Nullable;
 
-import static slimeknights.mantle.util.TranslationHelper.COMMA_FORMAT;
+import static modernmods.mantle.util.TranslationHelper.COMMA_FORMAT;
 
 /**
  * Alternative to {@link net.neoforged.neoforge.fluids.FluidUtil} since no one has time to make the forge util not a buggy mess.
@@ -186,6 +186,21 @@ public class FluidTransferHelper {
     int insertable;
     try (Transaction tx = Transaction.openRoot()) {
       insertable = output.insert(resource, extractable, tx);
+    }
+    // All-or-nothing containers (a vanilla bucket must end up at exactly one bucket) REJECT an over-capacity insert amount
+    // instead of clamping it, so filling a bucket from a tank that holds more than a bucket fails the insert above. Retry
+    // offering only the output's free capacity. (Tinkers' own tank items accept partial fills, which is why those worked.)
+    if (insertable <= 0) {
+      long freeSpace = 0;
+      for (int i = 0; i < output.size(); i++) {
+        freeSpace += Math.max(0, output.getCapacityAsLong(i, resource) - output.getAmountAsLong(i));
+      }
+      int offer = (int) Math.min(freeSpace, extractable);
+      if (offer > 0 && offer < extractable) {
+        try (Transaction tx = Transaction.openRoot()) {
+          insertable = output.insert(resource, offer, tx);
+        }
+      }
     }
     if (insertable <= 0) {
       return FluidStack.EMPTY;
