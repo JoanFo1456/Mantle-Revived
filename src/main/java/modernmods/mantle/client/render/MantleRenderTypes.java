@@ -1,16 +1,8 @@
-package slimeknights.mantle.client.render;
+package modernmods.mantle.client.render;
 
-import com.mojang.blaze3d.pipeline.BlendFunction;
-import com.mojang.blaze3d.pipeline.ColorTargetState;
-import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.rendertype.OutputTarget;
-import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import slimeknights.mantle.Mantle;
 
 import java.util.function.Consumer;
 
@@ -18,35 +10,23 @@ import java.util.function.Consumer;
  * Class for render types defined by Mantle.
  * <p>
  * The 1.21.4+ render engine rewrite replaced the {@code RenderStateShard}/{@code CompositeState}/{@code ShaderInstance}
- * system with {@link RenderPipeline}s (see {@link RenderPipelines}) and {@link RenderType#create(String, RenderSetup)}.
- * Custom render types are now built from a pipeline plus a {@link RenderSetup} describing the bound textures/targets.
+ * system with render pipelines and {@code RenderType.create}. Mantle no longer defines a bespoke fluid pipeline: shader
+ * mods (Iris/Oculus, Euphoria Patches) only render types whose pipeline they recognise, so custom pipelines are dropped
+ * under shaders. Both render types below use vanilla block pipelines that shaders map to their gbuffers programs.
  */
 public class MantleRenderTypes {
   private MantleRenderTypes() {}
 
   /**
-   * Pipeline for the fluid renderer: reuses the vanilla translucent block shader ({@link RenderPipelines#BLOCK_SNIPPET})
-   * with backface culling disabled, so both faces of a fluid cuboid render (needed for gasses and inner tank faces).
+   * Render type used for the fluid renderer (tanks, smeltery, faucet/casting streams).
+   * <p>
+   * Uses the vanilla {@link RenderTypes#translucentMovingBlock()} type rather than a bespoke {@code mantle:pipeline/fluid}
+   * pipeline. A custom pipeline isn't mapped by shader mods, so under shaders the fluid quads were dropped entirely and
+   * molten metal / lava / poured fluids became invisible (they render fine without shaders); this vanilla block pipeline IS
+   * recognised. The trade-off is that it culls back faces (the old pipeline disabled culling), so
+   * {@link FluidRenderer#putTexturedQuad} emits a mirrored copy of each face to keep the no-cull appearance.
    */
-  public static final RenderPipeline FLUID_PIPELINE = RenderPipeline.builder(RenderPipelines.BLOCK_SNIPPET)
-    .withLocation(Mantle.getResource("pipeline/fluid"))
-    .withShaderDefine("ALPHA_CUTOUT", 0.01F)
-    .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
-    .withDepthStencilState(DepthStencilState.DEFAULT)
-    .withCull(false)
-    .build();
-
-  /** Render type used for the fluid renderer; block atlas, lightmap, translucent, no culling. */
-  public static final RenderType FLUID = RenderType.create("mantle:fluid", RenderSetup.builder(FLUID_PIPELINE)
-    .useLightmap()
-    .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS)
-    .affectsCrumbling()
-    .sortOnUpload()
-    // MAIN_TARGET: the fluid renderer runs in block entity renderers (tanks, smeltery), which draw to the world's main
-    // framebuffer. ITEM_ENTITY_TARGET (used before) is the dropped-item pass, so the fluid quads were composited there and
-    // never appeared in the tank/smeltery.
-    .setOutputTarget(OutputTarget.MAIN_TARGET)
-    .createRenderSetup());
+  public static final RenderType FLUID = RenderTypes.translucentMovingBlock();
 
   /**
    * Render type used for the structure renderer. Historically this used Mantle's block full-bright core shader to force
@@ -57,9 +37,9 @@ public class MantleRenderTypes {
 
   /**
    * Registers Mantle's custom render pipelines so their shaders are compiled. Call from
-   * {@code RegisterRenderPipelinesEvent}.
+   * {@code RegisterRenderPipelinesEvent}. Mantle no longer defines any custom pipelines, so this is a no-op kept for the
+   * existing event wiring.
    */
   public static void registerPipelines(Consumer<RenderPipeline> registrar) {
-    registrar.accept(FLUID_PIPELINE);
   }
 }

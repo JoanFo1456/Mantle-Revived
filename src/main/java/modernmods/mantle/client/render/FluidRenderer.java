@@ -1,4 +1,4 @@
-package slimeknights.mantle.client.render;
+package modernmods.mantle.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -16,7 +16,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import slimeknights.mantle.client.render.FluidCuboid.FluidFace;
+import modernmods.mantle.client.render.FluidCuboid.FluidFace;
 
 import java.util.List;
 
@@ -203,43 +203,27 @@ public class FluidRenderer {
     int r = color >> 16 & 0xFF;
     int g = color >> 8 & 0xFF;
     int b = color & 0xFF;
-    switch (face) {
-      case DOWN -> {
-        putVertex(renderer, matrix, face, x1, y1, z2, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, face, x1, y1, z1, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, face, x2, y1, z1, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, face, x2, y1, z2, r, g, b, a, u4, v4, light1, light2);
-      }
-      case UP -> {
-        putVertex(renderer, matrix, face, x1, y2, z1, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, face, x1, y2, z2, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, face, x2, y2, z2, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, face, x2, y2, z1, r, g, b, a, u4, v4, light1, light2);
-      }
-      case NORTH -> {
-        putVertex(renderer, matrix, face, x1, y1, z1, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, face, x1, y2, z1, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, face, x2, y2, z1, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, face, x2, y1, z1, r, g, b, a, u4, v4, light1, light2);
-      }
-      case SOUTH -> {
-        putVertex(renderer, matrix, face, x2, y1, z2, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, face, x2, y2, z2, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, face, x1, y2, z2, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, face, x1, y1, z2, r, g, b, a, u4, v4, light1, light2);
-      }
-      case WEST -> {
-        putVertex(renderer, matrix, face, x1, y1, z2, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, face, x1, y2, z2, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, face, x1, y2, z1, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, face, x1, y1, z1, r, g, b, a, u4, v4, light1, light2);
-      }
-      case EAST -> {
-        putVertex(renderer, matrix, face, x2, y1, z1, r, g, b, a, u1, v1, light1, light2);
-        putVertex(renderer, matrix, face, x2, y2, z1, r, g, b, a, u2, v2, light1, light2);
-        putVertex(renderer, matrix, face, x2, y2, z2, r, g, b, a, u3, v3, light1, light2);
-        putVertex(renderer, matrix, face, x2, y1, z2, r, g, b, a, u4, v4, light1, light2);
-      }
+    // the four corner positions of this face (paired with the u1..u4/v1..v4 computed above)
+    float[][] pos = switch (face) {
+      case DOWN  -> new float[][]{{x1, y1, z2}, {x1, y1, z1}, {x2, y1, z1}, {x2, y1, z2}};
+      case UP    -> new float[][]{{x1, y2, z1}, {x1, y2, z2}, {x2, y2, z2}, {x2, y2, z1}};
+      case NORTH -> new float[][]{{x1, y1, z1}, {x1, y2, z1}, {x2, y2, z1}, {x2, y1, z1}};
+      case SOUTH -> new float[][]{{x2, y1, z2}, {x2, y2, z2}, {x1, y2, z2}, {x1, y1, z2}};
+      case WEST  -> new float[][]{{x1, y1, z2}, {x1, y2, z2}, {x1, y2, z1}, {x1, y1, z1}};
+      case EAST  -> new float[][]{{x2, y1, z1}, {x2, y2, z1}, {x2, y2, z2}, {x2, y1, z2}};
+    };
+    float[] us = {u1, u2, u3, u4};
+    float[] vs = {v1, v2, v3, v4};
+    // front face, wound for the face's own normal
+    for (int i = 0; i < 4; i++) {
+      putVertex(renderer, matrix, face, pos[i][0], pos[i][1], pos[i][2], r, g, b, a, us[i], vs[i], light1, light2);
+    }
+    // 26.1 fluid rendering now uses a vanilla (shader-visible) render type that culls back faces; the old bespoke pipeline
+    // disabled culling. Emit the mirrored quad (reversed winding + opposite normal) so each fluid face still shows from both
+    // sides (inside the tank, gasses), preserving the no-cull appearance.
+    Direction back = face.getOpposite();
+    for (int i = 3; i >= 0; i--) {
+      putVertex(renderer, matrix, back, pos[i][0], pos[i][1], pos[i][2], r, g, b, a, us[i], vs[i], light1, light2);
     }
   }
 
