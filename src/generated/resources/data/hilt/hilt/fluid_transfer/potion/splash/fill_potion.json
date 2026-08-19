@@ -1,0 +1,22 @@
+{
+  "type": "hilt:fill_nbt",
+  "conditions": [
+    {
+      "type": "hilt:tag_filled",
+      "registry": "minecraft:fluid",
+      "tag": "forge:potion"
+    },
+    {
+      "type": "hilt:tag_filled",
+      "tag": "forge:bottles/splash"
+    }
+  ],
+  "fluid": {
+    "amount": 250,
+    "tag": "forge:potion"
+  },
+  "input": {
+    "tag": "forge:bottles/splash"
+  },
+  "result": "minecraft:splash_potion"
+}

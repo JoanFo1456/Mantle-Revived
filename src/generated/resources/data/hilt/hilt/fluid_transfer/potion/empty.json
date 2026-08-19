@@ -1,0 +1,8 @@
+{
+  "type": "hilt:empty_potion",
+  "amount": 250,
+  "input": {
+    "item": "minecraft:potion"
+  },
+  "result": "minecraft:glass_bottle"
+}

@@ -1,0 +1,8 @@
+{
+  "units": [
+    {
+      "key": "gui.hilt.fluid.bucket",
+      "needed": 1000
+    }
+  ]
+}

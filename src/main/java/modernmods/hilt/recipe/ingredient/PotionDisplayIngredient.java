@@ -1,0 +1,80 @@
+package modernmods.hilt.recipe.ingredient;
+
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.crafting.IngredientType;
+import modernmods.hilt.data.loadable.record.RecordLoadable;
+import modernmods.hilt.recipe.HiltRecipes;
+import modernmods.hilt.recipe.helper.LoadableIngredientSerializer;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
+/** Ingredient that shows all potion variants on the displayed item list */
+public class PotionDisplayIngredient extends ItemIngredient {
+  /** Ingredient serializer instance */
+  public static final LoadableIngredientSerializer<PotionDisplayIngredient> SERIALIZER = new LoadableIngredientSerializer<>(RecordLoadable.create(ItemsField.INSTANCE, TAG_FIELD, PotionDisplayIngredient::new));
+
+  protected PotionDisplayIngredient(List<Item> items, @Nullable TagKey<Item> tag) {
+    super(items, tag);
+  }
+
+  /** Creates a ingredient matching a list of items */
+  public static Ingredient of(List<ItemLike> items) {
+    return new PotionDisplayIngredient(toItem(items), null).toVanilla();
+  }
+
+  /** Creates a ingredient matching a list of items */
+  public static Ingredient of(ItemLike... items) {
+    return of(List.of(items));
+  }
+
+  /** Creates a ingredient matching a tag */
+  public static Ingredient of(TagKey<Item> tag) {
+    return new PotionDisplayIngredient(List.of(), tag).toVanilla();
+  }
+
+  @Override
+  public boolean isSimple() {
+    return true;
+  }
+
+  /** Builds a display stack for the given item carrying the given potion */
+  private static ItemStack withPotion(Holder<Item> item, Potion potion) {
+    ItemStack stack = new ItemStack(item);
+    stack.set(DataComponents.POTION_CONTENTS, new PotionContents(BuiltInRegistries.POTION.wrapAsHolder(potion)));
+    return stack;
+  }
+
+  @Override
+  public SlotDisplay display() {
+    // show every non-water potion variant on each matched item
+    List<Holder<Item>> baseItems = items().toList();
+    List<SlotDisplay> displays = new ArrayList<>();
+    BuiltInRegistries.POTION.stream()
+                            .filter(potion -> potion != Potions.WATER.value())
+                            .forEach(potion -> {
+                              for (Holder<Item> item : baseItems) {
+                                displays.add(new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(withPotion(item, potion))));
+                              }
+                            });
+    return new SlotDisplay.Composite(displays);
+  }
+
+  @Override
+  public IngredientType<?> getType() {
+    return HiltRecipes.POTION_DISPLAY_INGREDIENT.get();
+  }
+}

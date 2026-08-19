@@ -1,0 +1,44 @@
+package modernmods.hilt.recipe.helper;
+
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import modernmods.hilt.Hilt;
+
+import java.lang.reflect.Method;
+import java.util.function.Function;
+
+/** Simple implementation of a recipe serializer with no properties other than recipe ID. */
+public record SimpleRecipeSerializer<T extends Recipe<?>>(Function<Identifier,T> constructor) {
+  /** Builds the actual recipe serializer record wrapping this instance's codecs. */
+  public RecipeSerializer<T> serializer() {
+    return new RecipeSerializer<>(codec(), streamCodec());
+  }
+
+  public MapCodec<T> codec() {
+    return RecordCodecBuilder.mapCodec(instance -> instance.group(
+      Identifier.CODEC.optionalFieldOf("id", Hilt.getResource("unknown_simple_recipe")).forGetter(SimpleRecipeSerializer::getRecipeId)
+    ).apply(instance, constructor));
+  }
+
+  public StreamCodec<RegistryFriendlyByteBuf,T> streamCodec() {
+    return StreamCodec.of((buffer, recipe) -> buffer.writeIdentifier(getRecipeId(recipe)), buffer -> constructor.apply(buffer.readIdentifier()));
+  }
+
+  /** Gets the recipe ID from legacy recipe classes for 1.21 recipe packets. */
+  private static Identifier getRecipeId(Recipe<?> recipe) {
+    try {
+      Method method = recipe.getClass().getMethod("getId");
+      if (method.invoke(recipe) instanceof Identifier id) {
+        return id;
+      }
+    } catch (ReflectiveOperationException e) {
+      return Hilt.getResource("unknown_simple_recipe");
+    }
+    return Hilt.getResource("unknown_simple_recipe");
+  }
+}

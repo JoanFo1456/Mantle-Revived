@@ -1,0 +1,36 @@
+package modernmods.hilt.client.model.builder;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
+import modernmods.hilt.Hilt;
+
+/** Builder for {@link modernmods.hilt.client.model.RetexturedModel} */
+public class RetexturedModelBuilder extends ColoredModelBuilder {
+  private final JsonArray retextured = new JsonArray();
+
+  public RetexturedModelBuilder() {
+    super(Hilt.getResource("retextured"));
+  }
+
+  /** Marks the given texture as retextured. Uses the texture name, not path. */
+  public RetexturedModelBuilder retexture(String name) {
+    this.retextured.add(name);
+    return this;
+  }
+
+  @Override
+  protected CustomLoaderBuilder copyInternal() {
+    RetexturedModelBuilder builder = new RetexturedModelBuilder();
+    copyColors(builder);
+    this.retextured.forEach(builder.retextured::add);
+    return builder;
+  }
+
+  @Override
+  public JsonObject toJson(JsonObject json) {
+    json = super.toJson(json);
+    json.add("retextured", retextured);
+    return json;
+  }
+}

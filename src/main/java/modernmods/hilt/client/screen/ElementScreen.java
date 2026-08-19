@@ -1,0 +1,62 @@
+package modernmods.hilt.client.screen;
+
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
+
+/**
+ * Represents a GUI element INSIDE the graphics file.
+ * The coordinates all refer to the coordinates inside the graphics!
+ */
+public class ElementScreen {
+  // TODO: can this be final?
+  public Identifier texture;
+  public final int x;
+  public final int y;
+  public final int w;
+  public final int h;
+
+  public final int texW;
+  public final int texH;
+
+  // explicit constructor: lombok @AllArgsConstructor was unreliable during the 26.1.2 port
+  public ElementScreen(Identifier texture, int x, int y, int w, int h, int texW, int texH) {
+    this.texture = texture;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.texW = texW;
+    this.texH = texH;
+  }
+
+  /** Creates a new element from this texture with the X, Y, width, and height */
+  public ElementScreen move(int x, int y, int width, int height) {
+    return new ElementScreen(this.texture, x, y, width, height, this.texW, this.texH);
+  }
+
+  /** Creates a new element by offsetting this element by the given amount */
+  public ElementScreen shift(int xd, int yd) {
+    return move(x + xd, y + yd, this.w, this.h);
+  }
+
+  /**
+   * Draws the element at the given x/y coordinates
+   *
+   * @param xPos X-Coordinate on the screen
+   * @param yPos Y-Coordinate on the screen
+   */
+  public void draw(GuiGraphicsExtractor graphics, int xPos, int yPos, int blitOffset) {
+    graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, xPos, yPos, this.x, this.y, this.w, this.h, this.texW, this.texH);
+  }
+
+  /**
+   * Draws the element at the given x/y coordinates
+   *
+   * @param xPos X-Coordinate on the screen
+   * @param yPos Y-Coordinate on the screen
+   */
+  public void draw(GuiGraphicsExtractor graphics, int xPos, int yPos) {
+    this.draw(graphics, xPos, yPos, 0);
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "hilt:fill_item",
+  "fluid": {
+    "amount": 250,
+    "tag": "hilt:water"
+  },
+  "input": {
+    "item": "minecraft:sponge"
+  },
+  "result": "minecraft:wet_sponge"
+}

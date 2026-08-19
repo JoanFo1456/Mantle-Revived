@@ -1,0 +1,17 @@
+{
+  "tag": "forge:honey",
+  "units": [
+    {
+      "key": "gui.hilt.fluid.bucket",
+      "needed": 1000
+    },
+    {
+      "key": "gui.hilt.fluid.bottle",
+      "needed": 250
+    },
+    {
+      "key": "gui.hilt.fluid.sip",
+      "needed": 50
+    }
+  ]
+}

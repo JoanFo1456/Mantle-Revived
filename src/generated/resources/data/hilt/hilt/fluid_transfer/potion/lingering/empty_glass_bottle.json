@@ -1,0 +1,17 @@
+{
+  "type": "hilt:empty_potion",
+  "amount": 250,
+  "conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "hilt:tag_filled",
+        "tag": "forge:bottles/lingering"
+      }
+    }
+  ],
+  "input": {
+    "item": "minecraft:lingering_potion"
+  },
+  "result": "minecraft:glass_bottle"
+}

@@ -1,0 +1,51 @@
+package modernmods.hilt.client.book.transformer;
+
+import net.minecraft.resources.Identifier;
+import modernmods.hilt.client.book.data.BookData;
+import modernmods.hilt.client.book.data.PageData;
+import modernmods.hilt.client.book.data.SectionData;
+import modernmods.hilt.client.book.data.content.PageContent;
+
+/** Transformer that locates a specific section to transform */
+public abstract class SectionTransformer extends BookTransformer {
+  /** Name of the section to transform */
+  protected final String sectionName;
+
+  // explicit constructor: lombok @RequiredArgsConstructor was unreliable during the 26.1.2 port
+  protected SectionTransformer(String sectionName) {
+    this.sectionName = sectionName;
+  }
+
+  @Override
+  public final void transform(BookData book) {
+    SectionData data = null;
+    for (SectionData section : book.sections) {
+      if (sectionName.equals(section.name)) {
+        data = section;
+        break;
+      }
+    }
+
+    if (data != null) {
+      transform(book, data);
+    }
+  }
+
+  /** Called when the section is found to apply the transformer */
+  public abstract void transform(BookData book, SectionData section);
+
+  /** Helper to add a page to the section */
+  protected PageData addPage(SectionData data, String name, Identifier type, PageContent content) {
+    PageData page = new PageData(true);
+    page.source = data.source;
+    page.parent = data;
+    page.name = name;
+    page.type = type;
+    page.content = content;
+    page.load();
+
+    data.pages.add(page);
+
+    return page;
+  }
+}

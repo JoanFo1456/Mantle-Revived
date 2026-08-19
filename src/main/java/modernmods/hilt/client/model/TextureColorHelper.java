@@ -1,0 +1,139 @@
+package modernmods.hilt.client.model;
+
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.SpriteContents;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.data.AtlasIds;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import org.apache.commons.lang3.math.NumberUtils;
+import modernmods.hilt.Hilt;
+import modernmods.hilt.client.model.util.ModelHelper;
+
+import java.awt.Color;
+import java.util.function.ToIntFunction;
+
+/** Helper for getting the average color of a texture */
+public class TextureColorHelper {
+  private TextureColorHelper() {}
+
+  /** Cache of the color of various textures */
+  private static final Object2IntMap<Identifier> SPRITE_CACHE = new Object2IntOpenHashMap<>();
+  /** Cache of the color of various textures */
+  private static final Object2IntMap<Item> ITEM_CACHE = new Object2IntOpenHashMap<>();
+  /** Cache of the color of various textures */
+  private static final Object2IntMap<Block> BLOCK_CACHE = new Object2IntOpenHashMap<>();
+  /** Reload listener for client utils */
+  public static final ResourceManagerReloadListener RELOAD_LISTENER = manager -> {
+    SPRITE_CACHE.clear();
+    ITEM_CACHE.clear();
+    BLOCK_CACHE.clear();
+  };
+
+  /** Gets the average color for a sprite, used internally by colorCache. Licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a> */
+  private static int computeAverageColor(TextureAtlasSprite sprite) {
+    float r = 0, g = 0, b = 0, count = 0;
+    float[] hsb = new float[3];
+    try {
+      SpriteContents contents = sprite.contents();
+      for (int x = 0; x < contents.width(); x++) {
+        for (int y = 0; y < contents.height(); y++) {
+          int argb = sprite.getPixelRGBA(0, x, y);
+          // integer is in format of 0xAABBGGRR
+          int cr = argb & 0xFF;
+          int cg = argb >> 8 & 0xFF;
+          int cb = argb >> 16 & 0xFF;
+          int ca = argb >> 24 & 0xFF;
+          if (ca > 0x7F && NumberUtils.max(cr, cg, cb) > 0x1F) {
+            Color.RGBtoHSB(ca, cr, cg, hsb);
+            float weight = hsb[1];
+            r += cr * weight;
+            g += cg * weight;
+            b += cb * weight;
+            count += weight;
+          }
+        }
+      }
+    } catch (Exception e) {
+      // there is a random bug where models do not properly load, leading to a null frame data
+      // so just catch that and treat it as another error state
+      Hilt.logger.error("Caught exception reading sprite for {}", sprite.contents().name(), e);
+      return -1;
+    }
+    if (count > 0) {
+      r /= count;
+      g /= count;
+      b /= count;
+    }
+    return 0xFF000000 | (int)r << 16 | (int)g << 8 | (int)b;
+  }
+
+  /** Getter mapping a block sprite texture to a single average color */
+  private static final ToIntFunction<Identifier> COMPUTE_SPRITE_COLOR = key -> {
+    Minecraft mc = Minecraft.getInstance();
+    // 26.1: AtlasManager.getAtlasOrThrow keys by atlas id (AtlasIds.BLOCKS = "minecraft:blocks"), not the atlas texture
+    // path (TextureAtlas.LOCATION_BLOCKS). Passing the texture path threw "Invalid atlas id" and crashed fog rendering
+    // when submerged in a mod fluid.
+    TextureAtlasSprite sprite = mc.getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(key);
+    //noinspection ConstantValue  eh, its better to be safe
+    if (sprite == null || sprite.contents().name() == MissingTextureAtlasSprite.getLocation()) {
+      return -1;
+    }
+    return getAverageColor(sprite);
+  };
+
+  /** Gets the color for the given texture */
+  public static int getAverageColor(Identifier texture) {
+    return SPRITE_CACHE.computeIfAbsent(texture, COMPUTE_SPRITE_COLOR);
+  }
+
+  /** Gets the color for the given sprite. Should be from the block atlas */
+  public static int getAverageColor(TextureAtlasSprite sprite) {
+    Identifier name = sprite.contents().name();
+    if (SPRITE_CACHE.containsKey(name)) {
+      return SPRITE_CACHE.get(name);
+    }
+    int color = computeAverageColor(sprite);
+    SPRITE_CACHE.put(name, color);
+    return color;
+  }
+
+
+  /* Particle textures */
+
+  /**
+   * Computes the color for an item based on the particle icon.
+   * item model particle access was reworked (BakedModel/getParticleIcon removed); falls back to -1.
+   */
+  private static final ToIntFunction<Item> COMPUTE_ITEM_COLOR = item -> {
+    if (item instanceof net.minecraft.world.item.BlockItem blockItem) {
+      return getBlockColor(blockItem.getBlock());
+    }
+    return -1;
+  };
+
+  /** Gets the average color of an item's default particle icon */
+  public static int getItemColor(ItemLike item) {
+    return ITEM_CACHE.computeIfAbsent(item.asItem(), COMPUTE_ITEM_COLOR);
+  }
+
+  /** Computes the color for a block based on its particle icon */
+  private static final ToIntFunction<Block> COMPUTE_BLOCK_COLOR = block -> {
+    Identifier particle = ModelHelper.getParticleTexture(block);
+    if (particle.equals(MissingTextureAtlasSprite.getLocation())) {
+      return -1;
+    }
+    return getAverageColor(particle);
+  };
+
+  /** Gets the average color of a blocks default particle icon */
+  public static int getBlockColor(Block block) {
+    return BLOCK_CACHE.computeIfAbsent(block, COMPUTE_BLOCK_COLOR);
+  }
+}

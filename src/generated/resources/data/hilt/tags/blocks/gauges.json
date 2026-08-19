@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#hilt:gauges/attached",
+      "required": false
+    },
+    {
+      "id": "#hilt:gauges/tank",
+      "required": false
+    }
+  ]
+}

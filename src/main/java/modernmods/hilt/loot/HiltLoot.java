@@ -1,0 +1,99 @@
+package modernmods.hilt.loot;
+
+import com.google.gson.JsonDeserializer;
+import com.mojang.serialization.MapCodec;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforge.registries.RegisterEvent;
+import modernmods.hilt.Hilt;
+import modernmods.hilt.loot.condition.BlockTagLootCondition;
+import modernmods.hilt.loot.condition.ContainsItemModifierLootCondition;
+import modernmods.hilt.loot.condition.EmptyModifierLootCondition;
+import modernmods.hilt.loot.condition.HasLootContextSetCondition;
+import modernmods.hilt.loot.condition.ILootModifierCondition;
+import modernmods.hilt.loot.condition.InvertedModifierLootCondition;
+import modernmods.hilt.loot.entry.TagPreferenceLootEntry;
+import modernmods.hilt.loot.function.RetexturedLootFunction;
+import modernmods.hilt.loot.function.SetFluidLootFunction;
+import modernmods.hilt.recipe.condition.TagCombinationCondition;
+import modernmods.hilt.recipe.condition.TagEmptyCondition;
+import modernmods.hilt.recipe.condition.TagFilledCondition;
+import modernmods.hilt.registration.adapter.RegistryAdapter;
+
+import java.util.Objects;
+
+import static modernmods.hilt.loot.condition.ILootModifierCondition.MODIFIER_CONDITIONS;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class HiltLoot {
+  /** Matches if the passed tag is empty */
+  public static MapCodec<? extends LootItemCondition> TAG_EMPTY;
+  /** Matches if the passed tag is filled */
+  public static MapCodec<? extends LootItemCondition> TAG_FILLED;
+  /** Condition to match a block tag and property predicate */
+  public static MapCodec<? extends LootItemCondition> BLOCK_TAG_CONDITION;
+  /** Condition for global loot modifiers that ensures a context set is present. Useful to check if we are in a specific context like entity. */
+  public static MapCodec<? extends LootItemCondition> HAS_CONTEXT_SET;
+  /** Function to add block entity texture to a dropped item */
+  public static MapCodec<RetexturedLootFunction> RETEXTURED_FUNCTION;
+  /** Function to add a fluid to an item fluid capability */
+  public static MapCodec<SetFluidLootFunction> SET_FLUID_FUNCTION;
+  /** Entry to pull a value from a tag preference */
+  public static MapCodec<? extends LootPoolEntryContainer> TAG_PREFERENCE;
+
+
+  /**
+   * Called during serializer registration to register any relevant loot logic
+   */
+  public static void registerGlobalLootModifiers(final RegisterEvent event) {
+    ResourceKey<?> key = event.getRegistryKey();
+
+    if (key == NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS) {
+      RegistryAdapter<MapCodec<? extends IGlobalLootModifier>> adapter = new RegistryAdapter<>(Objects.requireNonNull(event.getRegistry(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS)), Hilt.modId);
+      adapter.register(AddEntryLootModifier.CODEC, "add_entry");
+      adapter.register(ReplaceItemLootModifier.CODEC, "replace_item");
+
+      // loot modifier conditions
+      MODIFIER_CONDITIONS.registerDeserializer(InvertedModifierLootCondition.ID, (JsonDeserializer<? extends ILootModifierCondition>)InvertedModifierLootCondition::deserialize);
+      MODIFIER_CONDITIONS.registerDeserializer(EmptyModifierLootCondition.ID, EmptyModifierLootCondition.INSTANCE);
+      MODIFIER_CONDITIONS.registerDeserializer(ContainsItemModifierLootCondition.ID, (JsonDeserializer<? extends ILootModifierCondition>)ContainsItemModifierLootCondition::deserialize);
+    } else if (key == NeoForgeRegistries.Keys.CONDITION_CODECS) {
+      RegistryAdapter<MapCodec<? extends ICondition>> adapter = new RegistryAdapter<>(Objects.requireNonNull(event.getRegistry(NeoForgeRegistries.Keys.CONDITION_CODECS)), Hilt.modId);
+      adapter.register(TagCombinationCondition.CODEC, "tag_combination_filled");
+      adapter.register(TagEmptyCondition.CODEC, "tag_empty");
+      adapter.register(TagFilledCondition.CODEC, "tag_filled");
+    } else if (key == Registries.LOOT_FUNCTION_TYPE) {
+      RETEXTURED_FUNCTION = registerFunction("fill_retextured_block", RetexturedLootFunction.CODEC);
+      SET_FLUID_FUNCTION = registerFunction("set_fluid", SetFluidLootFunction.CODEC);
+
+    } else if (key == Registries.LOOT_CONDITION_TYPE) {
+      BLOCK_TAG_CONDITION = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, Hilt.getResource("block_tag"), BlockTagLootCondition.CODEC);
+      HAS_CONTEXT_SET = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, Hilt.getResource("has_context_set"), HasLootContextSetCondition.CODEC);
+      TAG_EMPTY = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, TagEmptyCondition.SERIALIZER.getID(), TagEmptyCondition.CODEC);
+      TAG_FILLED = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, TagFilledCondition.SERIALIZER.getID(), TagFilledCondition.CODEC);
+
+    } else if (key == Registries.LOOT_POOL_ENTRY_TYPE) {
+      TAG_PREFERENCE = Registry.register(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, Hilt.getResource("tag_preference"), TagPreferenceLootEntry.CODEC);
+    }
+  }
+
+  /**
+   * Registers a loot function
+   * @param name        Loot function name
+   * @param codec       Loot function codec
+   * @return  Registered loot function
+   */
+  private static <T extends LootItemFunction> MapCodec<T> registerFunction(String name, MapCodec<T> codec) {
+    return Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, Hilt.getResource(name), codec);
+  }
+}

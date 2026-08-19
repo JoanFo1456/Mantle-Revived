@@ -1,0 +1,58 @@
+package modernmods.hilt.client.book;
+
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.component.CustomData;
+
+import javax.annotation.Nullable;
+import java.util.Objects;
+
+public class BookHelper {
+
+  public static final String BOOK_COMPOUND = "hilt";
+  public static final String BOOK_DATA_COMPOUND = "book";
+
+  public static final String NBT_CURRENT_PAGE = "current_page";
+
+  /**
+   * Returns the current saved page on the book
+   * Returns an empty string is one is not found
+   *
+   * @param item The book to check for a saved page on
+   * @return The current saved page
+   */
+  public static String getCurrentSavedPage(@Nullable ItemStack item) {
+    if (item != null) {
+      CustomData data = item.get(DataComponents.CUSTOM_DATA);
+      if (!item.isEmpty() && data != null) {
+        CompoundTag bookNBT = data.copyTag().getCompoundOrEmpty(BOOK_COMPOUND).getCompoundOrEmpty(BOOK_DATA_COMPOUND);
+
+        if (bookNBT.contains(NBT_CURRENT_PAGE)) {
+          return bookNBT.getStringOr(NBT_CURRENT_PAGE, "");
+        }
+      }
+    }
+
+    return "";
+  }
+
+  /**
+   * Saves the current open page to the given book ItemStack.
+   *
+   * @param stack       the current book stack
+   * @param currentPage the current open page
+   */
+  public static void writeSavedPageToBook(ItemStack stack, String currentPage) {
+    CompoundTag compoundNBT = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+
+    CompoundTag hiltCompound = compoundNBT.getCompoundOrEmpty(BOOK_COMPOUND);
+    CompoundTag bookCompound = hiltCompound.getCompoundOrEmpty(BOOK_DATA_COMPOUND);
+
+    bookCompound.putString(NBT_CURRENT_PAGE, currentPage);
+
+    hiltCompound.put(BOOK_DATA_COMPOUND, bookCompound);
+    compoundNBT.put(BOOK_COMPOUND, hiltCompound);
+    stack.set(DataComponents.CUSTOM_DATA, CustomData.of(compoundNBT));
+  }
+}

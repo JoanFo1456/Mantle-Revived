@@ -1,0 +1,13 @@
+{
+  "tag": "hilt:soup",
+  "units": [
+    {
+      "key": "gui.hilt.fluid.bowl",
+      "needed": 250
+    },
+    {
+      "key": "gui.hilt.fluid.sip",
+      "needed": 50
+    }
+  ]
+}

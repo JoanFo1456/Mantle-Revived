@@ -1,0 +1,93 @@
+{
+  "hilt:tooltip.cooktime": "Время приготовления: %d сек.",
+  "config.hilt.extraHeartRenderer": "Доп. рендеринг сердца",
+  "config.hilt.enableFluidFogFix": "Включить исправление тумана жидкости",
+
+  "command.hilt.view_tag.success": "Значения для %s тега '%s':",
+
+  "command.hilt.tags_for.success": "%s теги для '%s':",
+  "command.hilt.tags_for.not_found": "Неизвестное значение %s реестра '%s'",
+  "command.hilt.tags_for.no_held_block": "Удерживаемый предмет не является блоком",
+  "command.hilt.tags_for.no_held_entity": "Удерживаемый предмет не является яйцом призыва",
+  "command.hilt.tags_for.no_held_potion": "Удерживаемый предмет не является зельем",
+  "command.hilt.tags_for.no_held_fluid": "Не удалось получить жидкость из удерживаемого предмета",
+  "command.hilt.tags_for.no_held_enchantment": "Удерживаемый предмет не зачарован",
+  "command.hilt.tags_for.no_targeted_entity": "В пределах досягаемости нет сущности",
+  "command.hilt.tags_for.no_targeted_block": "Нет целевого блока",
+  "command.hilt.tags_for.no_targeted_fluid": "Нет целевой жидкости",
+  "command.hilt.tags_for.no_targeted_block_entity": "Нет целевой блочной сущности",
+  "command.hilt.tags_for.no_tags": "Нет тегов",
+
+  "command.hilt.book_test.not_found": "Неизвестная книга с ID %s",
+  "command.hilt.book.export.success": "Изображения книги экспортированы в '%s'",
+  "command.hilt.book.export.error_generic": "Не удалось экспортировать изображения книги, подробности см. в журнале",
+  "command.hilt.book.export.error_io": "Не удалось создать каталог для изображений книги '%s'",
+
+  "command.hilt.dump_tag.success": "Сброшен комбинированный %s тег '%s' в журнал консоли",
+  "command.hilt.dump_tag.success_log": "Сброшен комбинированный %s тег '%s' в '%s'",
+  "command.hilt.dump_all_tags.success": "Все теги сброшены в '%s'",
+  "command.hilt.dump_all_tags.type_success": "Сброшены все %s теги в '%s'",
+
+  "command.hilt.modify_tag.success.add": "Успешное добавление '%s' к %s тегу '%s'. Запустите /reload, чтобы активировать пакет в %s.",
+  "command.hilt.modify_tag.success.remove": "Успешное удаление '%s' из %s тега '%s'. Запустите /reload, чтобы активировать пакет в %s.",
+  "command.hilt.modify_tag.success.clear": "Успешное очищение %s тега '%s'. Запустите /reload, чтобы активировать пакет в %s.",
+  "command.hilt.modify_tag.read_error": "Ошибка чтения %s тега '%s'",
+  "command.hilt.modify_tag.write_error": "Ошибка записи %s тега '%s'",
+
+  "command.hilt.dump_loot_modifiers.success_log": "В журнал консоли выведены объединённые глобальные модификаторы добычи",
+  "command.hilt.dump_loot_modifiers.success_save": "Объединённые глобальные модификаторы добычи сброшены в '%s'",
+  "command.hilt.dump_loot_modifiers.read_error": "Ошибка чтения глобальных модификаторов добычи",
+
+  "command.hilt.harvest_tiers.success_log": "Выведены отсортированные уровни в журнал консоли",
+  "command.hilt.harvest_tiers.success_save": "Сброшены отсортированные уровни в '%s'",
+  "command.hilt.harvest_tiers.success_list": "Уровни сбора:",
+  "command.hilt.harvest_tiers.tag": "%s: Тег блока %s",
+  "command.hilt.harvest_tiers.no_tag": "%s: Нет тега",
+  
+  "command.hilt.hunger.set.single":   "Игроку %s установлено %d голод(а).",
+  "command.hilt.hunger.set.multiple": "%d игрокам установлено %d голод(а).",
+  "command.hilt.hunger.add.single":   "Игроку %s добавлено +%d голод(а).",
+  "command.hilt.hunger.add.multiple": "%d игрокам добавлено +%d голод(а).",
+  "command.hilt.hunger.subtract.single":   "Игроку %s добавлено -%d голод(а).",
+  "command.hilt.hunger.subtract.multiple": "%d игрокам добавлено -%d голод(а).",
+
+  "command.hilt.remove_recipes": "Рецепты %s успешно удалены за %s секунд. Запустите /reload, чтобы активировать пакет в %s.",
+  "command.hilt.remove_recipes.preset_not_found": "Предустановка удаления рецепта '%s' отсутствует или недействительна. Проверьте журнал для получения дополнительной информации.",
+  "command.hilt.remove.failed_save": "Не удалось сохранить JSON в '%s'.",
+
+  "command.hilt.key.wrong_registry": "Ожидаемый ключ ресурса '%s' принадлежит реестру '%s'.",
+  "command.hilt.remove_data.structure.success": "Набор структур '%s' успешно очищен за %s секунд. Запустите /reload, чтобы активировать пакет в %s.",
+  "command.hilt.remove_data.biome_modifier.success": "Модификатор биома '%s' успешно удалён за %s секунд. Запустите /reload, чтобы активировать пакет в %s.",
+
+  "command.hilt.sources.success": "Источники для %s:",
+  "command.hilt.sources.not_found": "'%s' не найдено:",
+
+  "command.hilt.tag.empty": "Пусто",
+  "command.hilt.item.not_found": "Неизвестный предмет '%s'",
+  "command.hilt.registry.not_found": "Неизвестный реестр '%s'",
+  "command.hilt.tag_source.not_found": "Неизвестный источник тега '%s'",
+  "command.hilt.tag.not_found": "Неизвестный %s тега '%s'",
+
+  "command.hilt.tag_preference.empty_tag": "Нет предпочтений %s для тега %s",
+  "command.hilt.tag_preference.preference": "Предпочтительным значением %s для тега %s является %s",
+
+  "gui.hilt.fluid.capacity": "Ёмкость: %s мВ",
+  "gui.hilt.fluid.contents": "Содержит: %s",
+  "gui.hilt.fluid.format": "%s / %s мВ %s",
+
+  "gui.hilt.fluid.hold_shift": "§7Удерживайте [§6Shift§7] для подробной информации и перемещения жидкости.",
+  "gui.hilt.fluid.kilobucket": "%s кВ",
+  "gui.hilt.fluid.bucket": "Вёдер: %s",
+  "gui.hilt.fluid.millibucket": "%s мВ",
+
+  "gui.hilt.fluid.bowl": "Мисок: %s",
+  "gui.hilt.fluid.bottle": "Бутылочек: %s",
+  "gui.hilt.fluid.drop": "Капель: %s",
+  "gui.hilt.fluid.sip": "Глотков: %s",
+
+  "block.hilt.tank.drained": "Осушено %s мВ %s",
+  "block.hilt.tank.filled": "Заполнено %s мВ %s",
+  "block.hilt.retextured.id": "ID текстуры: %s",
+
+  "item.hilt.book.click_to_open": "§7Щёлкните [§6ПКМ§7], чтобы открыть."
+}

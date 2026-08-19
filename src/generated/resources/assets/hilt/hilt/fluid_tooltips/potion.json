@@ -1,0 +1,13 @@
+{
+  "tag": "forge:potion",
+  "units": [
+    {
+      "key": "gui.hilt.fluid.bottle",
+      "needed": 250
+    },
+    {
+      "key": "gui.hilt.fluid.sip",
+      "needed": 50
+    }
+  ]
+}

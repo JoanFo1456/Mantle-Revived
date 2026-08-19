@@ -1,0 +1,271 @@
+package modernmods.hilt.block.entity;
+
+import lombok.Getter;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.Nameable;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import modernmods.hilt.util.ItemStackList;
+
+// Updated version of InventoryLogic in Hilt. Also contains a few bugfixes DOES NOT OVERRIDE createMenu
+public abstract class InventoryBlockEntity extends NameableBlockEntity implements Container, MenuProvider, Nameable {
+  private static final String TAG_INVENTORY_SIZE = "InventorySize";
+  private static final String TAG_ITEMS = "Items";
+  private static final String TAG_SLOT = "Slot";
+
+  private NonNullList<ItemStack> inventory;
+  /** If true, the inventory size is saved to NBT, false means you are responsible for serializing it if it changes */
+  private final boolean saveSizeToNBT;
+  protected int stackSizeLimit;
+  @Getter
+  protected IItemHandlerModifiable itemHandler;
+
+  /**
+   * @param name Localization String for the inventory title. Can be overridden through setCustomName
+   */
+  public InventoryBlockEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, Component name, boolean saveSizeToNBT, int inventorySize) {
+    this(tileEntityTypeIn, pos, state, name, saveSizeToNBT, inventorySize, 64);
+  }
+
+  /**
+   * @param name Localization String for the inventory title. Can be overridden through setCustomName
+   */
+  public InventoryBlockEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, Component name, boolean saveSizeToNBT, int inventorySize, int maxStackSize) {
+    super(tileEntityTypeIn, pos, state, name);
+    this.saveSizeToNBT = saveSizeToNBT;
+    this.inventory = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
+    this.stackSizeLimit = maxStackSize;
+    this.itemHandler = new InvWrapper(this);
+  }
+
+  /** Registers this base inventory handler for a concrete block entity type. */
+  public static <T extends InventoryBlockEntity> void registerItemHandler(RegisterCapabilitiesEvent event, BlockEntityType<T> type) {
+    event.registerBlockEntity(Capabilities.Item.BLOCK, type, (be, side) -> VanillaContainerWrapper.of(be));
+  }
+
+  /* Inventory management */
+
+  @Override
+  public ItemStack getItem(int slot) {
+    if (slot < 0 || slot >= this.inventory.size()) {
+      return ItemStack.EMPTY;
+    }
+
+    return this.inventory.get(slot);
+  }
+
+  public boolean isStackInSlot(int slot) {
+    return !this.getItem(slot).isEmpty();
+  }
+
+  /**
+   * Same as resize, but does not call markDirty. Used on loading from NBT
+   */
+  private void resizeInternal(int size) {
+    // save effort if the size did not change
+    if (size == this.inventory.size()) {
+      return;
+    }
+    ItemStackList newInventory = ItemStackList.withSize(size);
+
+    for (int i = 0; i < size && i < this.inventory.size(); i++) {
+      newInventory.set(i, this.inventory.get(i));
+    }
+    this.inventory = newInventory;
+  }
+
+  public void resize(int size) {
+    this.resizeInternal(size);
+    this.setChangedFast();
+  }
+
+  @Override
+  public int getContainerSize() {
+    return this.inventory.size();
+  }
+
+  @Override
+  public int getMaxStackSize() {
+    return this.stackSizeLimit;
+  }
+
+  @Override
+  public void setItem(int slot, ItemStack itemstack) {
+    if (slot < 0 || slot >= this.inventory.size()) {
+      return;
+    }
+
+    ItemStack current = this.inventory.get(slot);
+    this.inventory.set(slot, itemstack);
+
+    if (!itemstack.isEmpty() && itemstack.getCount() > this.getMaxStackSize()) {
+      itemstack.setCount(this.getMaxStackSize());
+    }
+    if (!ItemStack.matches(current, itemstack)) {
+      this.setChangedFast();
+    }
+  }
+
+  @Override
+  public ItemStack removeItem(int slot, int quantity) {
+    if (quantity <= 0) {
+      return ItemStack.EMPTY;
+    }
+    ItemStack itemStack = this.getItem(slot);
+
+    if (itemStack.isEmpty()) {
+      return ItemStack.EMPTY;
+    }
+
+    // whole itemstack taken out
+    if (itemStack.getCount() <= quantity) {
+      this.setItem(slot, ItemStack.EMPTY);
+      this.setChangedFast();
+      return itemStack;
+    }
+
+    // split itemstack
+    itemStack = itemStack.split(quantity);
+    // slot is empty, set to ItemStack.EMPTY
+    // isn't this redundant to the above check?
+    if (this.getItem(slot).getCount() == 0) {
+      this.setItem(slot, ItemStack.EMPTY);
+    }
+
+    this.setChangedFast();
+    // return remainder
+    return itemStack;
+  }
+
+  @Override
+  public ItemStack removeItemNoUpdate(int slot) {
+    ItemStack itemStack = this.getItem(slot);
+    this.setItem(slot, ItemStack.EMPTY);
+    return itemStack;
+  }
+
+  @Override
+  public boolean canPlaceItem(int slot, ItemStack itemstack) {
+    if (slot < this.getContainerSize()) {
+      return this.inventory.get(slot).isEmpty() || itemstack.getCount() + this.inventory.get(slot).getCount() <= this.getMaxStackSize();
+    }
+    return false;
+  }
+
+  @Override
+  public void clearContent() {
+    for (int i = 0; i < this.inventory.size(); i++) {
+      this.inventory.set(i, ItemStack.EMPTY);
+    }
+  }
+
+  /* Supporting methods */
+  @Override
+  public boolean stillValid(Player entityplayer) {
+    // block changed/got broken?
+    if (level == null || this.level.getBlockEntity(this.worldPosition) != this || this.getBlockState().getBlock() == Blocks.AIR) {
+      return false;
+    }
+
+    return entityplayer.distanceToSqr(this.worldPosition.getX() + 0.5D, this.worldPosition.getY() + 0.5D, this.worldPosition.getZ() + 0.5D) <= 64D;
+  }
+
+  @Override
+  public void startOpen(net.minecraft.world.entity.ContainerUser user) {}
+
+  @Override
+  public void stopOpen(net.minecraft.world.entity.ContainerUser user) {}
+
+  /* NBT */
+
+  @Override
+  public void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    if (saveSizeToNBT) {
+      this.resizeInternal(input.getIntOr(TAG_INVENTORY_SIZE, this.inventory.size()));
+    }
+    this.readInventoryFromNBT(input);
+  }
+
+  @Override
+  public void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
+    // only sync the size to the client by default
+    if (saveSizeToNBT) {
+      output.putInt(TAG_INVENTORY_SIZE, this.inventory.size());
+    }
+  }
+
+  @Override
+  public void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    this.writeInventoryToNBT(output);
+  }
+
+  /**
+   * Writes the contents of the inventory to the tag
+   */
+  public void writeInventoryToNBT(ValueOutput output) {
+    Container inventory = this;
+    ValueOutput.ValueOutputList list = output.childrenList(TAG_ITEMS);
+
+    for (int i = 0; i < inventory.getContainerSize(); i++) {
+      ItemStack stack = inventory.getItem(i);
+      if (!stack.isEmpty()) {
+        ValueOutput itemTag = list.addChild();
+        itemTag.store(ItemStack.MAP_CODEC, stack);
+        itemTag.putByte(TAG_SLOT, (byte) i);
+      }
+    }
+  }
+
+  /**
+   * Reads an inventory from the tag. Overwrites current content
+   */
+  public void readInventoryFromNBT(ValueInput input) {
+    for (int slot = 0; slot < this.inventory.size(); slot++) {
+      this.inventory.set(slot, ItemStack.EMPTY);
+    }
+
+    int limit = this.getMaxStackSize();
+    for (ValueInput itemTag : input.childrenListOrEmpty(TAG_ITEMS)) {
+      int slot = itemTag.getByteOr(TAG_SLOT, (byte) 0) & 255;
+      if (slot < this.inventory.size()) {
+        ItemStack stack = itemTag.read(ItemStack.MAP_CODEC).orElse(ItemStack.EMPTY);
+        if (!stack.isEmpty() && stack.getCount() > limit) {
+          stack.setCount(limit);
+        }
+        this.inventory.set(slot, stack);
+      }
+    }
+  }
+
+  @Override
+  public boolean isEmpty() {
+    for (ItemStack itemstack : this.inventory) {
+      if (!itemstack.isEmpty()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+}

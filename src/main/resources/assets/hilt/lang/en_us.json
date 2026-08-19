@@ -1,0 +1,94 @@
+{
+  "hilt:tooltip.cooktime": "Cook Time: %ds",
+  "config.hilt.extraHeartRenderer": "Extra Heart Renderer",
+  "config.hilt.enableFluidFogFix": "Enable Fluid Fog Fix",
+
+  "command.hilt.view_tag.success": "Values for %s tag '%s':",
+
+  "command.hilt.tags_for.success": "%s tags for '%s':",
+  "command.hilt.tags_for.not_found": "Unknown %s registry value '%s'",
+  "command.hilt.tags_for.no_held_block": "Held item is not a block",
+  "command.hilt.tags_for.no_held_entity": "Held item is not a spawn egg",
+  "command.hilt.tags_for.no_held_potion": "Held item is not a potion",
+  "command.hilt.tags_for.no_held_fluid": "Unable to get fluid from the held item",
+  "command.hilt.tags_for.no_held_enchantment": "Held item is not enchanted",
+  "command.hilt.tags_for.no_targeted_entity": "No entity within range",
+  "command.hilt.tags_for.no_targeted_block": "No targeted block",
+  "command.hilt.tags_for.no_targeted_fluid": "No targeted fluid",
+  "command.hilt.tags_for.no_targeted_block_entity": "No targeted block entity",
+  "command.hilt.tags_for.no_tags": "No tags",
+
+  "command.hilt.book_test.not_found": "Unknown book with ID %s",
+  "command.hilt.book.export.success": "Exported book images to '%s'",
+  "command.hilt.book.export.html.success": "Exported book images to '%s' and HTML to '%s'",
+  "command.hilt.book.export.error_generic": "Failed to export book images, see log for details",
+  "command.hilt.book.export.error_io": "Failed to create directory for book images '%s'",
+
+  "command.hilt.dump_tag.success": "Printed combined %s tag '%s' to console log",
+  "command.hilt.dump_tag.success_log": "Dumped combined %s tag '%s' to '%s'",
+  "command.hilt.dump_all_tags.success": "Dumped all tags to '%s'",
+  "command.hilt.dump_all_tags.type_success": "Dumped all %s tags to '%s'",
+
+  "command.hilt.modify_tag.success.add": "Successfully added '%s' to %s tag '%s'. Run /reload to activate pack at %s.",
+  "command.hilt.modify_tag.success.remove": "Successfully removed '%s' from %s tag '%s'. Run /reload to activate pack at %s.",
+  "command.hilt.modify_tag.success.clear": "Successfully cleared %s tag '%s'. Run /reload to activate pack at %s.",
+  "command.hilt.modify_tag.read_error": "Error reading %s tag '%s'",
+  "command.hilt.modify_tag.write_error": "Error writing %s tag '%s'",
+
+  "command.hilt.dump_loot_modifiers.success_log": "Printed combined global loot modifiers to console log",
+  "command.hilt.dump_loot_modifiers.success_save": "Dumped combined global loot modifiers to '%s'",
+  "command.hilt.dump_loot_modifiers.read_error": "Error reading global loot modifiers",
+
+  "command.hilt.harvest_tiers.success_log": "Printed sorted tiers to console log",
+  "command.hilt.harvest_tiers.success_save": "Dumped sorted tiers to '%s'",
+  "command.hilt.harvest_tiers.success_list": "Harvest tiers:",
+  "command.hilt.harvest_tiers.tag": "%s: Block tag %s",
+  "command.hilt.harvest_tiers.no_tag": "%s: No tag",
+
+  "command.hilt.hunger.set.single":   "Set %s's hunger to %d",
+  "command.hilt.hunger.set.multiple": "Set %d players' hunger to %d",
+  "command.hilt.hunger.add.single":   "Gave %s +%d hunger",
+  "command.hilt.hunger.add.multiple": "Gave %d players +%d hunger",
+  "command.hilt.hunger.subtract.single":   "Gave %s -%d hunger",
+  "command.hilt.hunger.subtract.multiple": "Gave %d players -%d hunger",
+
+  "command.hilt.remove_recipes": "Successfully removed %s recipes in %s seconds. Run /reload to activate pack at %s",
+  "command.hilt.remove_recipes.preset_not_found": "Recipe removal preset '%s' was missing or invalid. Check the log for more information.",
+  "command.hilt.remove.failed_save": "Failed to save JSON at '%s'.",
+
+  "command.hilt.key.wrong_registry": "Expected resource key '%s' to belong to registry '%s'.",
+  "command.hilt.remove_data.structure.success": "Successfully emptied structure set '%s' in %s seconds. Run /reload to activate pack at %s",
+  "command.hilt.remove_data.biome_modifier.success": "Successfully removed biome modifier '%s' in %s seconds. Run /reload to activate pack at %s",
+
+  "command.hilt.sources.success": "Sources for %s:",
+  "command.hilt.sources.not_found": "'%s' not found:",
+
+  "command.hilt.tag.empty": "Empty",
+  "command.hilt.item.not_found": "Unknown item '%s'",
+  "command.hilt.registry.not_found": "Unknown registry '%s'",
+  "command.hilt.tag_source.not_found": "Unknown tag source '%s'",
+  "command.hilt.tag.not_found": "Unknown %s tag '%s'",
+
+  "command.hilt.tag_preference.empty_tag": "No preference for %s tag %s",
+  "command.hilt.tag_preference.preference": "Preferred value for %s tag %s is %s",
+
+  "gui.hilt.fluid.capacity": "Capacity: %s mb",
+  "gui.hilt.fluid.contents": "Contains: %s",
+  "gui.hilt.fluid.format": "%s / %s mb %s",
+
+  "gui.hilt.fluid.hold_shift": "Hold §e§oShift§r§7 for buckets",
+  "gui.hilt.fluid.kilobucket": "%s kb",
+  "gui.hilt.fluid.bucket": "%s buckets",
+  "gui.hilt.fluid.millibucket": "%s mb",
+
+  "gui.hilt.fluid.bowl": "%s bowls",
+  "gui.hilt.fluid.bottle": "%s bottles",
+  "gui.hilt.fluid.drop": "%s drops",
+  "gui.hilt.fluid.sip": "%s sips",
+
+  "block.hilt.tank.drained": "Drained %s mb %s",
+  "block.hilt.tank.filled": "Filled %s mb %s",
+  "block.hilt.retextured.id": "Texture ID: %s",
+
+  "item.hilt.book.click_to_open": "Right click to open"
+}

@@ -1,0 +1,17 @@
+{
+  "tag": "hilt:water",
+  "units": [
+    {
+      "key": "gui.hilt.fluid.bucket",
+      "needed": 1000
+    },
+    {
+      "key": "gui.hilt.fluid.bottle",
+      "needed": 250
+    },
+    {
+      "key": "gui.hilt.fluid.drop",
+      "needed": 50
+    }
+  ]
+}

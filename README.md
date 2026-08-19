@@ -1,5 +1,5 @@
-![Mantle logo](https://raw.github.com/SlimeKnights/Mantle/master/src/main/resources/Mantle.png)  
-# Mantle  
+![Hilt logo](https://raw.github.com/SlimeKnights/Hilt/master/src/main/resources/Hilt.png)  
+# Hilt  
 **Shared code for Forge mods**
 
 ## Compile from Source
@@ -12,8 +12,8 @@ Note: Git MUST be installed and in the system path to use our scripts.
 Please include the following:
 
 * Minecraft version
-* Mantle version
-* Versions of Mantle dependant mods
+* Hilt version
+* Versions of Hilt dependant mods
 * Forge version/build
 * Versions of any mods potentially related to the issue 
 * Any relevant screenshots are greatly appreciated.

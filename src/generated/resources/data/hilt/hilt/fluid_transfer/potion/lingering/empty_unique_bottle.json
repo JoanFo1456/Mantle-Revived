@@ -1,0 +1,16 @@
+{
+  "type": "hilt:empty_potion",
+  "amount": 250,
+  "conditions": [
+    {
+      "type": "hilt:tag_filled",
+      "tag": "forge:bottles/lingering"
+    }
+  ],
+  "input": {
+    "item": "minecraft:lingering_potion"
+  },
+  "result": {
+    "tag": "forge:bottles/lingering"
+  }
+}

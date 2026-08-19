@@ -6,17 +6,17 @@
       "request": "launch",
       "name": "Client",
       "presentation": {
-        "group": "Mod Development - Mantle",
+        "group": "Mod Development - Hilt",
         "order": 0
       },
-      "projectName": "Mantle",
+      "projectName": "Hilt",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\Joan\\Desktop\\Nadien\\Mantle-Revived\\build\\moddev\\clientRunProgramArgs.txt"
+        "@C:\\Users\\Joan\\Desktop\\Nadien\\Hilt-Revived\\build\\moddev\\clientRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\Joan\\Desktop\\Nadien\\Mantle-Revived\\build\\moddev\\clientRunVmArgs.txt",
-        "-Dfml.modFolders\u003dmantle%%C:\\Users\\Joan\\Desktop\\Nadien\\Mantle-Revived\\bin\\main"
+        "@C:\\Users\\Joan\\Desktop\\Nadien\\Hilt-Revived\\build\\moddev\\clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dhilt%%C:\\Users\\Joan\\Desktop\\Nadien\\Hilt-Revived\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
@@ -28,17 +28,17 @@
       "request": "launch",
       "name": "Server",
       "presentation": {
-        "group": "Mod Development - Mantle",
+        "group": "Mod Development - Hilt",
         "order": 1
       },
-      "projectName": "Mantle",
+      "projectName": "Hilt",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\Joan\\Desktop\\Nadien\\Mantle-Revived\\build\\moddev\\serverRunProgramArgs.txt"
+        "@C:\\Users\\Joan\\Desktop\\Nadien\\Hilt-Revived\\build\\moddev\\serverRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\Joan\\Desktop\\Nadien\\Mantle-Revived\\build\\moddev\\serverRunVmArgs.txt",
-        "-Dfml.modFolders\u003dmantle%%C:\\Users\\Joan\\Desktop\\Nadien\\Mantle-Revived\\bin\\main"
+        "@C:\\Users\\Joan\\Desktop\\Nadien\\Hilt-Revived\\build\\moddev\\serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dhilt%%C:\\Users\\Joan\\Desktop\\Nadien\\Hilt-Revived\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
