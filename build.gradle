@@ -28,7 +28,7 @@ repositories {
 
 group = 'modernmods.hilt'
 base {
-    archivesName = 'HiltRevived'
+    archivesName = 'Hilt'
 }
 // MC 26.1.2 ships as Java 25 bytecode (Java 25 preview features), so the toolchain must be JDK 25
 // to compile against it. ModDevGradle uses a standard JavaCompile task, which lets the lombok
